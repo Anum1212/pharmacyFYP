@@ -164,6 +164,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Bodunde\GoogleGeocoder\GeocoderServiceProvider::class, // for geoLocation distance
         Jcf\Geocode\GeocodeServiceProvider::class, // for geoLocation Distance
+        Ixudra\Curl\CurlServiceProvider::class, //for api
 
         /*
          * Package Service Providers...
@@ -228,6 +229,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Geocode' => Jcf\Geocode\Facades\Geocode::class,
+        'Curl'          => Ixudra\Curl\Facades\Curl::class,
 
 
     ],

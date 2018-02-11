@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 Use Auth;
 use App\Pharmacydetail;
-use Ixudra\Curl\Facades\Curl;
 use Illuminate\Support\Facades\Redirect;
+use Curl;
 
 class PharmacistController extends Controller
 {
