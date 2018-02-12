@@ -55,3 +55,9 @@ Route::prefix('pharmacist')->group(function () {
     Route::post('/postQuery', 'posts_controller@pharmacistPostQuery');
 
 });
+
+// Send verification email to user
+Route::get('sendEmailToUser/{email}/{verificationToken}', 'Auth\RegisterController@sendVerifyEmail')->name('sendEmailToUser');
+
+// Send verification email to pharmacist
+Route::get('sendEmailToPharmacist/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@sendVerifyEmail')->name('sendEmailToPharmacist');
