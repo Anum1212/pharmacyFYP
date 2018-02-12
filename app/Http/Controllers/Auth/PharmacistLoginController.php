@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Auth;
+use App\Pharmacist;
 
 class PharmacistLoginController extends Controller
 {
@@ -26,14 +27,24 @@ class PharmacistLoginController extends Controller
             'password' => 'required|min:6'
         ]);
         //attempt to login the pharmacists in
-        if (Auth::guard('pharmacist')->attempt(['email' => $request->email, 'password' => $request->password], $request->remember)){
+        if (Auth::guard('pharmacist')->attempt(['email' => $request->email, 'password' => $request->password, 'verificationStatus' => '1'], $request->remember)){
             //if successful redirect to pharmacist dashboard
             return redirect()->intended(route('pharmacist.dashboard'));
         }
-        //if unsuccessfull redirect back to the login for with form data
-        return redirect()->back()->withInput($request->only('email','remember'));
+
+        // if pharmacist hasn't verified email go to login form with form data and appropriate error message
+        $pharmacist = Pharmacist::where('email', $request->email)->first();
+        if (Auth::guard('pharmacist') && $pharmacist->verificationStatus == '0')
+        {
+        return redirect()->back()->withInput($request->only('email','remember'))->with('error', 'Verify Account First');
+        }
+
+        //if Wrong credentials or any other problem redirect back to the login form with form data and appropriate error message
+        return redirect()->back()->withInput($request->only('email','remember'))->with('error', 'Wrong credentials');
     }
 
+
+// logout Pharmacist
     public function logout()
     {
         Auth::guard('pharmacist')->logout();
