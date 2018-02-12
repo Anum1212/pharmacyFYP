@@ -4,9 +4,12 @@ namespace App\Http\Controllers\Auth;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Str;
 use App\Pharmacist;
 use Auth;
 use Geocode;
+use Mail;
+use App\Mail\verifyEmailToPharmacist;
 
 class PharmacistRegisterController extends Controller
 {
@@ -74,12 +77,34 @@ class PharmacistRegisterController extends Controller
       $pharmacists->latitude = $latitude;
       $pharmacists->longitude = $longitude;
       $pharmacists->password=bcrypt($req->password);
-
+      $pharmacists->verificationToken=Str::random(40);
       $pharmacists->save();
 
-
-      return redirect()->route('pharmacist.login');
+      $thisUser = $pharmacists;
+      $this->sendEmail($thisUser);
+//
+// return redirect(route('verifyEmailFirst'));
+      return redirect()->route('pharmacist.login')->with('message', 'A confirmation email has been sent');
 }
+  }
+
+  // to send email
+  public function sendEmail($thisUser)
+  {
+    Mail::to($thisUser['email'])->send(new verifyEmailToPharmacist($thisUser));
+  }
+
+  // to update Pharmacist status to verified
+  public function sendVerifyEmail($email, $verificationToken)
+  {
+    $pharmacist = Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
+    if($pharmacist){
+      Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => NULL]);
+      return redirect()->route('pharmacist.login')->with('message', 'Verification Successful');
+    }
+    else {
+      return redirect()->route('pharmacist.login')->with('error', 'There seems to be an error. Try to login if login fails register again');
+    }
   }
 
   public function logout()

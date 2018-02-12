@@ -6,7 +6,13 @@ use App\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Auth\Events\Registered;
 use Geocode;
+use Mail;
+use App\Mail\verifyEmailToUser;
+
 
 class RegisterController extends Controller
 {
@@ -72,7 +78,7 @@ class RegisterController extends Controller
 if ($addressToLatLng) {
 	$latitude = $addressToLatLng->latitude();
 	$longitude = $addressToLatLng->longitude();
-        return User::create([
+        $user = User::create([
             'status' => '0',
             'name' => $data['name'],
             'email' => $data['email'],
@@ -83,7 +89,40 @@ if ($addressToLatLng) {
             'latitude' => $latitude,
             'longitude' => $longitude,
             'password' => bcrypt($data['password']),
+            'verificationToken' => Str::random(40),
         ]);
+
+        $thisUser = User::findOrFail($user->id);
+        $this->sendEmail($thisUser);
+        return $user;
     }
   }
+
+// overriding register function found in D:\Projects\Pharmacy\vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers
+  public function register(Request $request)
+{
+    $this->validator($request->all())->validate();
+
+    event(new Registered($user = $this->create($request->all())));
+    return redirect('login')->with('message', 'A confirmation email has been sent');
+}
+
+// to send email
+public function sendEmail($thisUser)
+{
+  Mail::to($thisUser['email'])->send(new verifyEmailToUser($thisUser));
+}
+
+// to update user status to verified
+public function sendVerifyEmail($email, $verificationToken)
+{
+  $user = User::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
+  if($user){
+    User::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => NULL]);
+    return redirect('login')->with('message', 'Verification Successful');
+  }
+  else {
+    return redirect('login')->with('error', 'There seems to be an error. Try to login if login fails register again');
+  }
+}
 }
