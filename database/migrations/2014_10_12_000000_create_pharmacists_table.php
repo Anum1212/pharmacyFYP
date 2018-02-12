@@ -16,6 +16,8 @@ class CreatePharmacistsTable extends Migration
         Schema::create('pharmacists', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+            $table->string('verificationToken')->nullable();
+            $table->boolean('verificationStatus')->default('0');
             // status types
                     // email not confirmed->0
                     // email confirmed->1
