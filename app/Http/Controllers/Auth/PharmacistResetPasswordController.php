@@ -28,7 +28,7 @@ class PharmacistResetPasswordController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/pharmacist';
+    protected $redirectTo = '/pharmacist/login';
 
     /**
      * Create a new controller instance.
