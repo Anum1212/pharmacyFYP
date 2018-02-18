@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c1ffbbba8ed230e0362fc6bfe064ad9",
+    "content-hash": "7060f65ad7910bf652c1b6e3417d1adb",
     "packages": [
         {
             "name": "bodunde/geocoder",
