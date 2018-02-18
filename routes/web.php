@@ -61,3 +61,9 @@ Route::get('sendEmailToUser/{email}/{verificationToken}', 'Auth\RegisterControll
 
 // Send verification email to pharmacist
 Route::get('sendEmailToPharmacist/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@sendVerifyEmail')->name('sendEmailToPharmacist');
+
+//show Pharmacy Rating Page
+Route::get('ratePharmacy', 'ratingController@index');
+
+//update Pharmacy Rating
+Route::post('ratePharmacy/{pharmacyId}', 'ratingController@ratePharmacy');
