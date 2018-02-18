@@ -175,7 +175,7 @@
     @include('partials.message') @include('partials.error')
   </div>
 
-  <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-12">
+  <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2">
     {{-- Admin Div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnBlueGreen">
       <span class="top">Admin</span>
