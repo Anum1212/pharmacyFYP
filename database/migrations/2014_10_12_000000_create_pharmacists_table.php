@@ -17,13 +17,14 @@ class CreatePharmacistsTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('verificationToken')->nullable();
-            $table->boolean('verificationStatus')->default('0');
-            // status types
+            // verificationStatus types
                     // email not confirmed->0
                     // email confirmed->1
-                    // user not banned->2
-                    // user banned->3
-            $table->integer('status');
+            $table->boolean('verificationStatus')->default('0');
+            // status types
+                    // pharmacist banned->0
+                    // pharmacist not banned->1
+            $table->integer('status')->default('1');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('contact');
