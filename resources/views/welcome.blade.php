@@ -35,20 +35,29 @@
       background: #A74982;
     }
 
-    div.button {
-      display: block;
-      position: relative;
-      float: left;
-      width: 120px;
-      padding: 0;
-      margin: 10px 20px 10px 0;
-      font-weight: 600;
-      text-align: center;
-      line-height: 50px;
-      color: #FFF;
-      border-radius: 5px;
-      transition: all 0.2s;
+    @media screen and (max-width:600px) {
+      .button {
+        font-weight: 600;
+        text-align: center;
+        line-height: 50px;
+        color: #FFF;
+        border-radius: 5px;
+        transition: all 0.2s;
+        margin-bottom: 100px;
+      }
     }
+
+    @media screen and (min-width:601px) {
+      .button {
+        font-weight: 600;
+        text-align: center;
+        line-height: 50px;
+        color: #FFF;
+        border-radius: 5px;
+        transition: all 0.2s;
+      }
+    }
+
 
     .btnSlide .top {
       position: absolute;
@@ -166,36 +175,32 @@
     @include('partials.message') @include('partials.error')
   </div>
 
-
-  <div class="wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-    <div class="col-lg-8 col-lg-offset-4 col-md-8 col-md-offset-4 col-sm-12 col-xs-12">
-      {{-- Admin Div --}}
-      <div class="button btnSlide btnBlueGreen col-lg-4 col-md-4 col-sm-12 col-xs-12">
-        <span class="top">Admin</span>
-        <div class="bottom">
-          <a href="{{ route('admin.login') }}">Login</a>
-        </div>
+  <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-12">
+    {{-- Admin Div --}}
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnBlueGreen">
+      <span class="top">Admin</span>
+      <div class="bottom">
+        <a href="{{ route('admin.login') }}">Login</a>
       </div>
+    </div>
 
-      {{-- Pharmacist Div --}}
-      <div class="button btnSlide btnOrange col-lg-4 col-md-4 col-sm-12 col-xs-12">
-        <span class="top">Pharmacist</span>
-        <div class="bottom">
-          <a href="{{ route('pharmacist.login') }}">Login</a>
-          <br>
-          <a href="{{ route('pharmacist.register') }}">Register</a>
-        </div>
+    {{-- Pharmacist Div --}}
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnOrange">
+      <span class="top">Pharmacist</span>
+      <div class="bottom">
+        <a href="{{ route('pharmacist.login') }}">Login</a>
+        <br>
+        <a href="{{ route('pharmacist.register') }}">Register</a>
       </div>
+    </div>
 
-      {{-- User div --}}
-      <div class="button btnSlide btnPurple col-lg-4 col-md-4 col-sm-12 col-xs-12">
-        <span class="top">User</span>
-        <div class="bottom">
-          <a href="{{ route('login') }}">Login</a>
-          <br>
-          <a href="{{ route('register') }}">Register</a>
-        </div>
+    {{-- User div --}}
+    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnPurple">
+      <span class="top">User</span>
+      <div class="bottom">
+        <a href="{{ route('login') }}">Login</a>
+        <br>
+        <a href="{{ route('register') }}">Register</a>
       </div>
     </div>
   </div>
