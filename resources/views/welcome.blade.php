@@ -43,6 +43,11 @@
 
                     <!-- Right Side Of Navbar -->
                     <ul class="nav navbar-nav navbar-right">
+
+                      {{-- in final verion remove from here --}}
+                      @if (Auth::user())
+                        <li><a href="/ratePharmacy">Rate Pharmacy</a></li>
+                      @endif
                         <!-- Authentication Links -->
                         @if (Auth::guest())
                             <!-- Collect the nav links, forms, and other content for toggling -->
