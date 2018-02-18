@@ -35,8 +35,30 @@
       background: #A74982;
     }
 
+/* for mobile display */
     @media screen and (max-width:600px) {
-      .button {
+      .button{
+        margin-bottom: 100px;
+      }
+
+/* button outer */
+      .button .top {
+        font-weight: 600;
+        text-align: center;
+        line-height: 25px;
+        color: #FFF;
+        border-radius: 5px;
+        transition: all 0.2s;
+        margin-bottom: 100px;
+        padding-top: 10px;
+      }
+
+      .button .top i{
+        font-size: 2em;
+      }
+
+/* button inner */
+      .button .bottom {
         font-weight: 600;
         text-align: center;
         line-height: 50px;
@@ -48,7 +70,21 @@
     }
 
     @media screen and (min-width:601px) {
-      .button {
+      .button .top {
+        font-weight: 600;
+        text-align: center;
+        line-height: 25px;
+        color: #FFF;
+        border-radius: 5px;
+        transition: all 0.2s;
+        padding-top: 10px;
+      }
+
+      .button .top i{
+        font-size: 3em;
+      }
+
+      .button .bottom {
         font-weight: 600;
         text-align: center;
         line-height: 50px;
@@ -178,7 +214,9 @@
   <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2">
     {{-- Admin Div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnBlueGreen">
-      <span class="top">Admin</span>
+      <span class="top"><i class="fa fa-cog"></i> <br /> Admin
+
+      </span>
       <div class="bottom">
         <a href="{{ route('admin.login') }}">Login</a>
       </div>
@@ -186,7 +224,9 @@
 
     {{-- Pharmacist Div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnOrange">
-      <span class="top">Pharmacist</span>
+      <span class="top"><i class="fa fa-user-md"></i> <br /> Pharmacist
+
+  </span>
       <div class="bottom">
         <a href="{{ route('pharmacist.login') }}">Login</a>
         <br>
@@ -196,7 +236,9 @@
 
     {{-- User div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnPurple">
-      <span class="top">User</span>
+      <span class="top"><i class="fa fa-user"></i> <br /> User
+
+    </span>
       <div class="bottom">
         <a href="{{ route('login') }}">Login</a>
         <br>
