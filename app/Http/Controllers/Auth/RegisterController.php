@@ -79,7 +79,6 @@ if ($addressToLatLng) {
 	$latitude = $addressToLatLng->latitude();
 	$longitude = $addressToLatLng->longitude();
         $user = User::create([
-            'status' => '0',
             'name' => $data['name'],
             'email' => $data['email'],
             'contact' => $data['contact'],
@@ -90,6 +89,8 @@ if ($addressToLatLng) {
             'longitude' => $longitude,
             'password' => bcrypt($data['password']),
             'verificationToken' => Str::random(40),
+            // by default verificationStatus and status is set to 0 and 1 respectively
+            // see create_users_table migration for more info
         ]);
 
         $thisUser = User::findOrFail($user->id);
