@@ -15,11 +15,9 @@ Route::get('/test', 'testController@index');
 
 
 // *************** SITE NAVIGATION ROUTES ***************
-Route::get('/', 'siteViewController@index');
-Route::post('/detectPharmacy/{latitude?}/{longitude?}', 'siteViewController@findPharmacies');
-Route::post('/convertAddress', 'siteViewController@convertAddressToLatLong');
-
-
+Route::get('/', 'findPharmaciesProducts@index');
+Route::post('/detectPharmacy/{latitude?}/{longitude?}', 'findPharmaciesProducts@findPharmacies');
+Route::post('/convertAddress', 'findPharmaciesProducts@convertAddressToLatLong');
 
 
 // *************** ROLE MANAGEMENT ROUTES ***************
