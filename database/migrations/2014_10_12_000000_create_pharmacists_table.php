@@ -32,8 +32,8 @@ class CreatePharmacistsTable extends Migration
             $table->string('address');
             $table->string('society');
             $table->string('city');
-            $table->string('longitude');
-            $table->string('latitude');
+            $table->float('longitude', 10, 6);
+            $table->float('latitude', 10, 6);
             $table->string('password');
             $table->rememberToken();
         });

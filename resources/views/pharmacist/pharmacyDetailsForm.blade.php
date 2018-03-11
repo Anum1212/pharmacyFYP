@@ -164,8 +164,6 @@
 								<button type="submit" class="btn btn-primary">
 									Save Details
 								</button>
-
-								</a>
 							</div>
 						</div>
 					</form>

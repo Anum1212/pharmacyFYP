@@ -10,10 +10,21 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+// *************** TEST ROUTES (for testing purposes only) ***************
 Route::get('/test', 'testController@index');
 
-Route::get('/', function () {
-    return view('welcome');
+
+// *************** SITE NAVIGATION ROUTES ***************
+Route::get('/', 'siteViewController@index');
+Route::post('/detectPharmacy/{latitude?}/{longitude?}', 'siteViewController@findPharmacies');
+Route::post('/convertAddress', 'siteViewController@convertAddressToLatLong');
+
+
+
+
+// *************** ROLE MANAGEMENT ROUTES ***************
+Route::get('/roles', function () {
+    return view('welcome'); // *** change page name in future ***
 });
 
 Auth::routes();
@@ -56,12 +67,16 @@ Route::prefix('pharmacist')->group(function () {
 
 });
 
+
+// *************** VERIFICATION EMAIL ROUTES ***************
 // Send verification email to user
 Route::get('sendEmailToUser/{email}/{verificationToken}', 'Auth\RegisterController@sendVerifyEmail')->name('sendEmailToUser');
 
 // Send verification email to pharmacist
 Route::get('sendEmailToPharmacist/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@sendVerifyEmail')->name('sendEmailToPharmacist');
 
+
+// *************** PHARMACY RATING ROUTES ***************
 //show Pharmacy Rating Page
 Route::get('ratePharmacy', 'ratingController@index');
 
