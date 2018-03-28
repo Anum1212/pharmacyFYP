@@ -18,7 +18,7 @@ class Pharmacist extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'status', 'name', 'email', 'contact', 'pharmacyName', 'address', 'society', 'city', 'latitude', 'longitude', 'password', 'verificationToken', 'verificationStatus',
+        'status', 'name', 'email', 'contact', 'pharmacyName', 'address', 'society', 'city', 'latitude', 'longitude', 'freeDeliveryDistance', 'freeDeliveryPurchase', 'dataSource', 'dbAPI', 'password', 'verificationToken', 'verificationStatus',
     ];
 
     /**
