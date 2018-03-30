@@ -1,5 +1,16 @@
 <?php
 
+
+
+// controller Details
+// ------------------
+// methods and their details
+// ---------------------------
+// 1) index --> display all pharmacy ratings
+// 2) ratePharmacy --> save rating
+
+
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -14,11 +25,13 @@ class ratingController extends Controller
       $this->middleware('auth');
   }
 
+
+  // |---------------------------------- index ----------------------------------|
   public function index()
   {
     // getting activated pahrmacy records
     $pharmacies = Pharmacist::where([
-            ['status', '=', '1'], // Pharmacy is not banned by admin
+            ['pharmacistStatus', '=', '1'], // Pharmacy is not banned by admin
                 ['verificationStatus', '=', '1'], // pharmacist has verified the email
                 ])->get();
     // getting ratings of those "$pharmacies" form ratings table
@@ -29,6 +42,7 @@ class ratingController extends Controller
   }
 
 
+  // |---------------------------------- ratePharmacy ----------------------------------|
     public function ratePharmacy(Request $req, $pharmacyId)
     {
       echo $req->rating;

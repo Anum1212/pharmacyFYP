@@ -12,12 +12,25 @@
 */
 // *************** TEST ROUTES (for testing purposes only) ***************
 Route::get('/test', 'testController@index');
+Route::get('/', 'testController@allRoutes');
 
 
 // *************** SITE NAVIGATION ROUTES ***************
-Route::get('/', 'findPharmaciesProducts@index');
+Route::get('/index', 'siteViewController@index');
+Route::get('/contactUsForm', 'siteViewController@contactUsForm');
+Route::post('/contactUs', 'siteViewController@contactUs');
+
+
+// *************** Product and pharmacy find ROUTES ***************
 Route::post('/detectPharmacy/{latitude?}/{longitude?}', 'findPharmaciesProducts@findPharmacies');
 Route::post('/convertAddress', 'findPharmaciesProducts@convertAddressToLatLong');
+Route::get('/pharmacyDetails/{pharmacyId}', 'findPharmaciesProducts@pharmacyDetails');
+
+
+
+// *************** Order Managment Routes ***************
+Route::get('/addToCart/{productId}/{PharmacyId}', 'cartController@addToCart');
+
 
 
 // *************** ROLE MANAGEMENT ROUTES ***************
@@ -43,6 +56,24 @@ Route::prefix('admin')->group(function () {
     Route::get('/password/reset','Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset','Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}','Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+
+    // *************** Message ROUTES ***************
+// View Messages
+Route::get('/viewAllMessages', 'messageController@viewAllMessages');
+// View Specific Message
+Route::get('/viewMessage/{messageId}', 'messageController@viewMessage');
+// View All Replies to a Specific Message Sender
+Route::get('/viewAllMessagesOfSpecificSender/{messageId}', 'messageController@viewAllMessagesOfSpecificSender');
+// Reply to Message
+Route::post('/replyMessage/{messageId}', 'messageController@replyMessage');
+// Mark As Unread Message
+Route::put('/markAsUnreadMessage/{messageId}', 'messageController@markAsUnreadMessage');
+// Mark As Read Message
+Route::put('/markAsReadMessage/{messageId}', 'messageController@markAsReadMessage');
+// Delete Specific Message
+Route::delete('/deleteMessage/{messageId}', 'messageController@deleteMessage');
+// Search for Sender
+Route::post('/searchSender', 'messageController@searchSender');
 });
 
 Route::prefix('pharmacist')->group(function () {
@@ -58,10 +89,18 @@ Route::prefix('pharmacist')->group(function () {
     Route::get('/password/reset','Auth\PharmacistForgotPasswordController@showLinkRequestForm')->name('pharmacist.password.request');
     Route::post('/password/reset','Auth\PharmacistResetPasswordController@reset');
     Route::get('/password/reset/{token}','Auth\PharmacistResetPasswordController@showResetForm')->name('pharmacist.password.reset');
-    //PharamcyDetails Form
-    Route::post('/savePharmacyDetails', 'PharmacistController@savePharmacyDetails');
-    //Ask Query
-    Route::post('/postQuery', 'posts_controller@pharmacistPostQuery');
+    
+    //Pharamcy DataStorage
+    Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
+    Route::get('/storeProductsInTable', 'PharmacistController@storeProductsInTable');
+    
+    //PharamcyProducts
+    Route::get('/viewProducts', 'PharmacistProductController@viewProducts');
+    Route::get('/addProduct', 'PharmacistProductController@addProductForm');
+    Route::post('/addProduct', 'PharmacistProductController@addProduct');
+    Route::get('/editProduct/{productId}', 'PharmacistProductController@editProductForm');
+    Route::put('/editProduct/{productId}', 'PharmacistProductController@editProduct');
+    Route::delete('/deleteProduct/{productId}', 'PharmacistProductController@deleteProduct');
 
 });
 

@@ -25,7 +25,7 @@ class PharmacistRegisterController extends Controller
    */
   public function index()
   {
-      return view('pharmacist');
+      return view('pharmacist.pharmacistDashboard');
   }
 
   /**
@@ -56,6 +56,8 @@ class PharmacistRegisterController extends Controller
         'address'       =>      'required',
         'society'       =>      'required',
         'city'          =>      'required',
+        'freeDeliveryDistance' => 'required|numeric',
+        'freeDeliveryPurchase' => 'required|numeric',
         'password'      =>      'required|string|min:6|confirmed'
 
       ]);
@@ -76,13 +78,19 @@ class PharmacistRegisterController extends Controller
       $pharmacists->city = $req->city;
       $pharmacists->latitude = $latitude;
       $pharmacists->longitude = $longitude;
+      $pharmacists->freeDeliveryDistance = $req->freeDeliveryDistance;
+      $pharmacists->freeDeliveryPurchase = $req->freeDeliveryPurchase;
       $pharmacists->password=bcrypt($req->password);
       $pharmacists->verificationToken=Str::random(40);
-      // by default verificationStatus and status is set to 0 and 1 respectively
+      // by default 
+      // verificationStatus  is set to 0
+      // status is set to 1 
       // see create_pharmacists_table migration for more info
       $pharmacists->save();
 
       $thisUser = $pharmacists;
+
+      // verification email function called
       $this->sendEmail($thisUser);
 
       return redirect()->route('pharmacist.login')->with('message', 'A confirmation email has been sent');

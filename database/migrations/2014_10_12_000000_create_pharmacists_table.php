@@ -24,7 +24,7 @@ class CreatePharmacistsTable extends Migration
             // status types
                     // pharmacist banned->0
                     // pharmacist not banned->1
-            $table->integer('status')->default('1');
+            $table->integer('pharmacistStatus')->default('1');
             $table->string('name');
             $table->string('email')->unique();
             $table->string('contact');
@@ -34,6 +34,14 @@ class CreatePharmacistsTable extends Migration
             $table->string('city');
             $table->float('longitude', 10, 6);
             $table->float('latitude', 10, 6);
+            $table->string('freeDeliveryDistance');
+            $table->string('freeDeliveryPurchase');
+            // Possible data source type
+                    // none->0
+                    // api->1
+                    // table->2
+            $table->string('dataSource')->default('0');
+            $table->string('dbAPI')->nullable();
             $table->string('password');
             $table->rememberToken();
         });

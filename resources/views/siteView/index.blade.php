@@ -24,8 +24,8 @@
                     {{ csrf_field() }}
 
                     <div class="col-md-6">
-                        <input id="searchBar" type="text" class="form-control" name="searchBar" placeholder="search medicine" required>
-                        <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
+                        Medicine: <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine" required>
+                        Distance(km):<input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
                         <input id="latitude" type="text" name="latitude" hidden>
                         <input id="longitude" type="text" name="longitude" hidden>
                         <div class="form-group">
@@ -59,18 +59,17 @@
   ********************************************************************
   -->
                     <div class="form">
-                        enterALocation
                         <form class="form-horizontal" method="POST" action="/convertAddress">
                             {{ csrf_field() }}
 
                             <div class="col-md-6">
-                                <input id="searchBar" type="text" class="form-control" name="searchBar" placeholder="search medicine" required>
+                                Medicine: <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine" required>
                                 @if (Auth::check())
-                                <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required value="{{Auth::user()->address.' '.Auth::user()->society.' '.Auth::user()->city}}">
+                                Address:<input id="address" type="text" class="form-control" name="address" placeholder="enter address" required value="{{Auth::user()->address.' '.Auth::user()->society.' '.Auth::user()->city}}">
                                 @else
-                                <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required>
+                                Address:<input id="address" type="text" class="form-control" name="address" placeholder="enter address" required>
                                 @endif
-                                <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
+                                Distance(km):<input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
                                 <div class="form-group">
                                     <div class="col-md-8 col-md-offset-4">
                                         <button type="submit" class="btn btn-primary">

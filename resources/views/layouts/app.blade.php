@@ -12,9 +12,9 @@
 
     
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 
+    @yield('head')
     @yield('style')
 </head>
 <body>
@@ -49,6 +49,7 @@
                         @if (Auth::guest())
                             <!-- Collect the nav links, forms, and other content for toggling -->
   <ul class="nav navbar-nav">
+      <li><a href="/contactUsForm">Contact Admin</a></li>
     <li class="dropdown">
       <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></a>
       <ul class="dropdown-menu">

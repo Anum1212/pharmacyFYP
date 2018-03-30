@@ -8,13 +8,20 @@
                 <li><a href="#">Account</a></li>
                 <li><a href="#">View Orders</a></li>
                 <li><a href="#">View Medicine Stats</a></li>
-                <li><a href="admin/viewAllMessages">Messages</li>
+                @if($userData->dataSource=='2')
+                <li>Manage Products
+                <ul>
+                    <li><a href="pharmacist/viewProducts">View Products</a></li>
+                    <li><a href="pharmacist/addProduct">Add Product</a></li>
+                </ul>
+                </li>
+                @endif
             </ul>
         </div>
         </div>
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12 col-lg-offset-2 col-md-offset-2 col-sm-offset-1">
                 <div class="panel panel-default">
-                    <div class="panel-heading">Admin Dashboard</div>
+                    <div class="panel-heading">Pharmacist Dashboard</div>
 
                     <div class="panel-body">
                         @component('components.who-is-logged-in')
@@ -22,5 +29,6 @@
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 @endsection
