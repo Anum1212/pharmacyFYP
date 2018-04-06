@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
 @section('style')
   <style>
@@ -51,7 +51,7 @@ h1 { font-size: 1.5em; margin: 10px; }
 
 
 
-@section('content')
+@section('body')
 <div class="container">
     <div class="row">
         <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-md-offset-2">

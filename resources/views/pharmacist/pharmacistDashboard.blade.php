@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
-@section('content')
+@section('body')
     <div class="container">
         <div class="sideNavBar panel panel-default col-lg-2 col-md-2 col-sm-2 col-xs-12">
            <div class="panel-body">

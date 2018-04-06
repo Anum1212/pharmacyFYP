@@ -99,7 +99,7 @@
   @include('partials.message')
   @include('partials.error')
 </div>
-        @yield('content')
+        @yield('body')
     </div>
 
     <!-- Scripts -->

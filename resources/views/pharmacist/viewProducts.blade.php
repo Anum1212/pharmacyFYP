@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
-@section('content')
+@section('body')
     <div class="container">
         <div class="row">
             <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">

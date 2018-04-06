@@ -1,4 +1,4 @@
-@extends('layouts.app') 
+@extends('layouts.siteView') 
 
 @section('style') 
 <style>
@@ -15,7 +15,7 @@
 </style>
 @endsection 
 
-@section('content')
+@section('body')
 <div class="wrapper">
 <div class="map">
     <p>

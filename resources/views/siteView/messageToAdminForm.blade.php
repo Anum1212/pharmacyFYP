@@ -1,10 +1,10 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
 @section('style')
 
 @endsection
 
-@section('content')
+@section('body')
   <div class="container">
     <div class="row">
   {{-- ---------------------------- Message Div ----------------------------- --}}

@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
-@section('content')
+@section('body')
 <div class="container">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -113,19 +113,7 @@
                                 @endif
                             </div>
                         </div>
-                        {{-- ---------------------------- Max Distance for Free Delivery ----------------------------- --}}
-						<div class="form-group{{ $errors->has('freeDeliveryDistance') ? ' has-error' : '' }}">
-							<label for="freeDeliveryDistance" class="col-md-4 control-label">Max Distance for Free Delivery</label>
 
-							<div class="col-md-6">
-								<input id="freeDeliveryDistance" type="text" class="form-control" name="freeDeliveryDistance" value="{{ old('freeDeliveryDistance') }}"
-								 required autofocus> @if ($errors->has('freeDeliveryDistance'))
-								<span class="help-block">
-									<strong>{{ $errors->first('freeDeliveryDistance') }}</strong>
-								</span>
-								@endif
-							</div>
-						</div>
 
 						{{-- ---------------------------- Max Purchase for Free Delivery ----------------------------- --}}
 						<div class="form-group{{ $errors->has('freeDeliveryPurchase') ? ' has-error' : '' }}">

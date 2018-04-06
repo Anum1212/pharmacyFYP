@@ -17,6 +17,7 @@ class CreatePharmacistproductsTable extends Migration
             $table->increments('id');
             $table->timestamps();
             $table->string('pharmacistId');
+            $table->string('pharmacistName');
             $table->string('name');
             // possible types of medicine
             // 1 -> tablet

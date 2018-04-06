@@ -1,4 +1,4 @@
-@extends('layouts.app') 
+@extends('layouts.siteView') 
 
 @section('style') 
 <style>
@@ -55,7 +55,7 @@
 </style>
 @endsection 
 
-@section('content')
+@section('body')
 <div class="wrapper">
           @foreach($searchedProducts as $searchedProduct)
       @foreach($searchedProduct as $product)
@@ -104,7 +104,7 @@
           @endif
           @endforeach
 
-              <a href="/addToCart/{{$product->id}}/{{$nearByPharmacy->id}}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
+              <a href="/addToCart/{{$product->id}}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
         </div>
       
       @endforeach

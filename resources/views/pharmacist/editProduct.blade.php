@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
-@section('content')
+@section('body')
     <div class="container">
           <form action="/pharmacist/editProduct/{{$product->id}}" method="POST">
             {{ csrf_field() }}  {{ method_field('PUT') }}

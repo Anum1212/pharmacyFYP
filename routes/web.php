@@ -29,8 +29,15 @@ Route::get('/pharmacyDetails/{pharmacyId}', 'findPharmaciesProducts@pharmacyDeta
 
 
 // *************** Order Managment Routes ***************
-Route::get('/addToCart/{productId}/{PharmacyId}', 'cartController@addToCart');
-
+Route::get('/addToCart/{productId}', 'cartController@addToCart');
+// Remove from cart
+Route:: delete('/removeFromCart/{product}', 'cartController@remove');
+// View from cart
+Route:: get('/viewCart', 'cartController@view');
+// Update cart
+Route:: post('/updateCart', 'cartController@update');
+// checkout cart
+Route:: get('/CheckOutCart', 'orderController@checkout');
 
 
 // *************** ROLE MANAGEMENT ROUTES ***************

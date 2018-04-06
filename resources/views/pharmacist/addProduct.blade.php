@@ -1,6 +1,6 @@
-@extends('layouts.app')
+@extends('layouts.siteView')
 
-@section('content')
+@section('body')
     <div class="container">
           <form action="addProduct" method="POST">
             {{ csrf_field() }}
