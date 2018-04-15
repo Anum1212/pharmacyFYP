@@ -1,5 +1,12 @@
 @extends('layouts.dashboard')
 
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet">
+@endsection
+
+@section('style')
+@endsection 
+
 @section('body')
 
   <div class="wrapper">
@@ -11,10 +18,10 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>O</b>rder</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-          <b>Dash</b>Board</span>
+          <b>O</b>rder</span>
       </a>
 
       <!-- Header Navbar -->
@@ -53,53 +60,28 @@
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
-            <a href="/pharmacist/dashboard">
-              <i class="fa fa-tachometer" aria-hidden="true"></i>
+                    <li class="active">
+            <a href="/home">
+              <i class="fa fa-tachometer " aria-hidden="true"></i>
               <span>DashBoard</span>
             </a>
           </li>
-           <li>
-            <a href="/pharmacist/editAccountDetailsForm">
+          <li>
+            <a href="/editAccountDetailsForm">
               <i class="fa fa-cogs" aria-hidden="true"></i>
               <span>Account Details</span>
             </a>
           </li>
           <li>
-            <a href="/pharmacist/viewAllOrders">
+            <a href="/viewAllOrders">
               <i class="fa fa-truck" aria-hidden="true"></i>
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-users" aria-hidden="true"></i>
-              <span>Product Management</span>
-              <span class="pull-right-container">
-               <i class="fa fa-database" aria-hidden="true"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
-                    View Products
-                </a>
-              </li>
-              <li>
-                <a href="/pharmacist/addProduct">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    Add Products
-                </a>
-              </li>
-            </ul>
-          </li>
-          @endif
           <li>
-            <a href="/pharmacist/contactUsForm">
+            <a href="contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
-              <span>Contact Us</span>
+              <span>Contact Admin</span>
             </a>
           </li>
           <li>
@@ -123,7 +105,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Orders
         </h1>
       </section>
 
@@ -133,6 +115,59 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
+        <div class="container containerDashboardContent">
+  <table>
+  <caption>Order Details</caption>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">item</th>
+      <th scope="col">type</th>
+      <th scope="col">quantity</th>
+      <th scope="col">pharmacy</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    $i=1;
+    ?>
+    @foreach($orderDetails as $orderDetail)
+    <tr>
+      <td data-label="#">{{$i}}</td>
+      @foreach($productDetails as $productDetail)
+      @if($productDetail->id == $orderDetail->id)
+      <td data-label="item">{{$productDetail->name}}</td>
+      @if($productDetail->type=='1') <!-- 1 = Tablet -->
+      <td data-label="type">Tablet</td>
+                  @elseif($productDetail->type=='2') <!-- 2 = Capsule -->
+                  <td data-label="type">Capsule</td>
+                  @elseif($productDetail->type=='3') <!-- 3 = Syrup -->
+                  <td data-label="type">Syrup</td>
+                  @elseif($productDetail->type=='4') <!-- 4 = Inhaler -->
+                  <td data-label="type">Inhaler</td>
+                  @elseif($productDetail->type=='5') <!-- 5 = Drops -->
+                  <td data-label="type">Drops</td>
+                  @elseif($productDetail->type=='6') <!-- 6 = Injection -->
+                  <td data-label="type">Injection</td>
+                  @elseif($productDetail->type=='7') <!-- 7 = Cream -->
+                  <td data-label="type">Cream</td>
+          @endif
+    @endif
+    @endforeach
+    <td data-label="item">{{$orderDetail->quantity}}</td>
+    @foreach($pharmacyDetails as $pharmacyDetail)
+    @if($productDetail->pharmacistId  == $pharmacyDetail->id)
+    <td data-label="item"><a href="/pharmacyDetails/{{$pharmacyDetail->id}}">{{$pharmacyDetail->pharmacyName}}</a></td>
+    @endif
+    @endforeach
+      </tr>
+      <?php
+      $i++;
+      ?>
+      @endforeach
+  </tbody>
+</table>
+  </div>
 
       </section>
       <!-- /.content -->

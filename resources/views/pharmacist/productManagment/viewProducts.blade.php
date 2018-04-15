@@ -11,10 +11,10 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>Pd</b>Mg</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-          <b>Dash</b>Board</span>
+          <b>Product</b>Managment</span>
       </a>
 
       <!-- Header Navbar -->
@@ -53,7 +53,7 @@
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
+          <li>
             <a href="/pharmacist/dashboard">
               <i class="fa fa-tachometer" aria-hidden="true"></i>
               <span>DashBoard</span>
@@ -71,8 +71,7 @@
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
-          <li class="treeview">
+          <li class="treeview active">
             <a href="#">
               <i class="fa fa-users" aria-hidden="true"></i>
               <span>Product Management</span>
@@ -81,9 +80,9 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li>
+              <li class="active">
                 <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
+                    <i class="fa fa-search" aria-hidden="true"></i>
                     View Products
                 </a>
               </li>
@@ -95,7 +94,6 @@
               </li>
             </ul>
           </li>
-          @endif
           <li>
             <a href="/pharmacist/contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
@@ -123,8 +121,15 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          View Products
         </h1>
+        <ol class="breadcrumb">
+          <li>
+            <a href="/pharmacist/viewProducts">
+              <i class="fa fa-database"></i> Product Managment</a>
+          </li>
+          <li class="active">View Products</li>
+        </ol>
       </section>
 
       <!-- Main content -->
@@ -133,6 +138,57 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
+
+        <div class="container containerDashboardContent">
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Name
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Dosage
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Type
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Price
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Quantity
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                Actions
+            </div>
+        </div>
+
+        @foreach ($products as $product)
+            
+        <div class="row">
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                {{$product->name}}
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                {{$product->dosage}}
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                {{$product->type}}
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                {{$product->price}}
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                {{$product->quantity}}
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
+                <a class="btn btn-success" href="editProduct/{{$product->id}}"><i class="fa fa-edit"></i></a>
+                <form action="/pharmacist/deleteProduct/{{$product->id}}" method="post">
+                                    {{csrf_field()}} {{method_field('DELETE')}}
+                                    <button class="btn btn-success" type="submit"><i class="fa fa-trash"></i></button>
+                                </form>
+            </div>
+        </div>
+        @endforeach
+    </div>
 
       </section>
       <!-- /.content -->
@@ -152,3 +208,4 @@
   </div>
   <!-- ./wrapper -->
 @endsection
+

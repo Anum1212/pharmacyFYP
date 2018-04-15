@@ -18,9 +18,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Pharmacist;
 use Auth;
 use Curl;
+use Geocode;
+use App\User;
+use App\Pharmacist;
+use App\Pharmacistproduct;
+use App\Order;
+use App\Orderitem;
 
 class PharmacistController extends Controller
 {
@@ -42,7 +47,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- Index ----------------------------------| 
+    //  |---------------------------------- Index ----------------------------------|
     public function index()
     {
         // get logged in pharamcist details
@@ -81,7 +86,7 @@ class PharmacistController extends Controller
     {
         $this->validate($req, [
             'dbAPI' => 'required|',
-          ]);
+            ]);
 
 
         // *************************** use this api for testing purposes (if no own api)***************************
@@ -93,11 +98,11 @@ class PharmacistController extends Controller
 
         for ($i=0;$i<count($medicine); $i++) {
             $response[$i] = Curl::to($req->dbAPI)
-// written according to clin api response
-// arham will make changes from here according to project api response structure
-              ->withData(['terms' => $medicine[$i]], ['maxList'=>'1'], ['q'=>'df'])
-               ->asJson()
-              ->get();
+                // written according to clin api response
+                // arham will make changes from here according to project api response structure
+                ->withData(['terms' => $medicine[$i]], ['maxList'=>'1'], ['q'=>'df'])
+                ->asJson()
+                ->get();
 
             // counting how many medicine tests failed
             if ($response[$i][0] == '0') {
@@ -122,4 +127,94 @@ class PharmacistController extends Controller
             return redirect()->action('PharmacistController@index')->with('message', 'Record Saved');
         }
     }
-}
+
+
+
+    //  |---------------------------------- viewAllOrders ----------------------------------|
+    public function viewAllOrders()
+    {
+        $allOrderId=[];
+        $allCustomerId=[];
+        $customer=[];
+        $orders=[];
+        $pharmacistId = Auth::user()->id;
+        
+        $orderItems = Orderitem::where('pharmacistId', $pharmacistId)->orderBy('id', 'desc')->get();
+        foreach ($orderItems as $orderItem) {
+            $allOrderId[] = $orderItem->orderId;
+        }
+        $orderId = array_unique($allOrderId);
+        for ($i=0; $i<count($orderId); $i++) {
+            $orders[$i] = Order::whereId($orderId[$i])->first();
+        }
+        foreach ($orders as $order) {
+            $allCustomerId[] = $order->userId;
+        }
+        $customerId = array_unique($allCustomerId);
+        for ($i=0; $i<count($customerId); $i++) {
+            $customers[$i] = User::whereId($customerId[$i])->first();
+        }
+        return view('pharmacist.orders.allOrders', compact('orders', 'customers'));
+    }
+
+
+
+    //  |---------------------------------- viewSpecificOrder ----------------------------------|
+    public function viewSpecificOrder($orderId, $customerId)
+    {
+        $productDetails =[];
+        $orderDetails = Orderitem::where([
+            ['orderId', $orderId],
+            ['pharmacistId', Auth::user()->id]
+            ])->get();
+        
+        $customerDetails =  User::whereId($customerId)->first();
+            foreach($orderDetails as $orderDetail)
+            $productDetails[]=Pharmacistproduct::whereId($orderDetail->productId)->first();
+            return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails'));
+        }
+        
+        
+
+        //  |---------------------------------- editAccountDetailsForm ----------------------------------|
+        public function editAccountDetailsForm()
+        {
+            $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
+            return view('pharmacist.editPharmacistDetails', compact('pharmacyDetails'));
+        }
+        
+        
+        
+        //  |---------------------------------- editAccountDetails ----------------------------------|
+        public function editAccountDetails(Request $req)
+        {
+            $address = $req->address.' '.$req->society.' '.$req->city;
+            $addressToLatLng = Geocode::make()->address($address);
+            
+            $latitude = $addressToLatLng->latitude();
+    	    $longitude = $addressToLatLng->longitude();
+            
+            $pharmacyDetails = Pharmacist::find(Auth::user()->id);
+            $pharmacyDetails->name = $req->name;
+            $pharmacyDetails->email = $req->email;
+            $pharmacyDetails->contact = $req->contact;
+            $pharmacyDetails->pharmacyName = $req->pharmacyName;
+            $pharmacyDetails->address = $req->address;
+            $pharmacyDetails->society = $req->society;
+            $pharmacyDetails->city = $req->city;
+            $pharmacyDetails->longitude = $longitude;
+            $pharmacyDetails->latitude = $latitude;
+            $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
+            $pharmacyDetails->save();
+            
+            return redirect('/pharmacist/dashboard');
+        }
+
+
+
+        //  |---------------------------------- contactUsForm ----------------------------------|
+        public function contactUsForm()
+        {
+           return view('pharmacist.messageToAdminForm');
+        }
+    }

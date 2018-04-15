@@ -14,11 +14,18 @@
 Route::get('/test', 'testController@index');
 Route::get('/', 'testController@allRoutes');
 
-
 // *************** SITE NAVIGATION ROUTES ***************
 Route::get('/index', 'siteViewController@index');
-Route::get('/contactUsForm', 'siteViewController@contactUsForm');
-Route::post('/contactUs', 'siteViewController@contactUs');
+Route::post('/contactUs', 'messageController@contactUs');
+
+
+// *************** Customer ROUTES ***************
+Route::get('/contactUsForm', 'HomeController@contactUsForm');
+Route::get('/editAccountDetailsForm', 'HomeController@editAccountDetailsForm');
+Route::post('/editAccountDetails', 'HomeController@editAccountDetails');
+//CustomerOrders
+Route::get('/viewAllOrders', 'HomeController@viewAllOrders');
+Route::get('/viewSpecificOrder/{orderId}', 'HomeController@viewSpecificOrder');
 
 
 // *************** Product and pharmacy find ROUTES ***************
@@ -47,7 +54,7 @@ Route::get('/roles', function () {
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 Route::get('/user/logout','Auth\LoginController@userLogout')->name('user.logout');
 
 //admin route for our multi-auth system
@@ -84,23 +91,31 @@ Route::post('/searchSender', 'messageController@searchSender');
 });
 
 Route::prefix('pharmacist')->group(function () {
-    Route::get('/', 'PharmacistController@index')->name('pharmacist.dashboard');
+    //pharmacist register login logout routes
+    Route::get('/dashboard', 'PharmacistController@index')->name('pharmacist.dashboard');
     Route::get('/login', 'Auth\PharmacistLoginController@showLoginForm')->name('pharmacist.login');
     Route::post('/login', 'Auth\PharmacistLoginController@login')->name('pharmacist.login.submit');
     Route::get('/register', 'Auth\PharmacistRegisterController@create')->name('pharmacist.register');
     Route::post('/register', 'Auth\PharmacistRegisterController@store')->name('pharmacist.register.store');
     Route::get('/logout','Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
-
+    
     //pharmacist password reset routes
     Route::post('/password/email','Auth\PharmacistForgotPasswordController@sendResetLinkEmail')->name('pharmacist.password.email');
     Route::get('/password/reset','Auth\PharmacistForgotPasswordController@showLinkRequestForm')->name('pharmacist.password.request');
     Route::post('/password/reset','Auth\PharmacistResetPasswordController@reset');
     Route::get('/password/reset/{token}','Auth\PharmacistResetPasswordController@showResetForm')->name('pharmacist.password.reset');
     
+    //Pharamcy Edit Details Routes
+    Route::get('/editAccountDetailsForm', 'PharmacistController@editAccountDetailsForm');
+    Route::post('/editAccountDetails', 'PharmacistController@editAccountDetails');
+    
     //Pharamcy DataStorage
     Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
     Route::get('/storeProductsInTable', 'PharmacistController@storeProductsInTable');
     
+    //Pharamcy DataStorage
+    Route::get('/contactUsForm', 'PharmacistController@contactUsForm');
+
     //PharamcyProducts
     Route::get('/viewProducts', 'PharmacistProductController@viewProducts');
     Route::get('/addProduct', 'PharmacistProductController@addProductForm');
@@ -108,7 +123,10 @@ Route::prefix('pharmacist')->group(function () {
     Route::get('/editProduct/{productId}', 'PharmacistProductController@editProductForm');
     Route::put('/editProduct/{productId}', 'PharmacistProductController@editProduct');
     Route::delete('/deleteProduct/{productId}', 'PharmacistProductController@deleteProduct');
-
+    
+    //PharmacyOrders
+    Route::get('/viewAllOrders', 'PharmacistController@viewAllOrders');
+    Route::get('/viewSpecificOrder/{orderId}/{customerId}', 'PharmacistController@viewSpecificOrder');
 });
 
 

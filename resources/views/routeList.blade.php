@@ -22,6 +22,7 @@
                 <li><a href="/login" target="_blank">User Login</a></li>
                 <li><a href="/contactUsForm" target="_blank">Contact Admin</a></li>
                 <li><a href="/ratePharmacy" target="_blank">Rate Pharmacy</a></li>
+                <li><a href="http://localhost/phpmyadmin/" target="_blank">PhpMyAdmin</a></li>
                 <li><a href="/test" target="_blank">Test Route</a></li>
             </ul>
         </div>

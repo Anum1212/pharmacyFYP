@@ -1,5 +1,12 @@
 @extends('layouts.dashboard')
 
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet">
+@endsection
+
+@section('style')
+@endsection 
+
 @section('body')
 
   <div class="wrapper">
@@ -11,7 +18,7 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>H</b>OME</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
           <b>Dash</b>Board</span>
@@ -53,7 +60,7 @@
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
+          <li>
             <a href="/pharmacist/dashboard">
               <i class="fa fa-tachometer" aria-hidden="true"></i>
               <span>DashBoard</span>
@@ -65,13 +72,12 @@
               <span>Account Details</span>
             </a>
           </li>
-          <li>
+          <li class="active">
             <a href="/pharmacist/viewAllOrders">
               <i class="fa fa-truck" aria-hidden="true"></i>
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
           <li class="treeview">
             <a href="#">
               <i class="fa fa-users" aria-hidden="true"></i>
@@ -95,7 +101,6 @@
               </li>
             </ul>
           </li>
-          @endif
           <li>
             <a href="/pharmacist/contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
@@ -123,7 +128,7 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Orders
         </h1>
       </section>
 
@@ -133,6 +138,38 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
+        <div class="container containerDashboardContent">
+
+  <table>
+  <caption>Your Orders</caption>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Customer</th>
+      <th scope="col">View</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    $i=1;
+    ?>
+    @foreach($orders as $order)
+    <tr>
+      <td data-label="#">{{$i}}</td>
+      @foreach($customers as $customer)
+      @if($customer->id == $order->userId)
+      <td data-label="Customer">{{$customer->name}}</td>
+      <td data-label="View"><a href="viewSpecificOrder/{{$order->id}}/{{$customer->id}}"><i class="fa fa-search" aria-hidden="true"></i></a></td>
+      @endif
+      @endforeach
+      </tr>
+      <?php
+      $i++;
+      ?>
+      @endforeach
+  </tbody>
+</table>
+  </div>
 
       </section>
       <!-- /.content -->

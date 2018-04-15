@@ -77,7 +77,6 @@
                     {{csrf_field()}}
                     <input type="number" name="qty[]" max="99" min="1" maxlength="2" value="{{$row->qty}}"/>
                 </td>
-							</td>
 							<td data-th="Subtotal" class="text-center">{{$row->total}}</td>
 
 							</td>

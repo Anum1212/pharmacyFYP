@@ -48,7 +48,6 @@ class orderController extends Controller
 // which can then later on be used to fetch customer orders from db table orderItem
 $userId = Auth::user()->id;
 $cost=Cart::total();
-// dd($cost);
 
 if($cost > 0)
 {
@@ -66,6 +65,7 @@ foreach(Cart::content() as $item)
     $orderItem = new orderitem;
     $orderItem->orderId = $lastInsertId;
     $orderItem->productId = $item->id;
+    $orderItem->pharmacistId = $item->options->pharmacistId;
     $orderItem->quantity = $item->qty;
     $orderItem->save();
 
@@ -85,7 +85,7 @@ return redirect('/');
   {
     $userId = Auth::user()->id;
 
-    $orders = Order::where('userId', $userId)->paginate(15);;
+    $orders = Order::where('userId', $userId)->paginate(15);
 
 return view('user.orderList', compact('orders'));
   }

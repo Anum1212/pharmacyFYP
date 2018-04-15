@@ -11,10 +11,10 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>Pd</b>Mg</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-          <b>Dash</b>Board</span>
+          <b>Product</b>Managment</span>
       </a>
 
       <!-- Header Navbar -->
@@ -53,7 +53,7 @@
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
+          <li>
             <a href="/pharmacist/dashboard">
               <i class="fa fa-tachometer" aria-hidden="true"></i>
               <span>DashBoard</span>
@@ -71,8 +71,7 @@
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
-          <li class="treeview">
+          <li class="treeview active">
             <a href="#">
               <i class="fa fa-users" aria-hidden="true"></i>
               <span>Product Management</span>
@@ -83,11 +82,11 @@
             <ul class="treeview-menu">
               <li>
                 <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
+                    <i class="fa fa-search" aria-hidden="true"></i>
                     View Products
                 </a>
               </li>
-              <li>
+              <li class="active">
                 <a href="/pharmacist/addProduct">
                     <i class="fa fa-plus" aria-hidden="true"></i>
                     Add Products
@@ -95,7 +94,6 @@
               </li>
             </ul>
           </li>
-          @endif
           <li>
             <a href="/pharmacist/contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
@@ -123,8 +121,15 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Add Product
         </h1>
+        <ol class="breadcrumb">
+          <li>
+            <a href="/pharmacist/viewProducts">
+              <i class="fa fa-database"></i> Product Managment</a>
+          </li>
+          <li class="active">Add Product</li>
+        </ol>
       </section>
 
       <!-- Main content -->
@@ -133,6 +138,51 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
+
+        <div class="container containerDashboardContent">
+          <form action="addProduct" method="POST">
+            {{ csrf_field() }}
+    <div class="form-group">
+      <label for="productName">Product Name:</label>
+      <input type="text" class="form-control" id="productName" placeholder="Enter productName" name="productName" required>
+    </div>
+    <div class="form-group">
+      <label for="dosage">Dosage(mg/ml):</label>
+      <input type="number" class="form-control" id="dosage" placeholder="Enter dosage" name="dosage" required>
+    </div>
+     {{--  possible types of medicine
+             1) tablet
+             2) capsule
+             3) syrup
+             4) inhaler
+             5) drops
+             6) injection
+             7) cream  --}}
+    <div class="form-group">
+  <label for="drugType">Product Type:</label>
+  <select class="form-control" id="drugType" name="drugType" required>
+    <option value="">----</option>
+    <option value="1">Tablet</option>
+    <option value="2">Capsule</option>
+    <option value="3">Syrup</option>
+    <option value="4">Inhaler</option>
+    <option value="5">Drops</option>
+    <option value="6">Injection</option>
+    <option value="7">Cream</option>
+  </select>
+</div>
+    <div class="form-group">
+      <label for="price">Price:</label>
+      <input type="number" class="form-control" id="price" placeholder="Enter price" name="price" required>
+    </div>
+    <div class="form-group">
+      <label for="quantity">Quantity:</label>
+      <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" name="quantity" required>
+    </div>
+    <button type="submit" class="btn btn-success">Add Product</button>
+  </form>
+    </div>
+
 
       </section>
       <!-- /.content -->
@@ -152,3 +202,4 @@
   </div>
   <!-- ./wrapper -->
 @endsection
+

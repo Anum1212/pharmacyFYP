@@ -37,7 +37,7 @@
 									Give access to pharmacy database
 								</button>
               < or>
-                <a href="pharmacist/storeProductsInTable" class="btn btn-default">
+                <a href="storeProductsInTable" class="btn btn-default">
 									enter products manually
 								</a>
             </div>

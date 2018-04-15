@@ -6,32 +6,55 @@
 // ------------------
 // methods and their details
 // ---------------------------
+// 1) contactUs -> save user message to db
+// 2) viewAllMessages -> view all messages from db
+// 3) viewMessage -> view message details
+// 4) viewAllMessagesOfSpecificSender -> view all messages sent by a specific user
+// 5) replyMessage -> send message to customer/pharmacist
+// 6) markAsUnreadMessage -> mark a message as unread
+// 7) markAsReadMessage -> mark a message as read
+// 8) deleteMessage  -> delete a message
+// 9) searchSender -> search for message
+
+// Possible Status(int) Types
+// --------------------------
+// 0 -> UnRead message
+// 1 -> admin only Read message
+// 2 -> admin replied to messages
+// 3 -> indicates that message is admin response
+
+
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Message;
+use App\User;
+use App\Pharmacist;
 Use Mail;
 Use App\Mail\replyToMessages;
 
 class messageController extends Controller
 {
 
-
-      public function __construct()
-    {
-        $this->middleware('auth:admin');
-    }
-
-
-
-// ******************************************
-//             Visitor Message Functions
-//  ******************************************
-// Possible Status(int) Forms
-// 0 -> UnRead message
-// 1 -> admin only Read message
-// 2 -> admin replied to messages
-// 3 -> indicates that message is admin response
+  
+  public function __construct()
+  {
+    $this->middleware('auth:admin')->except(['contactUs']);
+  }
+  
+  
+  
+// |---------------------------------- contactUs ----------------------------------|
+  public function contactUs(Request $req){
+    $message = new Message();
+    $message->name = $req->name;
+    $message->senderEmail = $req->email;
+    $message->recipientEmail = '0'; // 0 = site admin
+    $message->message = $req->message;
+    $message->save();
+    return redirect('/')->with('message', 'Admin will soon get in contact with you.');
+  }
 
 
 
@@ -46,6 +69,8 @@ public function viewAllMessages(Request $req)
   return view('admin.messages.viewAllMessages',compact('unreadMessages', 'readMessages'));
 }
 
+
+
 // |---------------------------------- viewMessage ----------------------------------|
 public function viewMessage($messageId)
 {
@@ -53,6 +78,9 @@ public function viewMessage($messageId)
   $allPreviousEmails = Message::where('senderEmail', $message->senderEmail)->get();
   return view('admin.messages.replyMessage', compact('message', '$allPreviousEmails'));
 }
+
+
+
 // |---------------------------------- viewAllMessagesOfSpecificSender ----------------------------------|
 public function viewAllMessagesOfSpecificSender($messageId)
 {
@@ -67,6 +95,9 @@ public function viewAllMessagesOfSpecificSender($messageId)
   }
   return view('admin.messages.oldMessages', compact('visitorPrevMessage', 'adminResponse'));
 }
+
+
+
 // |---------------------------------- replyMessage ----------------------------------|
 public function replyMessage(Request $req, $messageId)
 {
@@ -86,6 +117,8 @@ $recipientData->save();
 return redirect('admin/viewAllMessages')->with('message','Email Sent');
 }
 
+
+
 // |---------------------------------- markAsUnreadMessage ----------------------------------|
 public function markAsUnreadMessage($messageId){
              $message = Message::find($messageId);
@@ -94,6 +127,9 @@ public function markAsUnreadMessage($messageId){
 
              return redirect()->action('messageController@viewAllMessages');
         }
+
+
+
 // |---------------------------------- markAsReadMessage ----------------------------------|
 public function markAsReadMessage($messageId){
              $message = Message::find($messageId);
@@ -102,6 +138,9 @@ public function markAsReadMessage($messageId){
 
          return redirect()->action('messageController@viewAllMessages');
         }
+
+
+
 // |---------------------------------- deleteMessage ----------------------------------|
 public function deleteMessage($messageId){
   $message = Message::find($messageId);

@@ -37,7 +37,7 @@ class PharmacistProductController extends Controller
     public function viewProducts()
     {
          $products = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->get();
-        return view('pharmacist.viewProducts', compact('products'));
+        return view('pharmacist.productManagment.viewProducts', compact('products'));
     }
 
 
@@ -46,7 +46,7 @@ class PharmacistProductController extends Controller
     
     public function addProductForm()
     {
-        return view('pharmacist.addProduct');
+        return view('pharmacist.productManagment.addProduct');
     }
     
 
@@ -81,22 +81,22 @@ class PharmacistProductController extends Controller
                 ['id', '=', $userData->id],
                 ['pharmacistId', '=', $productId],
              ])->first();
-        return view('pharmacist.editProduct', compact('product'));
+        return view('pharmacist.productManagment.editProduct', compact('product'));
     }
     
 
     // |---------------------------------- editProduct ----------------------------------|
     public function editProduct(Request $req, $productId)
     {
-        $newProduct = new Pharmacistproduct;
+        $product = Pharmacistproduct::find($productId);
 
         // store data in the pharmacist's table
-            $newProduct->name = $req->productName;
-            $newProduct->dosage = $req->dosage;
-            $newProduct->type = $req->drugType;
-            $newProduct->price = $req->price;
-            $newProduct->quantity = $req->quantity;
-            $newProduct->save();
+            $product->name = $req->productName;
+            $product->dosage = $req->dosage;
+            $product->type = $req->drugType;
+            $product->price = $req->price;
+            $product->quantity = $req->quantity;
+            $product->save();
 
             return redirect('/pharmacist/viewProducts');
     }

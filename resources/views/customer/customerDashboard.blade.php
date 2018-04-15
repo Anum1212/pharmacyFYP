@@ -11,7 +11,7 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>H</b>OME</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
           <b>Dash</b>Board</span>
@@ -23,8 +23,8 @@
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
-        <!-- Navbar Right Menu -->
-              <div class="navbar-custom-menu">
+              <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
           <!-- User Account Menu -->
@@ -47,62 +47,37 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
           <!-- Optionally, you can add icons to the links -->
-          <li >
-            <a href="/index">
+          <li>
+            <a href="index">
               <i class="fa fa-home" aria-hidden="true"></i>
               <span>Pharmacy</span>
             </a>
           </li>
           <li class="active">
-            <a href="/pharmacist/dashboard">
-              <i class="fa fa-tachometer" aria-hidden="true"></i>
+            <a href="/home">
+              <i class="fa fa-tachometer " aria-hidden="true"></i>
               <span>DashBoard</span>
             </a>
           </li>
-           <li>
-            <a href="/pharmacist/editAccountDetailsForm">
+          <li>
+            <a href="/editAccountDetailsForm">
               <i class="fa fa-cogs" aria-hidden="true"></i>
               <span>Account Details</span>
             </a>
           </li>
           <li>
-            <a href="/pharmacist/viewAllOrders">
+            <a href="/viewAllOrders">
               <i class="fa fa-truck" aria-hidden="true"></i>
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
-          <li class="treeview">
-            <a href="#">
-              <i class="fa fa-users" aria-hidden="true"></i>
-              <span>Product Management</span>
-              <span class="pull-right-container">
-               <i class="fa fa-database" aria-hidden="true"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              <li>
-                <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
-                    View Products
-                </a>
-              </li>
-              <li>
-                <a href="/pharmacist/addProduct">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    Add Products
-                </a>
-              </li>
-            </ul>
-          </li>
-          @endif
           <li>
-            <a href="/pharmacist/contactUsForm">
+            <a href="contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
-              <span>Contact Us</span>
+              <span>Contact Admin</span>
             </a>
           </li>
-          <li>
+<li>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                            <i class="fa fa-sign-out" aria-hidden="true"></i>
                                             <span>Logout</span>
@@ -123,8 +98,16 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Page Header
+          <small>Optional description</small>
         </h1>
+        <ol class="breadcrumb">
+          <li>
+            <a href="#">
+              <i class="fa fa-dashboard"></i> Level</a>
+          </li>
+          <li class="active">Here</li>
+        </ol>
       </section>
 
       <!-- Main content -->

@@ -18,6 +18,7 @@ class CreateOrderitemsTable extends Migration
             $table->timestamps();
             $table->integer('orderId');
             $table->integer('productId');
+            $table->integer('pharmacistId');
             $table->integer('quantity');
 
         });

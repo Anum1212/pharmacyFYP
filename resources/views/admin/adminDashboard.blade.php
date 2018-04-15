@@ -11,7 +11,7 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>H</b>OME</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
           <b>Dash</b>Board</span>
@@ -24,18 +24,8 @@
           <span class="sr-only">Toggle navigation</span>
         </a>
         <!-- Navbar Right Menu -->
-              <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
-            </a>
-          </li>
-      </div>
+        <div class="navbar-custom-menu">
+        </div>
       </nav>
     </header>
     <!-- Left side column. contains the logo and sidebar -->
@@ -46,71 +36,60 @@
 
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
+          <li class="header">HEADER</li>
           <!-- Optionally, you can add icons to the links -->
-          <li >
-            <a href="/index">
+          <li class="active">
+            <a href="#">
               <i class="fa fa-home" aria-hidden="true"></i>
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
-            <a href="/pharmacist/dashboard">
+          <li>
+            <a href="#">
               <i class="fa fa-tachometer" aria-hidden="true"></i>
               <span>DashBoard</span>
             </a>
           </li>
-           <li>
-            <a href="/pharmacist/editAccountDetailsForm">
-              <i class="fa fa-cogs" aria-hidden="true"></i>
-              <span>Account Details</span>
-            </a>
-          </li>
           <li>
-            <a href="/pharmacist/viewAllOrders">
+            <a href="#">
               <i class="fa fa-truck" aria-hidden="true"></i>
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
+          <li>
+            <a href="admin/viewAllMessages">
+              <i class="fa fa-comments" aria-hidden="true"></i>
+              <span>Messages</span>
+            </a>
+          </li>
           <li class="treeview">
             <a href="#">
               <i class="fa fa-users" aria-hidden="true"></i>
-              <span>Product Management</span>
+              <span>Registered Users</span>
               <span class="pull-right-container">
-               <i class="fa fa-database" aria-hidden="true"></i>
+                <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             <ul class="treeview-menu">
               <li>
-                <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
-                    View Products
+                <a href="#">
+                    <i class="fa fa-user" aria-hidden="true"></i>
+                    Customers
                 </a>
               </li>
               <li>
-                <a href="/pharmacist/addProduct">
-                    <i class="fa fa-plus" aria-hidden="true"></i>
-                    Add Products
+                <a href="#">
+                    <i class="fa fa-user-md" aria-hidden="true"></i>
+                    Pharmacists
                 </a>
               </li>
             </ul>
           </li>
-          @endif
-          <li>
-            <a href="/pharmacist/contactUsForm">
-              <i class="fa fa-truck" aria-hidden="true"></i>
-              <span>Contact Us</span>
+                    <li>
+            <a href="#">
+              <i class="fa fa-sign-out" aria-hidden="true"></i>
+              <span>Logout</span>
             </a>
-          </li>
-          <li>
-            <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                           <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                            <span>Logout</span>
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
           </li>
         </ul>
         <!-- /.sidebar-menu -->
@@ -123,8 +102,16 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Page Header
+          <small>Optional description</small>
         </h1>
+        <ol class="breadcrumb">
+          <li>
+            <a href="#">
+              <i class="fa fa-dashboard"></i> Level</a>
+          </li>
+          <li class="active">Here</li>
+        </ol>
       </section>
 
       <!-- Main content -->
@@ -151,4 +138,6 @@
     </footer>
   </div>
   <!-- ./wrapper -->
+@endsection
+
 @endsection

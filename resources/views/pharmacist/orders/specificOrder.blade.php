@@ -1,5 +1,12 @@
 @extends('layouts.dashboard')
 
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet">
+@endsection
+
+@section('style')
+@endsection 
+
 @section('body')
 
   <div class="wrapper">
@@ -11,10 +18,10 @@
       <a href="index2.html" class="logo">
         <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini">
-          <b>Dh</b>Bd</span>
+          <b>O</b>rder</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-          <b>Dash</b>Board</span>
+          <b>O</b>rder</span>
       </a>
 
       <!-- Header Navbar -->
@@ -53,7 +60,7 @@
               <span>Pharmacy</span>
             </a>
           </li>
-          <li class="active">
+          <li>
             <a href="/pharmacist/dashboard">
               <i class="fa fa-tachometer" aria-hidden="true"></i>
               <span>DashBoard</span>
@@ -65,13 +72,12 @@
               <span>Account Details</span>
             </a>
           </li>
-          <li>
+          <li class="active">
             <a href="/pharmacist/viewAllOrders">
               <i class="fa fa-truck" aria-hidden="true"></i>
               <span>Orders</span>
             </a>
           </li>
-          @if($userData->dataSource=='2')
           <li class="treeview">
             <a href="#">
               <i class="fa fa-users" aria-hidden="true"></i>
@@ -95,7 +101,6 @@
               </li>
             </ul>
           </li>
-          @endif
           <li>
             <a href="/pharmacist/contactUsForm">
               <i class="fa fa-truck" aria-hidden="true"></i>
@@ -123,8 +128,15 @@
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <h1>
-          DashBoard
+          Orders
         </h1>
+          <ol class="breadcrumb">
+          <li>
+            <a href="/pharmacist/viewAllOrders">
+              <i class="fa fa-dashboard"></i> Orders</a>
+          </li>
+          <li class="active">{{$customerDetails->name}}</li>
+        </ol>
       </section>
 
       <!-- Main content -->
@@ -133,6 +145,74 @@
         <!--------------------------
         | Your Page Content Here |
         -------------------------->
+        <div class="container containerDashboardContent">
+          <div style="min-width:200px; max-width:600px;">
+  <table>
+  <caption>Customer Details</caption>
+  <tbody>
+    <tr>
+      <td data-label="#">Name</td>
+      <td data-label="item">{{$customerDetails->name}}</td>
+      </tr>
+    <tr>
+      <td data-label="#">Email</td>
+      <td data-label="item">{{$customerDetails->email}}</td>
+      </tr>
+    <tr>
+      <td data-label="#">Contact#</td>
+      <td data-label="item">{{$customerDetails->contact}}</td>
+    </tr>
+    <tr>
+      <td data-label="#">Address</td>
+      <td data-label="item">{{$customerDetails->address.' '.$customerDetails->society.', '.$customerDetails->city}}</td>
+      </tr>
+  </tbody>
+</table>
+</div>
+  <table>
+  <caption>Order Details</caption>
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">item</th>
+      <th scope="col">type</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    $i=1;
+    ?>
+    @foreach($orderDetails as $orderDetail)
+    <tr>
+      <td data-label="#">{{$i}}</td>
+      @foreach($productDetails as $productDetail)
+      @if($productDetail->id == $orderDetail->id)
+      <td data-label="item">{{$productDetail->name}}</td>
+      @if($productDetail->type=='1') <!-- 1 = Tablet -->
+      <td data-label="type">Tablet</td>
+                  @elseif($productDetail->type=='2') <!-- 2 = Capsule -->
+                  <td data-label="type">Capsule</td>
+                  @elseif($productDetail->type=='3') <!-- 3 = Syrup -->
+                  <td data-label="type">Syrup</td>
+                  @elseif($productDetail->type=='4') <!-- 4 = Inhaler -->
+                  <td data-label="type">Inhaler</td>
+                  @elseif($productDetail->type=='5') <!-- 5 = Drops -->
+                  <td data-label="type">Drops</td>
+                  @elseif($productDetail->type=='6') <!-- 6 = Injection -->
+                  <td data-label="type">Injection</td>
+                  @elseif($productDetail->type=='7') <!-- 7 = Cream -->
+                  <td data-label="type">Cream</td>
+          @endif
+    @endif
+    @endforeach
+      </tr>
+      <?php
+      $i++;
+      ?>
+      @endforeach
+  </tbody>
+</table>
+  </div>
 
       </section>
       <!-- /.content -->
