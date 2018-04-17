@@ -1,60 +1,5 @@
 @extends('layouts.siteView') 
 
-@section('style') 
-<style>
-    /* -------------------------------- product CARD CSS --------------------------------  */
-
-/* -------------------------- smartphones, iPhone --------------------------*/
-@media screen and (max-width: 600px)  {
-  .card {
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-    width: 200px;
-    margin: auto;
-    text-align: center;
-    font-family: arial;
-    padding-bottom: 10px;
-    background-color: rgba(218, 216, 219, 0.73);
-    margin-bottom: 25px;
-    min-height: 300px;
-  }
-
-  .card img{
-   height:150px;
-   width:100%;
-  }
-}
-
-
-@media screen and (min-width: 601px)  {
-.card {
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-  width: 250px;
-  margin: 50px;
-  text-align: center;
-  font-family: arial;
-  padding-bottom: 10px;
-  background-color: rgba(218, 216, 219, 0.73);
-  margin-bottom: 25px;
-  height: 350px;
-}
-
-.card img{
- height:150px;   
- width:100%;
-}
-}
-
-.card .title {
-  color: grey;
-  font-size: 1em;
-}
-.card p{
- line-height: 10px;
-}
-/* -------------------------------- product Card CSS END --------------------------------  */
-</style>
-@endsection 
-
 @section('body')
 <div class="wrapper">
           @foreach($searchedProducts as $searchedProduct)
@@ -104,7 +49,7 @@
           @endif
           @endforeach
 
-              <a href="/addToCart/{{$product->id}}"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Add to cart</a>
+              <a href="/addToCart/{{$product->id}}"><i class="fas fa-cart-plus"></i> Add to cart</a>
         </div>
       
       @endforeach

@@ -2,14 +2,13 @@
         margin-top: 65px;
     }
 
-/* -------------------------- smartphones, iPhone --------------------------*/
+/* -------------------------- pharmacyDetails --------------------------*/
+    #map {
+        height: 500px;
+        width: auto;
+        margin: auto;
+    }
 
-@media screen and (max-width: 600px) {
-
-}
-    /* -------------------------- tablets and laptops --------------------------*/
-    @media screen and (min-width:601px) {
-        #gap {
-            margin-top: 65px;
-        }
+    .details{
+        margin-top: 40px;
     }

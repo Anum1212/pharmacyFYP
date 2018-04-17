@@ -21,7 +21,7 @@
           <b>O</b>rder</span>
         <!-- logo for regular state and mobile devices -->
         <span class="logo-lg">
-          <b>O</b>rder</span>
+          <b>O</b>rders</span>
       </a>
 
       <!-- Header Navbar -->
@@ -54,42 +54,41 @@
         <!-- Sidebar Menu -->
         <ul class="sidebar-menu" data-widget="tree">
           <!-- Optionally, you can add icons to the links -->
-          <li >
+                    <li >
             <a href="/index">
-              <i class="fa fa-home" aria-hidden="true"></i>
+              <i class="fas fa-home"></i>
               <span>Pharmacy</span>
             </a>
           </li>
           <li>
             <a href="/pharmacist/dashboard">
-              <i class="fa fa-tachometer" aria-hidden="true"></i>
+              <i class="fas fa-tachometer-alt"></i>
               <span>DashBoard</span>
             </a>
           </li>
            <li>
             <a href="/pharmacist/editAccountDetailsForm">
-              <i class="fa fa-cogs" aria-hidden="true"></i>
+              <i class="fas fa-cogs"></i>
               <span>Account Details</span>
             </a>
           </li>
           <li class="active">
             <a href="/pharmacist/viewAllOrders">
-              <i class="fa fa-truck" aria-hidden="true"></i>
+              <i class="fas fa-truck"></i>
               <span>Orders</span>
             </a>
           </li>
           <li class="treeview">
             <a href="#">
-              <i class="fa fa-users" aria-hidden="true"></i>
+              <i class="fas fa-database"></i>
               <span>Product Management</span>
               <span class="pull-right-container">
-               <i class="fa fa-database" aria-hidden="true"></i>
               </span>
             </a>
             <ul class="treeview-menu">
               <li>
                 <a href="/pharmacist/viewProducts">
-                    <i class="fa fa-sarch" aria-hidden="true"></i>
+                    <i class="fas fa-search"></i>
                     View Products
                 </a>
               </li>
@@ -103,13 +102,13 @@
           </li>
           <li>
             <a href="/pharmacist/contactUsForm">
-              <i class="fa fa-truck" aria-hidden="true"></i>
+              <i class="fas fa-comment"></i>
               <span>Contact Us</span>
             </a>
           </li>
           <li>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                           <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                           <i class="fas fa-sign-out-alt"></i>
                                             <span>Logout</span>
                                         </a>
 

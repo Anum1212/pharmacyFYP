@@ -48,38 +48,39 @@
         <ul class="sidebar-menu" data-widget="tree">
           <!-- Optionally, you can add icons to the links -->
                     <li>
-            <a href="index">
-              <i class="fa fa-home" aria-hidden="true"></i>
-              <span>customer</span>
+            <li >
+            <a href="/index">
+              <i class="fas fa-home"></i>
+              <span>Pharmacy</span>
             </a>
           </li>
-          <li>
-            <a href="#">
-              <i class="fa fa-tachometer " aria-hidden="true"></i>
+                    <li class="active">
+            <a href="/home">
+              <i class="fas fa-tachometer-alt"></i>
               <span>DashBoard</span>
             </a>
           </li>
-          <li class="active">
-            <a href="#">
-              <i class="fa fa-cogs" aria-hidden="true"></i>
+          <li>
+            <a href="/editAccountDetailsForm">
+              <i class="fas fa-cogs"></i>
               <span>Account Details</span>
             </a>
           </li>
           <li>
             <a href="/viewAllOrders">
-              <i class="fa fa-truck" aria-hidden="true"></i>
+              <i class="fas fa-truck"></i>
               <span>Orders</span>
             </a>
           </li>
           <li>
             <a href="contactUsForm">
-              <i class="fa fa-truck" aria-hidden="true"></i>
+              <i class="fas fa-comment"></i>
               <span>Contact Admin</span>
             </a>
           </li>
           <li>
             <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                           <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                           <i class="fas fa-sign-out-alt"></i>
                                             <span>Logout</span>
                                         </a>
 

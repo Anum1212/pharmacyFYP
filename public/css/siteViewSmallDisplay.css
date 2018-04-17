@@ -2,4 +2,22 @@
 
 @media screen and (max-width: 600px) {
 
+    /* -------------------------- siteView/searchResultPage --------------------------*/
+    .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    width: 200px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    padding-bottom: 10px;
+    background-color: rgba(218, 216, 219, 0.73);
+    margin-bottom: 25px;
+    min-height: 300px;
+  }
+
+  .card img{
+   height:150px;
+   width:100%;
+  }
+
 }
