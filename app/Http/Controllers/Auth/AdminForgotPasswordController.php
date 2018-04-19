@@ -31,12 +31,14 @@ class AdminForgotPasswordController extends Controller
         $this->middleware('guest:admin');
     }
 
-    public function showLinkRequestForm() {
+    public function showLinkRequestForm()
+    {
         return view('auth.passwords.admin-email');
     }
 
     //defining which password broker to use, in our case its the admins
-    protected function broker() {
+    protected function broker()
+    {
         return Password::broker('admins');
     }
 }

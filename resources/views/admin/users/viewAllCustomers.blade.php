@@ -1,4 +1,9 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') 
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+@endsection
+
+@section('body')
 
 <div class="wrapper">
 
@@ -9,17 +14,16 @@
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-        <b>Pd</b>Mg</span>
+        <b>Dh</b>Bd</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>Product</b>Managment</span>
+        <b>Dash</b>Board</span>
     </a>
 
     <!-- Header Navbar -->
     <nav class="navbar navbar-static-top" role="navigation">
       <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
+      <a class="sidebar-toggle" data-toggle="push-menu" role="button">
       </a>
       <!-- Navbar Right Menu -->
       <div class="navbar-custom-menu">
@@ -52,50 +56,50 @@
           </a>
         </li>
         <li>
-          <a href="/pharmacist/dashboard">
+          <a href="/admin/dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span>DashBoard</span>
           </a>
         </li>
-        <li>
-          <a href="/pharmacist/editAccountDetailsForm">
+        {{-- <li>
+          <a href="/admin/editAccountDetailsForm">
             <i class="fas fa-cogs"></i>
             <span>Account Details</span>
           </a>
-        </li>
+        </li> --}}
         <li>
-          <a href="/pharmacist/viewAllOrders">
+          <a href="/admin/viewAllOrders">
             <i class="fas fa-truck"></i>
             <span>Orders</span>
           </a>
         </li>
-        <li class="treeview active">
+<li class="treeview active">
           <a href="#">
-            <i class="fas fa-database"></i>
-            <span>Product Management</span>
+            <i class="fas fa-users"></i>
+            <span>Mangage Users</span>
             <span class="pull-right-container">
               <i class="fas fa-caret-down"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li>
-              <a href="/pharmacist/viewProducts">
-                <i class="fas fa-search"></i>
-                View Products
+            <li class="active">
+              <a href="/admin/viewAllCustomers">
+                <i class="fas fa-user"></i>
+                Customers
               </a>
             </li>
-            <li class="active">
-              <a href="/pharmacist/addProduct">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-                Add Products
+            <li>
+              <a href="/admin/viewAllPharmacies">
+                <i class="fas fa-user-md"></i>
+                Pharmacies
               </a>
             </li>
           </ul>
         </li>
         <li>
-          <a href="/pharmacist/contactUsForm">
+          <a href="/admin/viewAllMessages">
             <i class="fas fa-comment"></i>
-            <span>Contact Us</span>
+            <span>Messages</span>
           </a>
         </li>
         <li>
@@ -119,15 +123,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Add Product
+        Mangage Pharmacies
       </h1>
-      <ol class="breadcrumb">
-        <li>
-          <a href="/pharmacist/viewProducts">
-            <i class="fa fa-database"></i> Product Managment</a>
-        </li>
-        <li class="active">Add Product</li>
-      </ol>
     </section>
 
     <!-- Main content -->
@@ -136,42 +133,45 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
+<div class="container containerDashboardContent">
 
-      <div class="container containerDashboardContent">
-        <form action="addProduct" method="POST">
-          {{ csrf_field() }}
-          <div class="form-group">
-            <label for="productName">Product Name:</label>
-            <input type="text" class="form-control" id="productName" placeholder="Enter productName" name="productName" required>
-          </div>
-          <div class="form-group">
-            <label for="dosage">Dosage(mg/ml):</label>
-            <input type="number" class="form-control" id="dosage" placeholder="Enter dosage" name="dosage" required>
-          </div>
-          {{-- possible types of medicine 1) tablet 2) capsule 3) syrup 4) inhaler 5) drops 6) injection 7) cream --}}
-          <div class="form-group">
-            <label for="drugType">Product Type:</label>
-            <select class="form-control" id="drugType" name="drugType" required>
-              <option value="">----</option>
-              <option value="1">Tablet</option>
-              <option value="2">Capsule</option>
-              <option value="3">Syrup</option>
-              <option value="4">Inhaler</option>
-              <option value="5">Drops</option>
-              <option value="6">Injection</option>
-              <option value="7">Cream</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="price">Price:</label>
-            <input type="number" class="form-control" id="price" placeholder="Enter price" name="price" required>
-          </div>
-          <div class="form-group">
-            <label for="quantity">Quantity:</label>
-            <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" name="quantity" required>
-          </div>
-          <button type="submit" class="btn btn-success">Add Product</button>
-        </form>
+        <table>
+          <caption>Your Orders</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Address</th>
+              <th scope="col">View</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+    $i=1;
+    ?>
+              @foreach($users as $user)
+              <tr>
+                <td data-label="#">{{$i}}</td>
+                {{-- @foreach($customers as $customer) @if($customer->id == $order->userId) --}}
+                <td data-label="Customer">{{$user->name}}</td>
+                <td data-label="Email">{{$user->email}}</td>
+                <td data-label="Contact">{{$user->contact}}</td>
+                <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
+                <td data-label="View">
+                  {{-- <a href="viewSpecificOrder/{{$order->id}}/{{$customer->id}}"> --}}
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
+                </td>
+                {{-- @endif @endforeach --}}
+              </tr>
+              <?php
+      $i++;
+      ?>
+                @endforeach
+          </tbody>
+        </table>
       </div>
 
 

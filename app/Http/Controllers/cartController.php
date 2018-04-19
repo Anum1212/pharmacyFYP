@@ -27,15 +27,15 @@ class cartController extends Controller
 
 
   // |---------------------------------- construct ----------------------------------|
-  public function __construct()
-  {
-    $this->middleware('auth');
-      $this->middleware(function ($request, $next) {
-        Cart::instance('shopping');
-        Cart::restore(Auth::id());
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware(function ($request, $next) {
+            Cart::instance('shopping');
+            Cart::restore(Auth::id());
 
-        return $next($request);
-    });
+            return $next($request);
+        });
     }
 
 
@@ -44,7 +44,7 @@ class cartController extends Controller
     public function addToCart($productId)
     {
         $productDetails = Pharmacistproduct::whereId($productId)->first();
-        $cart = Cart::add($productDetails->id,$productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName]);
+        $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName]);
         return redirect('/viewCart'); // change in future
     }
 
@@ -52,39 +52,37 @@ class cartController extends Controller
 
     // |---------------------------------- remove ----------------------------------|
     public function remove($rowId)
-  {
-Cart::remove($rowId);
-return view('siteView.cart');
-  }
+    {
+        Cart::remove($rowId);
+        return view('siteView.cart');
+    }
 
 
 
-  // |---------------------------------- view ----------------------------------|
-  public function view()
-  {
-return view('siteView.cart');
-  }
+    // |---------------------------------- view ----------------------------------|
+    public function view()
+    {
+        return view('siteView.cart');
+    }
 
 
 
-  // |---------------------------------- update ----------------------------------|
-  public function update(Request $req)
-  {
-    $i=0;
-    foreach(Cart::content() as $item)
-      {
-        $itemRowId = $item->rowId;
-    Cart::update($itemRowId, $req->qty[$i]);
-      $i++;
-  }
-    return redirect::back();
-
-  }
+    // |---------------------------------- update ----------------------------------|
+    public function update(Request $req)
+    {
+        $i=0;
+        foreach (Cart::content() as $item) {
+            $itemRowId = $item->rowId;
+            Cart::update($itemRowId, $req->qty[$i]);
+            $i++;
+        }
+        return redirect::back();
+    }
 
 
-  // |---------------------------------- destruct ----------------------------------|
+    // |---------------------------------- destruct ----------------------------------|
     public function __destruct()
-{
-    Cart::instance('shopping')->store(Auth::id());
-}
+    {
+        Cart::instance('shopping')->store(Auth::id());
+    }
 }

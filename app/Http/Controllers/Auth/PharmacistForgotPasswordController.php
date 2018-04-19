@@ -31,12 +31,14 @@ class PharmacistForgotPasswordController extends Controller
         $this->middleware('guest:pharmacist');
     }
 
-    public function showLinkRequestForm() {
+    public function showLinkRequestForm()
+    {
         return view('auth.passwords.pharmacist-email');
     }
 
     //defining which password broker to use, in our case its the pharmacists
-    protected function broker() {
+    protected function broker()
+    {
         return Password::broker('pharmacists');
     }
 }

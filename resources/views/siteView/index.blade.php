@@ -24,8 +24,10 @@
                     {{ csrf_field() }}
 
                     <div class="col-md-6">
-                        Medicine: <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine" required>
-                        Distance(km):<input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
+                        Medicine:
+                        <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine"
+                            required> Distance(km):
+                        <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
                         <input id="latitude" type="text" name="latitude" hidden>
                         <input id="longitude" type="text" name="longitude" hidden>
                         <div class="form-group">
@@ -41,50 +43,49 @@
             </div>
         </div>
 
-            <!--
+        <!--
                 ********************************************************************
                 Enter A Location Div
                 ********************************************************************
   -->
-            <div id="enterALocationWrapper" class="menuItem">
-                <div class="menuItemHeading">
-                    <a class="btn btn-primary" id="showEnterALocationForm" onclick="javascript:showDiv('enterALocation');" href="#enterALocation">
-                        Enter a Location</a>
-                </div>
-                <div class="showForm" id="enterALocation" style="display: none;">
+        <div id="enterALocationWrapper" class="menuItem">
+            <div class="menuItemHeading">
+                <a class="btn btn-primary" id="showEnterALocationForm" onclick="javascript:showDiv('enterALocation');" href="#enterALocation">
+                    Enter a Location</a>
+            </div>
+            <div class="showForm" id="enterALocation" style="display: none;">
 
-                    <!--
+                <!--
   ********************************************************************
                         Enter A Location Form
   ********************************************************************
   -->
-                    <div class="form">
-                        <form class="form-horizontal" method="POST" action="/convertAddress">
-                            {{ csrf_field() }}
+                <div class="form">
+                    <form class="form-horizontal" method="POST" action="/convertAddress">
+                        {{ csrf_field() }}
 
-                            <div class="col-md-6">
-                                Medicine: <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine" required>
-                                @if (Auth::check())
-                                Address:<input id="address" type="text" class="form-control" name="address" placeholder="enter address" required value="{{Auth::user()->address.' '.Auth::user()->society.' '.Auth::user()->city}}">
-                                @else
-                                Address:<input id="address" type="text" class="form-control" name="address" placeholder="enter address" required>
-                                @endif
-                                Distance(km):<input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
-                                <div class="form-group">
-                                    <div class="col-md-8 col-md-offset-4">
-                                        <button type="submit" class="btn btn-primary">
-                                            Search Medicine
-                                        </button>
-                                    </div>
+                        <div class="col-md-6">
+                            Medicine:
+                            <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine"
+                                required> @if (Auth::check()) Address:
+                            <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required value="{{Auth::user()->address.' '.Auth::user()->society.' '.Auth::user()->city}}"> @else Address:
+                            <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required> @endif Distance(km):
+                            <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
+                            <div class="form-group">
+                                <div class="col-md-8 col-md-offset-4">
+                                    <button type="submit" class="btn btn-primary">
+                                        Search Medicine
+                                    </button>
                                 </div>
-                        </form>
-                        </div>
+                            </div>
+                    </form>
                     </div>
                 </div>
             </div>
-
         </div>
+
     </div>
+</div>
 
 </div>
 @endsection @section('script')
@@ -110,7 +111,7 @@
         $('.showForm').each(function (index) {
             if ($(this).attr("id") == selectedOne) {
                 $(this).toggle(200);
-                if(selectedOne == 'detectLocation'){
+                if (selectedOne == 'detectLocation') {
                     getLocation();
                 }
             } else {

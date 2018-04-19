@@ -1,5 +1,15 @@
 /* -------------------------- smartphones, iPhone --------------------------*/
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 766px) {
+.comments-container {
+    width: 480px;
+}
 
+.comments-list .comment-box {
+    width: 390px;
+}
+
+.reply-list .comment-box {
+    width: 320px;
+}
 }

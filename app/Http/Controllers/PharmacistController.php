@@ -9,6 +9,11 @@
 // 1) index --> decides where to take the logged in pharmacist. if pharmacist hasn't chosen a dataSource then go to dataSource Selection page else go to dashBoard
 // 2) storeProductsInTable --> set dataSorce to use database for saving data
 // 3) savePharmacyApi --> test given api if test pass then set DataSource to use api
+// 4) viewAllOrders --> view all customer orders
+// 5) viewSpecificOrder --> view order details of a specific customer
+// 6) editAccountDetailsForm --> goto edit pharamacy details form
+// 7) editAccountDetails --> save pharamcy edit changes
+// 8) contactUsForm --> goto contact admin form
 
 
 
@@ -138,7 +143,7 @@ class PharmacistController extends Controller
         $customer=[];
         $orders=[];
         $pharmacistId = Auth::user()->id;
-        
+
         $orderItems = Orderitem::where('pharmacistId', $pharmacistId)->orderBy('id', 'desc')->get();
         foreach ($orderItems as $orderItem) {
             $allOrderId[] = $orderItem->orderId;
@@ -167,54 +172,55 @@ class PharmacistController extends Controller
             ['orderId', $orderId],
             ['pharmacistId', Auth::user()->id]
             ])->get();
-        
+
         $customerDetails =  User::whereId($customerId)->first();
-            foreach($orderDetails as $orderDetail)
+        foreach ($orderDetails as $orderDetail) {
             $productDetails[]=Pharmacistproduct::whereId($orderDetail->productId)->first();
-            return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails'));
         }
-        
-        
-
-        //  |---------------------------------- editAccountDetailsForm ----------------------------------|
-        public function editAccountDetailsForm()
-        {
-            $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
-            return view('pharmacist.editPharmacistDetails', compact('pharmacyDetails'));
-        }
-        
-        
-        
-        //  |---------------------------------- editAccountDetails ----------------------------------|
-        public function editAccountDetails(Request $req)
-        {
-            $address = $req->address.' '.$req->society.' '.$req->city;
-            $addressToLatLng = Geocode::make()->address($address);
-            
-            $latitude = $addressToLatLng->latitude();
-    	    $longitude = $addressToLatLng->longitude();
-            
-            $pharmacyDetails = Pharmacist::find(Auth::user()->id);
-            $pharmacyDetails->name = $req->name;
-            $pharmacyDetails->email = $req->email;
-            $pharmacyDetails->contact = $req->contact;
-            $pharmacyDetails->pharmacyName = $req->pharmacyName;
-            $pharmacyDetails->address = $req->address;
-            $pharmacyDetails->society = $req->society;
-            $pharmacyDetails->city = $req->city;
-            $pharmacyDetails->longitude = $longitude;
-            $pharmacyDetails->latitude = $latitude;
-            $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
-            $pharmacyDetails->save();
-            
-            return redirect('/pharmacist/dashboard');
-        }
-
-
-
-        //  |---------------------------------- contactUsForm ----------------------------------|
-        public function contactUsForm()
-        {
-           return view('pharmacist.messageToAdminForm');
-        }
+        return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails'));
     }
+
+
+
+    //  |---------------------------------- editAccountDetailsForm ----------------------------------|
+    public function editAccountDetailsForm()
+    {
+        $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
+        return view('pharmacist.editPharmacistDetails', compact('pharmacyDetails'));
+    }
+
+
+
+    //  |---------------------------------- editAccountDetails ----------------------------------|
+    public function editAccountDetails(Request $req)
+    {
+        $address = $req->address.' '.$req->society.' '.$req->city;
+        $addressToLatLng = Geocode::make()->address($address);
+
+        $latitude = $addressToLatLng->latitude();
+        $longitude = $addressToLatLng->longitude();
+
+        $pharmacyDetails = Pharmacist::find(Auth::user()->id);
+        $pharmacyDetails->name = $req->name;
+        $pharmacyDetails->email = $req->email;
+        $pharmacyDetails->contact = $req->contact;
+        $pharmacyDetails->pharmacyName = $req->pharmacyName;
+        $pharmacyDetails->address = $req->address;
+        $pharmacyDetails->society = $req->society;
+        $pharmacyDetails->city = $req->city;
+        $pharmacyDetails->longitude = $longitude;
+        $pharmacyDetails->latitude = $latitude;
+        $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
+        $pharmacyDetails->save();
+
+        return redirect('/pharmacist/dashboard');
+    }
+
+
+
+    //  |---------------------------------- contactUsForm ----------------------------------|
+    public function contactUsForm()
+    {
+        return view('pharmacist.messageToAdminForm');
+    }
+}

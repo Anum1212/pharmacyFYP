@@ -1,5 +1,20 @@
 <?php
 
+
+
+// controller Details
+// ------------------
+// methods and their details
+// --------------------------
+// 1) index --> goto customer dashboard
+// 2) viewAllOrders --> view all customer orders
+// 3) viewSpecificOrder --> view details of specific order
+// 4) contactUsForm --> goto admin contact form
+// 5) editAccountDetailsForm --> goto edit customer details form
+// 6) editAccountDetails --> save customer detail changes (incomplete need to add password change code)
+
+
+
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -28,6 +43,10 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+    //  |---------------------------------- index ----------------------------------|
     public function index()
     {
         return view('customer.customerDashboard');
@@ -49,14 +68,14 @@ class HomeController extends Controller
         $productDetails =[];
         $pharmacyDetails =[];
         $orderDetails = Orderitem::where('orderId', $orderId)->get();
-        
-        foreach($orderDetails as $orderDetail){
-        $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
-        $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
+
+        foreach ($orderDetails as $orderDetail) {
+            $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
+            $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
         }
-            return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
-        }
-                
+        return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
+    }
+
 
 
     // |---------------------------------- contactUsForm ----------------------------------|
@@ -68,34 +87,34 @@ class HomeController extends Controller
 
 
     //  |---------------------------------- editAccountDetailsForm ----------------------------------|
-        public function editAccountDetailsForm()
-        {
-            $customerDetails = User::whereId(Auth::user()->id)->first();
-            return view('customer.editCustomerDetails', compact('customerDetails'));
-        }
-        
-        
-        
-        //  |---------------------------------- editAccountDetails ----------------------------------|
-        public function editAccountDetails(Request $req)
-        {
-            $address = $req->address.' '.$req->society.' '.$req->city;
-            $addressToLatLng = Geocode::make()->address($address);
-            
-            $latitude = $addressToLatLng->latitude();
-    	    $longitude = $addressToLatLng->longitude();
-            
-            $customerDetails = User::find(Auth::user()->id);
-            $customerDetails->name = $req->name;
-            $customerDetails->email = $req->email;
-            $customerDetails->contact = $req->contact;
-            $customerDetails->address = $req->address;
-            $customerDetails->society = $req->society;
-            $customerDetails->city = $req->city;
-            $customerDetails->longitude = $longitude;
-            $customerDetails->latitude = $latitude;
-            $customerDetails->save();
-            
-            return redirect('/dashboard');
-        }
+    public function editAccountDetailsForm()
+    {
+        $customerDetails = User::whereId(Auth::user()->id)->first();
+        return view('customer.editCustomerDetails', compact('customerDetails'));
+    }
+
+
+
+    //  |---------------------------------- editAccountDetails ----------------------------------|
+    public function editAccountDetails(Request $req)
+    {
+        $address = $req->address.' '.$req->society.' '.$req->city;
+        $addressToLatLng = Geocode::make()->address($address);
+
+        $latitude = $addressToLatLng->latitude();
+        $longitude = $addressToLatLng->longitude();
+
+        $customerDetails = User::find(Auth::user()->id);
+        $customerDetails->name = $req->name;
+        $customerDetails->email = $req->email;
+        $customerDetails->contact = $req->contact;
+        $customerDetails->address = $req->address;
+        $customerDetails->society = $req->society;
+        $customerDetails->city = $req->city;
+        $customerDetails->longitude = $longitude;
+        $customerDetails->latitude = $latitude;
+        $customerDetails->save();
+
+        return redirect('/dashboard');
+    }
 }

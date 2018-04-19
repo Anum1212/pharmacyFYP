@@ -37,16 +37,16 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout','userlogout');
+        $this->middleware('guest')->except('logout', 'userlogout');
     }
 
-// overriding default credentials method to check verificationStatus of user
+    // overriding default credentials method to check verificationStatus of user
     protected function credentials(Request $request)
     {
         return ['email'=>$request->{$this->username()},'password' => $request->password, 'verificationStatus' => '1'];
     }
 
-// overriding default sendFailedLoginResponse method to show appropriate error message to user if verificationStatus is 0 -> email not verified
+    // overriding default sendFailedLoginResponse method to show appropriate error message to user if verificationStatus is 0 -> email not verified
     protected function sendFailedLoginResponse(Request $request)
     {
         $errors = [$this->username() => trans('auth.failed')];
@@ -57,7 +57,7 @@ class LoginController extends Controller
         // Check if user was successfully loaded, that the password matches
         // and verificationStatus is 0. If so, override the default error message.
         if ($user && \Hash::check($request->password, $user->password) && $user->verificationStatus == 0) {
-          return redirect()->back()->withInput($request->only('email','remember'))->with('error', 'Verify Account First');
+            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Verify Account First');
         }
 
         if ($request->expectsJson()) {

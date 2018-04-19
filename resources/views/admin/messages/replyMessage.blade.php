@@ -1,114 +1,192 @@
-@extends('layouts.siteView')
+@extends('layouts.dashboard') @section('body')
 
-<!--
-********************************************************************
-                              Head
-********************************************************************
- -->
-@section('head')
+<div class="wrapper">
 
-@endsection
+  <!-- Main Header -->
+  <header class="main-header">
 
-<!--
-********************************************************************
-                              Body
-********************************************************************
- -->
-@section('body')
+    <!-- Logo -->
+    <a href="index2.html" class="logo">
+      <!-- mini logo for sidebar mini 50x50 pixels -->
+      <span class="logo-mini">
+        <b>M</b>sg</span>
+      <!-- logo for regular state and mobile devices -->
+      <span class="logo-lg">
+        <b>M</b>essage</span>
+    </a>
 
-<!--
-********************************************************************
-                          Page Title
-********************************************************************
- -->
+    <!-- Header Navbar -->
+    <nav class="navbar navbar-static-top" role="navigation">
+      <!-- Sidebar toggle button-->
+      <a class="sidebar-toggle" data-toggle="push-menu" role="button">
+      </a>
+      <!-- Navbar Right Menu -->
+      <div class="navbar-custom-menu">
+        <ul class="nav navbar-nav">
 
-<div id="pageTitle" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-    <h1>Message</h1>
+          <!-- User Account Menu -->
+          <li class="user user-menu">
+            <!-- Menu Toggle Button -->
+            <a>
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span class="hidden-xs">{{Auth::user()->name}}</span>
+            </a>
+          </li>
+      </div>
+    </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <!-- Optionally, you can add icons to the links -->
+        <li>
+          <a href="/index">
+            <i class="fas fa-home"></i>
+            <span>Pharmacy</span>
+          </a>
+        </li>
+        <li>
+          <a href="/admin/dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>DashBoard</span>
+          </a>
+        </li>
+        {{-- <li>
+          <a href="/admin/editAccountDetailsForm">
+            <i class="fas fa-cogs"></i>
+            <span>Account Details</span>
+          </a>
+        </li> --}}
+        <li>
+          <a href="/admin/viewAllOrders">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+          </a>
+        </li>
+<li class="treeview">
+          <a href="#">
+            <i class="fas fa-users"></i>
+            <span>Mangage Users</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="/admin/viewAllCustomers">
+                <i class="fas fa-user"></i>
+                Customers
+              </a>
+            </li>
+            <li>
+              <a href="/admin/viewAllPharmacies">
+                <i class="fas fa-user-md"></i>
+                Pharmacies
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="active">
+          <a href="/admin/viewAllMessages">
+            <i class="fas fa-comment"></i>
+            <span>Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+
+          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+          </form>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        Message
+      </h1>
+    </section>
+
+    <!-- Main content -->
+    <section class="content container-fluid">
+
+      <!--------------------------
+        | Your Page Content Here |
+        -------------------------->
+
+
+<div class="row">
+
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="panel panel-default">
+<div class="panel-heading">
+<strong>{{$message->name}} - &lt;{{$message->senderEmail}}&gt;</strong> <span class="text-muted"> {{$message->created_at}}</span>
+    <div class="btn pull-right">
+    <a href="/admin/viewAllMessagesOfSpecificSender/{{$message->id}}" target="_blank"> View Previous Messages </a> 
 </div>
+<div class="clearfix"></div></div>
+<div class="panel-body">
+{{$message->message}}
+</div><!-- /panel-body -->
+</div><!-- /panel panel-default -->
+</div><!-- /col-sm-5 -->
+</div><!-- /row -->
 
-<!--
-********************************************************************
-                    Main Wrapper for Divs
-********************************************************************
- -->
 
-<div class="col-lg-8 col-md-8 col-sm-12 col-xs-12 col-lg-offset-2 col-md-offset-2 well">
+<div class="row">
 
-<!--
-********************************************************************
-                      Sender Message Div
-********************************************************************
--->
-<!-- sender details -->
-<div id="sender" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-  <div id="senderName" class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <p>
-      Message by: <b>{{$message->name}}</b>
-      <br />
-      Email: <b>{{$message->senderEmail}}</b>
-    </p>
+<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+<div class="panel panel-default">
+<div class="panel-body">
+     <form class="form-horizontal" method="POST" action="{{'/admin/replyMessage/'.$message->id}}">
+      {{ csrf_field() }}
+    <textarea rows="5" id="messageReply" class="form-control" name="messageReply" required></textarea>
+</div><!-- /panel-body -->
+<div class="panel-footer">
+    <div class="btn pull-right">
+    <button type="submit" class="btn btn-primary">
+            Send Reply
+          </button>
+</div>
+<div class="clearfix"></div>
+</div>
+  </form>
+</div><!-- /panel panel-default -->
+</div><!-- /col-sm-5 -->
+</div><!-- /row -->
+
+
+
+    </section>
+    <!-- /.content -->
   </div>
+  <!-- /.content-wrapper -->
 
-  <!-- view previous messages button -->
-  <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
-    <a href="/admin/viewAllMessagesOfSpecificSender/{{$message->id}}" class="btn btn-default" target="_blank">View Previous Messages</a>
-  </div>
-
-  <!-- Sender Message -->
-  <div id="senderMessage" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-  <p>
-      {{$message->message}}
-  </p>
+  <!-- Main Footer -->
+  <footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+      Anything you want
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2016
+      <a href="#">Company</a>.</strong> All rights reserved.
+  </footer>
 </div>
-</div>
-
-<!--
-********************************************************************
-                      Admin Reply Form
-********************************************************************
--->
-<div id="adminReply" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                  <form class="form-horizontal" method="POST" action="{{'/admin/replyMessage/'.$message->id}}">
-                        {{ csrf_field() }}
-
-<!-- reply text box -->
-						<div class="form-group">
-							<label for="messageReply" class="col-md-4 control-label">Message Reply</label>
-							<div class="col-md-6">
-								<textarea rows="5" id="messageReply" class="form-control" name="messageReply" required></textarea>
-							</div>
-						</div>
-
-<!-- send reply button -->
-						<div class="form-group">
-							<div class="col-md-8 col-md-offset-4">
-								<button type="submit" class="btn btn-primary">
-									Send Reply
-								</button>
-							</div>
-						</div>
-					</form>
-
-          <!-- mark as read button -->
-          @if($message->status=='0')
-          <form style="margin-top:15px;" action="{{'/admin/markAsReadMessage/'.$message->id}}" method="post">
-                                      {{csrf_field()}} {{method_field('PUT')}}
-                                      <button type="submit" class="btn btn-success">Mark as Read</button>
-                                    </form>
-                                    @endif
-
-        <!-- mark as unread button -->
-          @if($message->status=='1')
-          <form style="margin-top:15px;" action="{{'/admin/markAsUnreadMessage/'.$message->id}}" method="post">
-                                      {{csrf_field()}} {{method_field('PUT')}}
-                                      <button type="submit" class="btn btn-success">Mark as UnRead</button>
-                                    </form>
-                                    @endif
-</div>
-</div>
-
-@endsection
-
-@section('script')
-
+<!-- ./wrapper -->
 @endsection

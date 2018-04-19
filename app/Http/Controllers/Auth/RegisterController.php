@@ -13,7 +13,6 @@ use Geocode;
 use Mail;
 use App\Mail\verifyEmailToUser;
 
-
 class RegisterController extends Controller
 {
     /*
@@ -73,12 +72,12 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-      $address = $data['address'].' '.$data['society'].' '.$data['city'];
+        $address = $data['address'].' '.$data['society'].' '.$data['city'];
         $addressToLatLng = Geocode::make()->address($address);
-if ($addressToLatLng) {
-	$latitude = $addressToLatLng->latitude();
-	$longitude = $addressToLatLng->longitude();
-        $user = User::create([
+        if ($addressToLatLng) {
+            $latitude = $addressToLatLng->latitude();
+            $longitude = $addressToLatLng->longitude();
+            $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'contact' => $data['contact'],
@@ -93,37 +92,36 @@ if ($addressToLatLng) {
             // see create_users_table migration for more info
         ]);
 
-        $thisUser = User::findOrFail($user->id);
-        $this->sendEmail($thisUser);
-        return $user;
+            $thisUser = User::findOrFail($user->id);
+            $this->sendEmail($thisUser);
+            return $user;
+        }
     }
-  }
 
-// overriding register function found in D:\Projects\Pharmacy\vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers
-  public function register(Request $request)
-{
-    $this->validator($request->all())->validate();
+    // overriding register function found in D:\Projects\Pharmacy\vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
 
-    event(new Registered($user = $this->create($request->all())));
-    return redirect('login')->with('message', 'A confirmation email has been sent');
-}
+        event(new Registered($user = $this->create($request->all())));
+        return redirect('login')->with('message', 'A confirmation email has been sent');
+    }
 
-// to send email
-public function sendEmail($thisUser)
-{
-  Mail::to($thisUser['email'])->send(new verifyEmailToUser($thisUser));
-}
+    // to send email
+    public function sendEmail($thisUser)
+    {
+        Mail::to($thisUser['email'])->send(new verifyEmailToUser($thisUser));
+    }
 
-// to update user status to verified
-public function sendVerifyEmail($email, $verificationToken)
-{
-  $user = User::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
-  if($user){
-    User::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => NULL]);
-    return redirect('login')->with('message', 'Verification Successful');
-  }
-  else {
-    return redirect('login')->with('error', 'There seems to be an error. Try to login if login fails register again');
-  }
-}
+    // to update user status to verified
+    public function sendVerifyEmail($email, $verificationToken)
+    {
+        $user = User::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
+        if ($user) {
+            User::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => null]);
+            return redirect('login')->with('message', 'Verification Successful');
+        } else {
+            return redirect('login')->with('error', 'There seems to be an error. Try to login if login fails register again');
+        }
+    }
 }

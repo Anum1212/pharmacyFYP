@@ -38,19 +38,19 @@ class ResetPasswordController extends Controller
     }
 
 
-// overriding password reset function to prevent autologin after password reset.
-// user taken to login page instead where when user login system can check user verification status
-protected function resetPassword($user, $password)
-{
-    $user->password = Hash::make($password);
+    // overriding password reset function to prevent autologin after password reset.
+    // user taken to login page instead where when user login system can check user verification status
+    protected function resetPassword($user, $password)
+    {
+        $user->password = Hash::make($password);
 
-    $user->setRememberToken(Str::random(60));
+        $user->setRememberToken(Str::random(60));
 
-    $user->save();
+        $user->save();
 
-    event(new PasswordReset($user));
+        event(new PasswordReset($user));
 
-// removing this line removes autologin
+        // removing this line removes autologin
     // $this->guard()->login($user);
-}
+    }
 }

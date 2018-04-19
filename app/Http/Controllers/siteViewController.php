@@ -19,12 +19,10 @@ class siteViewController extends Controller
 {
 
 
+
   // |---------------------------------- index ----------------------------------|
-        public function index() {
-    return view('siteView.index');
-  }
-
-
-
-
+    public function index()
+    {
+        return view('siteView.index');
+    }
 }

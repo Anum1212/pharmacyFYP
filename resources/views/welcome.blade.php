@@ -14,7 +14,8 @@
   <!-- Styles -->
 
 
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+    crossorigin="anonymous">
 
   <style>
     /* SLIDE */
@@ -35,13 +36,14 @@
       background: #A74982;
     }
 
-/* for mobile display */
+    /* for mobile display */
+
     @media screen and (max-width:600px) {
-      .button{
+      .button {
         margin-bottom: 100px;
       }
 
-/* button outer */
+      /* button outer */
       .button .top {
         font-weight: 600;
         text-align: center;
@@ -53,11 +55,11 @@
         padding-top: 10px;
       }
 
-      .button .top i{
+      .button .top i {
         font-size: 2em;
       }
 
-/* button inner */
+      /* button inner */
       .button .bottom {
         font-weight: 600;
         text-align: center;
@@ -80,7 +82,7 @@
         padding-top: 10px;
       }
 
-      .button .top i{
+      .button .top i {
         font-size: 3em;
       }
 
@@ -134,16 +136,16 @@
 
         <!-- Collapsed Hamburger -->
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
+          <span class="sr-only">Toggle Navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
 
         <!-- Branding Image -->
         <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Pharmacy') }}
-                    </a>
+          {{ config('app.name', 'Pharmacy') }}
+        </a>
       </div>
 
       <div class="collapse navbar-collapse" id="app-navbar-collapse">
@@ -156,43 +158,58 @@
         <ul class="nav navbar-nav navbar-right">
 
           {{-- in final verion remove from here --}} @if (Auth::user())
-          <li><a href="/ratePharmacy">Rate Pharmacy</a></li>
+          <li>
+            <a href="/ratePharmacy">Rate Pharmacy</a>
+          </li>
           @endif
           <!-- Authentication Links -->
           @if (Auth::guest())
           <!-- Collect the nav links, forms, and other content for toggling -->
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login
+                <span class="caret"></span>
+              </a>
               <ul class="dropdown-menu">
-                <li><a href="{{ route('login') }}">As User</a></li>
+                <li>
+                  <a href="{{ route('login') }}">As User</a>
+                </li>
                 <li role="separator" class="divider"></li>
-                <li><a href="{{ route('pharmacist.login') }}">As Pharmacist</a></li>
+                <li>
+                  <a href="{{ route('pharmacist.login') }}">As Pharmacist</a>
+                </li>
               </ul>
             </li>
           </ul>
           <ul class="nav navbar-nav">
             <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register <span class="caret"></span></a>
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register
+                <span class="caret"></span>
+              </a>
               <ul class="dropdown-menu">
-                <li><a href="{{ route('register') }}">As User</a></li>
+                <li>
+                  <a href="{{ route('register') }}">As User</a>
+                </li>
                 <li role="separator" class="divider"></li>
-                <li><a href="{{ route('pharmacist.register') }}">As Pharmacist</a></li>
+                <li>
+                  <a href="{{ route('pharmacist.register') }}">As Pharmacist</a>
+                </li>
               </ul>
             </li>
           </ul>
           @else
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
+              {{ Auth::user()->name }}
+              <span class="caret"></span>
+            </a>
 
             <ul class="dropdown-menu" role="menu">
               <li>
                 <a href="{{ route('logout') }}" onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
+                  Logout
+                </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   {{ csrf_field() }}
@@ -214,7 +231,9 @@
   <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2">
     {{-- Admin Div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnBlueGreen">
-      <span class="top"><i class="fa fa-cog"></i> <br /> Admin
+      <span class="top">
+        <i class="fa fa-cog"></i>
+        <br /> Admin
 
       </span>
       <div class="bottom">
@@ -224,9 +243,11 @@
 
     {{-- Pharmacist Div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnOrange">
-      <span class="top"><i class="fa fa-user-md"></i> <br /> Pharmacist
+      <span class="top">
+        <i class="fa fa-user-md"></i>
+        <br /> Pharmacist
 
-  </span>
+      </span>
       <div class="bottom">
         <a href="{{ route('pharmacist.login') }}">Login</a>
         <br>
@@ -236,9 +257,11 @@
 
     {{-- User div --}}
     <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnPurple">
-      <span class="top"><i class="fa fa-user"></i> <br /> User
+      <span class="top">
+        <i class="fa fa-user"></i>
+        <br /> User
 
-    </span>
+      </span>
       <div class="bottom">
         <a href="{{ route('login') }}">Login</a>
         <br>

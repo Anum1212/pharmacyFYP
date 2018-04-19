@@ -28,18 +28,18 @@
               <div class="col-md-6">
                 <input id="pharmacyName" type="text" class="form-control" name="pharmacyName" value="{{ Auth::user()->pharmacyName }}" readonly> @if ($errors->has('pharmacyName'))
                 <span class="help-block">
-									<strong>{{ $errors->first('pharmacyName') }}</strong>
-								</span> @endif
+                  <strong>{{ $errors->first('pharmacyName') }}</strong>
+                </span> @endif
               </div>
             </div>
             <div class="col-md-offset-2">
               <button class="btn btn-default" id='apiFormDivToggle'>
-									Give access to pharmacy database
-								</button>
+                Give access to pharmacy database
+              </button>
               < or>
                 <a href="storeProductsInTable" class="btn btn-default">
-									enter products manually
-								</a>
+                  enter products manually
+                </a>
             </div>
             <br>
             <div id="apiFormDiv" style="display:none;">
@@ -49,12 +49,12 @@
 
                 <div class="col-md-6">
                   <button class="btn btn-default" id='hideshow'>
-									<i class="fa fa-question-circle-o" aria-hidden="true"></i>
-								</button>
+                    <i class="fa fa-question-circle-o" aria-hidden="true"></i>
+                  </button>
                   <input type="text" id="dbAPI" name="dbAPI" class="form-control" required autofocus> @if ($errors->has('dbAPI'))
                   <span class="help-block">
-									<strong>{{ $errors->first('dbAPI') }}</strong>
-								</span> @endif
+                    <strong>{{ $errors->first('dbAPI') }}</strong>
+                  </span> @endif
                 </div>
               </div>
 
@@ -109,8 +109,8 @@
               <div class="form-group">
                 <div class="col-md-8 col-md-offset-4">
                   <button type="submit" class="btn btn-primary">
-									Save Details
-								</button>
+                    Save Details
+                  </button>
                 </div>
               </div>
 
@@ -128,21 +128,21 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script>
   // API instructions div hide/show
-  $(document).ready(function() {
+  $(document).ready(function () {
     $("#apiSteps").hide();
 
-    $("#hideshow").click(function() {
+    $("#hideshow").click(function () {
       $("#apiSteps").toggle();
     });
 
     $("#apiFormDiv").hide();
 
-    $("#apiFormDivToggle").click(function() {
+    $("#apiFormDivToggle").click(function () {
       $("#apiFormDiv").toggle();
     });
 
     // If api input form filled show api validity form
-    $('input[name=dbAPI]').keyup(function() {
+    $('input[name=dbAPI]').keyup(function () {
       if ($(this).val().length)
         $('#medInput').show();
       else

@@ -40,9 +40,11 @@ class AdminResetPasswordController extends Controller
         $this->middleware('guest:admin');
     }
 
-    public function showResetForm(Request $request, $token = null) {
+    public function showResetForm(Request $request, $token = null)
+    {
         return view('auth.passwords.admin-reset')
-            ->with(['token' => $token, 'email' => $request->email]
+            ->with(
+                ['token' => $token, 'email' => $request->email]
             );
     }
 
@@ -54,7 +56,8 @@ class AdminResetPasswordController extends Controller
     }
 
     //defining our password broker function
-    protected function broker() {
+    protected function broker()
+    {
         return Password::broker('admins');
     }
 }

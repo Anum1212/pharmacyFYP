@@ -14,41 +14,41 @@ use App\Mail\verifyEmailToPharmacist;
 
 class PharmacistRegisterController extends Controller
 {
-  public function __construct()
-  {
-      $this->middleware('guest:pharmacist',['except' => ['logout']]);
-  }
-  /**
-   * Display a listing of the resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function index()
-  {
-      return view('pharmacist.pharmacistDashboard');
-  }
+    public function __construct()
+    {
+        $this->middleware('guest:pharmacist', ['except' => ['logout']]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        return view('pharmacist.pharmacistDashboard');
+    }
 
-  /**
-   * Show the form for creating a new resource.
-   *
-   * @return \Illuminate\Http\Response
-   */
-  public function create()
-  {
-      return view('auth.pharmacist-register');
-  }
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        return view('auth.pharmacist-register');
+    }
 
-  /**
-   * Store a newly created resource in storage.
-   *
-   * @param  \Illuminate\Http\Request  $req
-   * @return \Illuminate\Http\Response
-   */
-  public function store(Request $req)
-  {
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $req
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $req)
+    {
 
       // validate the data
-      $this->validate($req, [
+        $this->validate($req, [
         'name'          =>      'required|string|max:255',
         'email'         =>      'required|string|email|max:255|unique:pharmacists',
         'contact'       =>      'required|digits:11',
@@ -60,69 +60,67 @@ class PharmacistRegisterController extends Controller
         'password'      =>      'required|string|min:6|confirmed'
 
       ]);
-      $address = $req->address.' '.$req->society.' '.$req->city;
-              $addressToLatLng = Geocode::make()->address($address);
-       if ($addressToLatLng) {
+        $address = $req->address.' '.$req->society.' '.$req->city;
+        $addressToLatLng = Geocode::make()->address($address);
+        if ($addressToLatLng) {
+            $latitude = $addressToLatLng->latitude();
+            $longitude = $addressToLatLng->longitude();
+            // store in the database
+            $pharmacists = new Pharmacist;
+            $pharmacists->name = $req->name;
+            $pharmacists->email = $req->email;
+            $pharmacists->contact = $req->contact;
+            $pharmacists->pharmacyName = $req->pharmacyName;
+            $pharmacists->address = $req->address;
+            $pharmacists->society = $req->society;
+            $pharmacists->city = $req->city;
+            $pharmacists->latitude = $latitude;
+            $pharmacists->longitude = $longitude;
+            $pharmacists->freeDeliveryPurchase = $req->freeDeliveryPurchase;
+            $pharmacists->password=bcrypt($req->password);
+            $pharmacists->verificationToken=Str::random(40);
+            // by default
+            // verificationStatus  is set to 0
+            // status is set to 1
+            // see create_pharmacists_table migration for more info
 
-    	$latitude = $addressToLatLng->latitude();
-    	$longitude = $addressToLatLng->longitude();
-      // store in the database
-      $pharmacists = new Pharmacist;
-      $pharmacists->name = $req->name;
-      $pharmacists->email = $req->email;
-      $pharmacists->contact = $req->contact;
-      $pharmacists->pharmacyName = $req->pharmacyName;
-      $pharmacists->address = $req->address;
-      $pharmacists->society = $req->society;
-      $pharmacists->city = $req->city;
-      $pharmacists->latitude = $latitude;
-      $pharmacists->longitude = $longitude;
-      $pharmacists->freeDeliveryPurchase = $req->freeDeliveryPurchase;
-      $pharmacists->password=bcrypt($req->password);
-      $pharmacists->verificationToken=Str::random(40);
-      // by default 
-      // verificationStatus  is set to 0
-      // status is set to 1 
-      // see create_pharmacists_table migration for more info
-      
-      $thisUser = $pharmacists; 
-      // verification email function called
-      $this->sendEmail($thisUser);
-      
-      $pharmacists->save();
-     
-      return redirect()->route('pharmacist.login')->with('message', 'A confirmation email has been sent');
-}
-  }
+            $thisUser = $pharmacists;
+            // verification email function called
+            $this->sendEmail($thisUser);
 
-  // to send email
-  public function sendEmail($thisUser)
-  {
-    Mail::to($thisUser['email'])->send(new verifyEmailToPharmacist($thisUser));
-  }
+            $pharmacists->save();
 
-  // to update Pharmacist status to verified
-  public function sendVerifyEmail($email, $verificationToken)
-  {
-    $pharmacist = Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
-    if($pharmacist){
-      Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => NULL]);
-      $defaultPharmacyRating = new Rating;
-      $defaultPharmacyRating->pharmacyId = $pharmacist->id;
-      $defaultPharmacyRating->pharmacyName = $pharmacist->pharmacyName;
-      $defaultPharmacyRating->save();
-
-      return redirect()->route('pharmacist.login')->with('message', 'Verification Successful');
+            return redirect()->route('pharmacist.login')->with('message', 'A confirmation email has been sent');
+        }
     }
-    else {
-      return redirect()->route('pharmacist.login')->with('error', 'There seems to be an error. Try to login if login fails register again');
+
+    // to send email
+    public function sendEmail($thisUser)
+    {
+        Mail::to($thisUser['email'])->send(new verifyEmailToPharmacist($thisUser));
     }
-  }
 
-  public function logout()
-  {
-      Auth::guard('pharmacist')->logout();
+    // to update Pharmacist status to verified
+    public function sendVerifyEmail($email, $verificationToken)
+    {
+        $pharmacist = Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
+        if ($pharmacist) {
+            Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->update(['verificationStatus'=>'1', 'verificationToken' => null]);
+            $defaultPharmacyRating = new Rating;
+            $defaultPharmacyRating->pharmacyId = $pharmacist->id;
+            $defaultPharmacyRating->pharmacyName = $pharmacist->pharmacyName;
+            $defaultPharmacyRating->save();
 
-      return redirect('/');
-  }
+            return redirect()->route('pharmacist.login')->with('message', 'Verification Successful');
+        } else {
+            return redirect()->route('pharmacist.login')->with('error', 'There seems to be an error. Try to login if login fails register again');
+        }
+    }
+
+    public function logout()
+    {
+        Auth::guard('pharmacist')->logout();
+
+        return redirect('/');
+    }
 }

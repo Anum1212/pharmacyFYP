@@ -40,9 +40,11 @@ class PharmacistResetPasswordController extends Controller
         $this->middleware('guest:pharmacist');
     }
 
-    public function showResetForm(Request $request, $token = null) {
+    public function showResetForm(Request $request, $token = null)
+    {
         return view('auth.passwords.pharmacist-reset')
-            ->with(['token' => $token, 'email' => $request->email]
+            ->with(
+                ['token' => $token, 'email' => $request->email]
             );
     }
 
@@ -54,7 +56,8 @@ class PharmacistResetPasswordController extends Controller
     }
 
     //defining our password broker function
-    protected function broker() {
+    protected function broker()
+    {
         return Password::broker('pharmacists');
     }
 }
