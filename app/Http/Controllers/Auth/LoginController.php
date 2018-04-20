@@ -37,7 +37,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout', 'userlogout');
+        $this->middleware('guest:web', ['except' => ['logout', 'userlogout']]);
     }
 
     // overriding default credentials method to check verificationStatus of user

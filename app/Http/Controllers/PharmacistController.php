@@ -41,7 +41,8 @@ class PharmacistController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:pharmacist');
+        $this->middleware('auth:pharmacist')->except(['viewSpecificOrder']);
+        $this->middleware('userType')->only(['viewSpecificOrder']);
     }
 
     /**

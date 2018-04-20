@@ -55,7 +55,7 @@
                   @foreach($customers as $customer) @if($customer->id == $order->userId)
                   <td data-label="Customer">{{$customer->name}}</td>
                   <td data-label="View">
-                      <a href="/viewSpecificOrder/{{$order->id}}/{{$customer->id}}">
+                      <a href="/pharmacist/viewSpecificOrder/{{$order->id}}/{{$customer->id}}">
                         <i class="fa fa-search" aria-hidden="true"></i>
                     </a>
                 </td>
@@ -73,15 +73,6 @@
 </div>
 </div>
 </div>
-
-
-
-
-
-
-
-
-
 
 
 @endsection @section('script')

@@ -44,7 +44,7 @@
 //dashboard --> customer dashboard
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 //logout --> customer logout
-    Route::get('/user/logout', 'Auth\LoginController@userLogout')->name('user.logout');
+    Route::post('user/logout', 'Auth\LoginController@userlogout')->name('user.logout');
 //contactUsForm --> goto to contact us form page
     Route::get('/contactUsForm', 'HomeController@contactUsForm');
 //editAccountDetailsForm --> goto edit details form page
@@ -69,7 +69,7 @@
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
 //logout --> admin logut
-    Route::get('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+    Route::post('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
 //password reset --> admin password reset
     Route::post('/password/email', 'Auth\AdminForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
@@ -110,7 +110,7 @@
     Route::get('/register', 'Auth\PharmacistRegisterController@create')->name('pharmacist.register');
     Route::post('/register', 'Auth\PharmacistRegisterController@store')->name('pharmacist.register.store');
 //logout --> pharmacist logout
-    Route::get('/logout', 'Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
+    Route::post('/logout', 'Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
 //password reset  --> pharmacist password reset
     Route::post('/password/email', 'Auth\PharmacistForgotPasswordController@sendResetLinkEmail')->name('pharmacist.password.email');
     Route::get('/password/reset', 'Auth\PharmacistForgotPasswordController@showLinkRequestForm')->name('pharmacist.password.request');

@@ -100,12 +100,12 @@
           </a>
         </li>
         <li>
-          <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <a href="{{ route('pharmacist.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </a>
 
-          <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+          <form id="logout-form" action="{{ route('pharmacist.logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
           </form>
         </li>
