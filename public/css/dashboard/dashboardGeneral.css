@@ -158,3 +158,12 @@
     border-radius: 0 0 4px 4px;
 }
 
+
+
+/* -------------------------- pharmacyDetails --------------------------*/
+
+#map {
+    height: 500px;
+    width: auto;
+    margin: auto;
+}

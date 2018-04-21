@@ -42,7 +42,7 @@ class PharmacistController extends Controller
     public function __construct()
     {
         $this->middleware('auth:pharmacist')->except(['viewSpecificOrder']);
-        $this->middleware('userType')->only(['viewSpecificOrder']);
+        $this->middleware('userTypeAorP')->only(['viewSpecificOrder']);
     }
 
     /**
@@ -166,12 +166,12 @@ class PharmacistController extends Controller
 
 
     //  |---------------------------------- viewSpecificOrder ----------------------------------|
-    public function viewSpecificOrder($orderId, $customerId)
+    public function viewSpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails =[];
         $orderDetails = Orderitem::where([
             ['orderId', $orderId],
-            ['pharmacistId', Auth::user()->id]
+            ['pharmacistId', $pharmacyId]
             ])->get();
 
         $customerDetails =  User::whereId($customerId)->first();

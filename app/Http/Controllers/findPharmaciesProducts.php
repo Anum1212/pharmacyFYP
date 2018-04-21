@@ -17,6 +17,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Bodunde\ GoogleGeocoder\ Geocoder;
 use DB;
+use Auth;
 use Geocode;
 use App\User;
 use App\Pharmacist;
@@ -109,6 +110,9 @@ class findPharmaciesProducts extends Controller
         for ($i=0; $i<count($customerId); $i++) {
             $customers[$i] = User::whereId($customerId[$i])->first();
         }
+        if(Auth::guard('admin')->check())
+        return view('admin.users.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
+        else
         return view('siteView.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
     }
 }

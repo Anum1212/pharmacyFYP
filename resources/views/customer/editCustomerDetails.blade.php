@@ -71,6 +71,12 @@
             </a>
           </li>
           <li>
+            <a href="/viewCart">
+              <i class="fas fa-shopping-cart"></i>
+              <span>Cart</span>
+            </a>
+          </li>
+          <li>
             <a href="contactUsForm">
               <i class="fas fa-comment"></i>
               <span>Contact Admin</span>

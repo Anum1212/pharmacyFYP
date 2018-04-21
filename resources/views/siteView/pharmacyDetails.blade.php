@@ -17,7 +17,7 @@
               <th scope="col">Pharmacy Name</th>
               <th scope="col">Email</th>
               <th scope="col">Contact</th>
-              <th scope="col"><Address></Address></th>
+              <th scope="col">Address</th>
             </tr>
           </thead>
           <tbody>
@@ -34,41 +34,6 @@
     <div id="map">
     </div>
 </div><!-- /panel-body -->
-@if(Auth::guard('admin')->check())
-<div class="panel-footer">
-    <table>
-        <caption>Orders Received</caption>
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Customer</th>
-                <th scope="col">View</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php
-    $i=1;
-    ?>
-              @foreach($orders as $order)
-              <tr>
-                  <td data-label="#">{{$i}}</td>
-                  @foreach($customers as $customer) @if($customer->id == $order->userId)
-                  <td data-label="Customer">{{$customer->name}}</td>
-                  <td data-label="View">
-                      <a href="/pharmacist/viewSpecificOrder/{{$order->id}}/{{$customer->id}}">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </a>
-                </td>
-                @endif @endforeach
-            </tr>
-            <?php
-      $i++;
-      ?>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
-    @endif
 </div>
 </div>
 </div>

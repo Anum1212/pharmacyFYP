@@ -1,5 +1,5 @@
 @extends('layouts.dashboard') @section('head')
-<link href="{{ asset('css/table.css') }}" rel="stylesheet"> @endsection @section('style') @endsection @section('body')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> @endsection @section('body')
 
 <div class="wrapper">
 
@@ -68,6 +68,12 @@
           <a href="/viewAllOrders">
             <i class="fas fa-truck"></i>
             <span>Orders</span>
+          </a>
+        </li>
+        <li>
+          <a href="/viewCart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
           </a>
         </li>
         <li>

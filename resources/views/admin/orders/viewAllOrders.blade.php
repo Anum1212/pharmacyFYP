@@ -1,4 +1,5 @@
 @extends('layouts.dashboard') 
+
 @section('head')
 <link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
 @endsection
@@ -67,13 +68,13 @@
             <span>Account Details</span>
           </a>
         </li> --}}
-        <li>
+        <li class="active">
           <a href="/admin/viewAllOrders">
             <i class="fas fa-truck"></i>
             <span>Orders</span>
           </a>
         </li>
-<li class="treeview active">
+        <li class="treeview">
           <a href="#">
             <i class="fas fa-users"></i>
             <span>Mangage Users</span>
@@ -82,7 +83,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active">
+            <li>
               <a href="/admin/viewAllCustomers">
                 <i class="fas fa-user"></i>
                 Customers
@@ -123,7 +124,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Mangage Pharmacies
+        DashBoard
       </h1>
     </section>
 
@@ -136,14 +137,13 @@
 <div class="container containerDashboardContent">
 
         <table>
-          <caption>Customer Details</caption>
+          <caption>Your Orders</caption>
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Contact</th>
-              <th scope="col">Address</th>
+              <th scope="col">Order#</th>
+              <th scope="col">Customer Name</th>
+              <th scope="col">Cost</th>
               <th scope="col">View</th>
             </tr>
           </thead>
@@ -151,15 +151,18 @@
             <?php
     $i=1;
     ?>
-              @foreach($users as $user)
+              @foreach($orders as $order)
               <tr>
                 <td data-label="#">{{$i}}</td>
-                <td data-label="Customer">{{$user->name}}</td>
-                <td data-label="Email">{{$user->email}}</td>
-                <td data-label="Contact">{{$user->contact}}</td>
-                <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
+                <td data-label="Order#">{{$order->id}}</td>
+                @foreach($customers as $customer)
+                @if($customer->id == $order->userId)
+                <td data-label="Customer Name">{{$customer->name}}</td>
+                @endif
+                @endforeach
+                <td data-label="Cost">{{$order->cost}}</td>
                 <td data-label="View">
-                  <a href="/admin/viewSpecificCustomer/{{$user->id}}">
+                  <a href="/viewSpecificOrder/{{$order->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>
                 </td>
@@ -167,12 +170,10 @@
               <?php
       $i++;
       ?>
-                @endforeach
+      @endforeach
           </tbody>
         </table>
       </div>
-
-
     </section>
     <!-- /.content -->
   </div>

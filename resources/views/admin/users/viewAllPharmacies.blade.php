@@ -136,7 +136,7 @@
 <div class="container containerDashboardContent">
 
         <table>
-          <caption>Your Orders</caption>
+          <caption>Pharmacy Details</caption>
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -161,7 +161,7 @@
                 <td data-label="Contact">{{$user->contact}}</td>
                 <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
                 <td data-label="View">
-                  <a href="/pharmacyDetails/{{$user->id}}">
+                  <a href="/pharmacyDetails/{{$user->id}}" target="_blank">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>
                 </td>

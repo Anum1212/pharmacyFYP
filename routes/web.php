@@ -28,7 +28,7 @@
 // addToCart --> add item to cart
     Route::get('/addToCart/{productId}', 'cartController@addToCart');
 // removeFromCart --> remove item from cart
-    Route:: delete('/removeFromCart/{product}', 'cartController@remove');
+    Route:: get('/removeFromCart/{product}', 'cartController@remove');
 // viewCart --> view items present in the cart
     Route:: get('/viewCart', 'cartController@view');
 // updateCart --> update cart item quantity
@@ -75,8 +75,12 @@
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+// viewAllOrders --> view all messages
+    Route::get('/viewAllOrders', 'AdminController@viewAllOrders');
 // viewAllCustomers --> view all messages
     Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
+// viewSpecificCustomer --> view all messages
+    Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
 // viewAllPharmacies --> view all messages
     Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
 // viewAllMessages --> view all messages
@@ -141,7 +145,7 @@
 //viewAllOrders --> view all orders the pharmamcy has received
     Route::get('/viewAllOrders', 'PharmacistController@viewAllOrders');
 //viewSpecificOrder --> view details of a specific order
-    Route::get('/viewSpecificOrder/{orderId}/{customerId}', 'PharmacistController@viewSpecificOrder');
+    Route::get('/viewSpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'PharmacistController@viewSpecificOrder');
     });
 // sendEmailToPharmacist --> Send registration verification email to pharmacist
     Route::get('sendEmailToPharmacist/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@sendVerifyEmail')->name('sendEmailToPharmacist');

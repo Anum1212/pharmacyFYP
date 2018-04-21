@@ -1,4 +1,10 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') 
+
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+@endsection
+
+@section('body')
 
 <div class="wrapper">
 
@@ -9,10 +15,10 @@
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-        <b>Mng</b>Cus</span>
+        <b>Mng</b>Ph</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>Mng</b>Customers</span>
+        <b>Mng</b>Pharmacies</span>
     </a>
 
     <!-- Header Navbar -->
@@ -29,7 +35,7 @@
             <!-- Menu Toggle Button -->
             <a>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
+              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
             </a>
           </li>
       </div>
@@ -68,7 +74,7 @@
             <span>Orders</span>
           </a>
         </li>
-<li class="treeview active">
+        <li class="treeview active">
           <a href="#">
             <i class="fas fa-users"></i>
             <span>Mangage Users</span>
@@ -118,7 +124,7 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Mangage Customers
+        DashBoard
       </h1>
     </section>
 
@@ -128,6 +134,67 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
+
+        <div class="panel panel-default">
+<div class="panel-heading">
+
+    <table>
+          <thead>
+            <tr>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Address</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr>
+                <td data-label="Name">{{$customer->name}}</td>
+                <td data-label="Email">{{$customer->email}}</td>
+                <td data-label="Contact">{{$customer->contact}}</td>
+                <td data-label="Address">{{$customer->address .' '. $customer->society .', '.$customer->city}}</td>
+              </tr>
+          </tbody>
+        </table>
+</div>
+<div class="panel-body">
+    <div id="map">
+    </div>
+</div><!-- /panel-body -->
+<div class="panel-footer">
+    <table>
+        <caption>Orders Received</caption>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Order</th>
+                <th scope="col">Cost</th>
+                <th scope="col">View</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php
+    $i=1;
+    ?>
+              @foreach($orders as $order)
+              <tr>
+                  <td data-label="#">{{$i}}</td>
+                  <td data-label="Customer">{{$order->id}}</td>
+                  <td data-label="Customer">{{$order->cost}}</td>
+                  <td data-label="View">
+                      <a href="/viewSpecificOrder/{{$order->id}}">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </a>
+                </td>
+            </tr>
+            <?php
+      $i++;
+      ?>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+</div>
 
     </section>
     <!-- /.content -->
@@ -146,4 +213,33 @@
   </footer>
 </div>
 <!-- ./wrapper -->
+@endsection
+
+
+@section('script')
+<script type="text/javascript">
+    var map;
+
+    function initMap() {
+        var latitude = {{$customer->latitude}}; // YOUR LATITUDE VALUE
+        var longitude = {{$customer->longitude}}; // YOUR LONGITUDE VALUE
+
+        var myLatLng = {
+            lat:latitude,
+            lng:longitude
+            };
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: myLatLng,
+            zoom: 18
+        });
+
+        var marker = new google.maps.Marker({
+            position: myLatLng,
+            map: map
+        });
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdwAF58eIXQ7rb2cf2g20QFUVqy4b_MoU&callback=initMap" async
+    defer></script>
 @endsection

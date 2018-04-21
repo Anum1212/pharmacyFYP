@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Auth;
 
-class userType
+class userTypeAorP
 {
     /**
      * Handle an incoming request.

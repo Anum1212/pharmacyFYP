@@ -23,6 +23,7 @@
         <span class="sr-only">Toggle navigation</span>
       </a>
       <!-- Navbar Right Menu -->
+      @if(Auth::guard('web')->check())
       <div class="navbar-custom-menu">
         <ul class="nav navbar-nav">
 
@@ -31,7 +32,7 @@
             <!-- Menu Toggle Button -->
             <a>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
+              <span class="hidden-xs">{{Auth::guard('web')->user()->name}}</span>
             </a>
           </li>
       </div>
@@ -71,6 +72,12 @@
           </a>
         </li>
         <li>
+          <a href="/viewCart">
+            <i class="fas fa-shopping-cart"></i>
+            <span>Cart</span>
+          </a>
+        </li>
+        <li>
           <a href="contactUsForm">
             <i class="fas fa-comment"></i>
             <span>Contact Admin</span>
@@ -91,6 +98,101 @@
     </section>
     <!-- /.sidebar -->
   </aside>
+  @endif @if(Auth::guard('admin')->check())
+  <div class="navbar-custom-menu">
+    <ul class="nav navbar-nav">
+
+      <!-- User Account Menu -->
+      <li class="user user-menu">
+        <!-- Menu Toggle Button -->
+        <a>
+          <!-- hidden-xs hides the username on small devices so only the image appears. -->
+          <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
+        </a>
+      </li>
+  </div>
+  </nav>
+  </header>
+  <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <!-- Optionally, you can add icons to the links -->
+        <li>
+          <a href="/index">
+            <i class="fas fa-home"></i>
+            <span>Pharmacy</span>
+          </a>
+        </li>
+        <li>
+          <a href="/admin/dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>DashBoard</span>
+          </a>
+        </li>
+        {{--
+        <li>
+          <a href="/admin/editAccountDetailsForm">
+            <i class="fas fa-cogs"></i>
+            <span>Account Details</span>
+          </a>
+        </li> --}}
+        <li>
+          <a href="/admin/viewAllOrders">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+          </a>
+        </li>
+        <li class="treeview active">
+          <a href="#">
+            <i class="fas fa-users"></i>
+            <span>Mangage Users</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li class="active">
+              <a href="/admin/viewAllCustomers">
+                <i class="fas fa-user"></i>
+                Customers
+              </a>
+            </li>
+            <li>
+              <a href="/admin/viewAllPharmacies">
+                <i class="fas fa-user-md"></i>
+                Pharmacies
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/admin/viewAllMessages">
+            <i class="fas fa-comment"></i>
+            <span>Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+
+          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+          </form>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+  @endif
+
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">

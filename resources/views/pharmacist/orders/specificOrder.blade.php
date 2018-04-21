@@ -30,13 +30,21 @@
           <li class="user user-menu">
             <!-- Menu Toggle Button -->
             <a>
+              @if(Auth::guard('pharmacist')->check())
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
+              <span class="hidden-xs">{{Auth::guard('pharmacist')->user()->name}}</span>
+              @endif
+              @if(Auth::guard('admin')->check())
+              <!-- hidden-xs hides the username on small devices so only the image appears. -->
+              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
+              @endif
             </a>
           </li>
       </div>
     </nav>
   </header>
+
+  @if(Auth::guard('pharmacist')->check())
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -115,6 +123,88 @@
     <!-- /.sidebar -->
   </aside>
 
+  @endif
+  @if(Auth::guard('admin')->check())
+
+    <!-- Left side column. contains the logo and sidebar -->
+  <aside class="main-sidebar">
+
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+
+      <!-- Sidebar Menu -->
+      <ul class="sidebar-menu" data-widget="tree">
+        <!-- Optionally, you can add icons to the links -->
+        <li>
+          <a href="/index">
+            <i class="fas fa-home"></i>
+            <span>Pharmacy</span>
+          </a>
+        </li>
+        <li class="active">
+          <a href="/admin/dashboard">
+            <i class="fas fa-tachometer-alt"></i>
+            <span>DashBoard</span>
+          </a>
+        </li>
+        {{-- <li>
+          <a href="/admin/editAccountDetailsForm">
+            <i class="fas fa-cogs"></i>
+            <span>Account Details</span>
+          </a>
+        </li> --}}
+        <li>
+          <a href="/admin/viewAllOrders">
+            <i class="fas fa-truck"></i>
+            <span>Orders</span>
+          </a>
+        </li>
+        <li class="treeview">
+          <a href="#">
+            <i class="fas fa-users"></i>
+            <span>Mangage Users</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="/admin/viewAllCustomers">
+                <i class="fas fa-user"></i>
+                Customers
+              </a>
+            </li>
+            <li>
+              <a href="/admin/viewAllPharmacies">
+                <i class="fas fa-user-md"></i>
+                Pharmacies
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li>
+          <a href="/admin/viewAllMessages">
+            <i class="fas fa-comment"></i>
+            <span>Messages</span>
+          </a>
+        </li>
+        <li>
+          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+            <i class="fas fa-sign-out-alt"></i>
+            <span>Logout</span>
+          </a>
+
+          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+            {{ csrf_field() }}
+          </form>
+        </li>
+      </ul>
+      <!-- /.sidebar-menu -->
+    </section>
+    <!-- /.sidebar -->
+  </aside>
+  @endif
+  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -127,7 +217,7 @@
           <a href="/pharmacist/viewAllOrders">
             <i class="fa fa-dashboard"></i> Orders</a>
         </li>
-        <li class="active">{{$customerDetails->name}}</li>
+        <li class="active"> {{$customerDetails->name}}</li>
       </ol>
     </section>
 
