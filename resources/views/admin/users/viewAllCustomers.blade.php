@@ -144,6 +144,7 @@
               <th scope="col">Email</th>
               <th scope="col">Contact</th>
               <th scope="col">Address</th>
+              <th scope="col">Block/Unblock</th>
               <th scope="col">View</th>
             </tr>
           </thead>
@@ -158,7 +159,18 @@
                 <td data-label="Email">{{$user->email}}</td>
                 <td data-label="Contact">{{$user->contact}}</td>
                 <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
-                <td data-label="View">
+                <td data-label="Block/Unblock">
+                  @if($user->status == 0)
+                  <a href="/admin/unBlockCustomer/{{$user->id}}">
+                    <span style="color:green">UnBlock</span>
+                  </a>
+                  @endif
+                  @if($user->status == 1)
+                  <a href="/admin/blockCustomer/{{$user->id}}">
+                    <span style="color:red">Block</span>
+                  </a>
+                  @endif
+                </td><td data-label="View">
                   <a href="/admin/viewSpecificCustomer/{{$user->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>

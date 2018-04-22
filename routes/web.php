@@ -85,10 +85,18 @@
     Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
 // viewSpecificCustomer --> view specific customer details
     Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
+    // blockCustomer --> block a Customer
+    Route::get('/blockCustomer/{customerId}', 'AdminController@blockCustomer');
+// unblockCustomer --> unblock a Customer
+    Route::get('/unBlockCustomer/{customerId}', 'AdminController@unBlockCustomer');
 // viewAllPharmacies --> view all pharmacies
     Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
 // pharmacyDetails --> view specific pharmacy details
     Route::get('/pharmacyDetails/{pharmacyId}', 'AdminController@pharmacyDetails');
+// blockPharmacy --> block a pharmacy
+    Route::get('/blockPharmacy/{pharmacyId}', 'AdminController@blockPharmacy');
+// unblockPharmacy --> unblock a pharmacy
+    Route::get('/unBlockPharmacy/{pharmacyId}', 'AdminController@unBlockPharmacy');
 // viewAllMessages --> view all messages
     Route::get('/viewAllMessages', 'messageController@viewAllMessages');
 // viewSpecificMessage --> view details of a specific message

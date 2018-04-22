@@ -43,7 +43,7 @@ class LoginController extends Controller
     // overriding default credentials method to check verificationStatus of user
     protected function credentials(Request $request)
     {
-        return ['email'=>$request->{$this->username()},'password' => $request->password, 'verificationStatus' => '1'];
+        return ['email'=>$request->{$this->username()},'password' => $request->password, 'verificationStatus' => '1', 'status' => '1'];
     }
 
     // overriding default sendFailedLoginResponse method to show appropriate error message to user if verificationStatus is 0 -> email not verified
@@ -58,6 +58,9 @@ class LoginController extends Controller
         // and verificationStatus is 0. If so, override the default error message.
         if ($user && \Hash::check($request->password, $user->password) && $user->verificationStatus == 0) {
             return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Verify Account First');
+        }
+        if ($user && \Hash::check($request->password, $user->password) && $user->status == 0) {
+            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Your Account has been Blocked! Contact Admin');
         }
 
         if ($request->expectsJson()) {

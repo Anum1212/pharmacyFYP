@@ -103,10 +103,10 @@
                        Main Page Wrapper
 ********************************************************************
  -->
-  @include('partials.error') @include('partials.message')
 
-  <div id="gap">
+   <div id="gap">
   </div>
+  @include('partials.error') @include('partials.message')
   @section('body') @show
 
 

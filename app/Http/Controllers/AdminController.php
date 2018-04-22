@@ -119,13 +119,36 @@ public function viewAllCustomers()
 
 
 
-// |---------------------------------- viewAllCustomers ----------------------------------|
+// |---------------------------------- viewSpecificCustomer ----------------------------------|
 public function viewSpecificCustomer($customerId)
 {
     $customer = User::find($customerId);
     $orders = Order::where('userId', $customerId)->paginate(15);
     return view('admin.users.customerDetails', compact('customer', 'orders'));
 }
+
+
+    //  |---------------------------------- blockCustomer ----------------------------------|
+    public function blockCustomer($customerId)
+    {
+        $customer = User::find($customerId);
+
+        $customer->status='0';
+        $customer->save();
+        return redirect('/admin/viewAllCustomers');
+    }
+
+
+    
+    //  |---------------------------------- unBlockCustomer ----------------------------------|
+    public function unBlockCustomer($customerId)
+    {
+        $customer = User::find($customerId);
+
+        $customer->status='1';
+        $customer->save();
+        return redirect('/admin/viewAllCustomers');
+    }
 
 
 
@@ -145,12 +168,12 @@ public function viewAllPharmacies()
         $allCustomerId=[];
         $customer=[];
         $orders=[];
-
+        
         $orderItems = Orderitem::where('pharmacistId', $pharmacyId)->orderBy('id', 'desc')->get();
         foreach ($orderItems as $orderItem) {
             $allOrderId[] = $orderItem->orderId;
         }
-
+        
         // to remove duplicates
         $orderId = array_unique($allOrderId);
         
@@ -191,5 +214,29 @@ public function viewAllPharmacies()
         }
         return view('admin.users.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
         
+    }
+    
+    
+    
+    //  |---------------------------------- blockPharmacy ----------------------------------|
+    public function blockPharmacy($pharmacyId)
+    {
+        $pharmacy = Pharmacist::find($pharmacyId);
+
+        $pharmacy->pharmacistStatus='0';
+        $pharmacy->save();
+        return redirect('/admin/viewAllPharmacies');
+    }
+
+
+
+    //  |---------------------------------- unBlockPharmacy ----------------------------------|
+    public function unBlockPharmacy($pharmacyId)
+    {
+        $pharmacy = Pharmacist::find($pharmacyId);
+
+        $pharmacy->pharmacistStatus='1';
+        $pharmacy->save();
+        return redirect('/admin/viewAllPharmacies');
     }
 }

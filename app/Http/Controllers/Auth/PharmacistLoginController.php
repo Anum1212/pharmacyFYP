@@ -29,7 +29,7 @@ class PharmacistLoginController extends Controller
             'password' => 'required|min:6'
         ]);
         //attempt to login the pharmacists in
-        if (Auth::guard('pharmacist')->attempt(['email' => $request->email, 'password' => $request->password, 'verificationStatus' => '1'], $request->remember)) {
+        if (Auth::guard('pharmacist')->attempt(['email' => $request->email, 'password' => $request->password, 'verificationStatus' => '1', 'pharmacistStatus' => '1'], $request->remember)) {
             //if successful redirect to pharmacist dashboard
             return redirect()->intended(route('pharmacist.dashboard'));
         }
@@ -38,6 +38,9 @@ class PharmacistLoginController extends Controller
         $pharmacist = Pharmacist::where('email', $request->email)->first();
         if (Auth::guard('pharmacist') && $pharmacist->verificationStatus == '0') {
             return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Verify Account First');
+        }
+        if (Auth::guard('pharmacist') && $pharmacist->pharmacistStatus == '0') {
+            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Your Account has been Blocked! Contact Admin');
         }
 
         //if Wrong credentials or any other problem redirect back to the login form with form data and appropriate error message
