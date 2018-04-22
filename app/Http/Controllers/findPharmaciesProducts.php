@@ -99,20 +99,45 @@ class findPharmaciesProducts extends Controller
         foreach ($orderItems as $orderItem) {
             $allOrderId[] = $orderItem->orderId;
         }
+
+        // to remove duplicates
         $orderId = array_unique($allOrderId);
-        for ($i=0; $i<count($orderId); $i++) {
-            $orders[$i] = Order::whereId($orderId[$i])->first();
+        
+        // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
+        // index => value
+        // 0     =>   1
+        // 2     =>   3 
+        // 7     =>   9 
+        // to fix this we use array_values()
+        // which will give the result
+        // index => value
+        // 0     =>   1
+        // 1     =>   3 
+        // 2     =>   9
+        $arrangedOrderId = array_values($orderId);
+        for ($i=0; $i<count($arrangedOrderId); $i++) {
+            $orders[$i] = Order::whereId($arrangedOrderId[$i])->first();
         }
         foreach ($orders as $order) {
             $allCustomerId[] = $order->userId;
         }
+        // to remove duplicates
         $customerId = array_unique($allCustomerId);
-        for ($i=0; $i<count($customerId); $i++) {
-            $customers[$i] = User::whereId($customerId[$i])->first();
+        // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
+        // index => value
+        // 0     =>   1
+        // 2     =>   3 
+        // 7     =>   9 
+        // to fix this we use array_values()
+        // which will give the result
+        // index => value
+        // 0     =>   1
+        // 1     =>   3 
+        // 2     =>   9
+        $arrangedCustomerId = array_values($customerId);
+        for ($i=0; $i<count($arrangedCustomerId); $i++) {
+            $customers[$i] = User::whereId($arrangedCustomerId[$i])->first();
         }
-        if(Auth::guard('admin')->check())
-        return view('admin.users.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
-        else
         return view('siteView.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
     }
 }

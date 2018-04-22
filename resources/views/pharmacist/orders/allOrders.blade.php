@@ -133,11 +133,13 @@
       <div class="container containerDashboardContent">
 
         <table>
-          <caption>Your Orders</caption>
           <thead>
             <tr>
               <th scope="col">#</th>
+              <th scope="col">Order#</th>
               <th scope="col">Customer</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Order Date</th>
               <th scope="col">View</th>
             </tr>
           </thead>
@@ -148,8 +150,12 @@
               @foreach($orders as $order)
               <tr>
                 <td data-label="#">{{$i}}</td>
-                @foreach($customers as $customer) @if($customer->id == $order->userId)
+                <td data-label="Order#">{{$order->id}}</td>
+                @foreach($customers as $customer) 
+                @if($customer->id == $order->userId)
                 <td data-label="Customer">{{$customer->name}}</td>
+                <td data-label="Cost">{{$order->cost}}</td>
+                <td data-label="Order Date">{{$order->created_at}}</td>
                 <td data-label="View">
                 <a href="viewSpecificOrder/{{$order->id}}/{{$customer->id}}/{{Auth::user()->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>

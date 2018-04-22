@@ -161,7 +161,7 @@
                 <td data-label="Contact">{{$user->contact}}</td>
                 <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
                 <td data-label="View">
-                  <a href="/pharmacyDetails/{{$user->id}}" target="_blank">
+                  <a href="/admin/pharmacyDetails/{{$user->id}}" target="_blank">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>
                 </td>

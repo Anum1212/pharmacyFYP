@@ -162,37 +162,44 @@
     </div>
 </div><!-- /panel-body -->
 <div class="panel-footer">
-    <table>
-        <caption>Orders Received</caption>
-        <thead>
+
+  <table>
+          <thead>
             <tr>
-                <th scope="col">#</th>
-                <th scope="col">Customer</th>
-                <th scope="col">View</th>
+              <th scope="col">#</th>
+              <th scope="col">Order#</th>
+              <th scope="col">Customer</th>
+              <th scope="col">Cost</th>
+              <th scope="col">Order Date</th>
+              <th scope="col">View</th>
             </tr>
-        </thead>
-        <tbody>
+          </thead>
+          <tbody>
             <?php
     $i=1;
     ?>
               @foreach($orders as $order)
               <tr>
-                  <td data-label="#">{{$i}}</td>
-                  @foreach($customers as $customer) @if($customer->id == $order->userId)
-                  <td data-label="Customer">{{$customer->name}}</td>
-                  <td data-label="View">
-                      <a href="/pharmacist/viewSpecificOrder/{{$order->id}}/{{$customer->id}}/{{$pharmacy->id}}">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </a>
+                <td data-label="#">{{$i}}</td>
+                <td data-label="Order#">{{$order->id}}</td>
+                @foreach($customers as $customer) 
+                @if($customer->id == $order->userId)
+                <td data-label="Customer">{{$customer->name}}</td>
+                <td data-label="Cost">{{$order->cost}}</td>
+                <td data-label="Order Date">{{$order->created_at}}</td>
+                <td data-label="View">
+                <a href="/admin/viewPharmacySpecificOrder/{{$order->id}}/{{$customer->id}}/{{Auth::user()->id}}">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
                 </td>
                 @endif @endforeach
-            </tr>
-            <?php
+              </tr>
+              <?php
       $i++;
       ?>
                 @endforeach
-            </tbody>
-        </table>
+          </tbody>
+
     </div>
 </div>
 
@@ -200,17 +207,6 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
 </div>
 <!-- ./wrapper -->
 @endsection

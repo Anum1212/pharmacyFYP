@@ -1,9 +1,11 @@
 @extends('layouts.dashboard') 
-@section('head')
-<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
-@endsection 
 
-@section('body')
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet">
+ @endsection 
+ 
+ 
+ @section('body')
 
 <div class="wrapper">
 
@@ -17,7 +19,7 @@
         <b>O</b>rder</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>O</b>rder</span>
+        <b>O</b>rders</span>
     </a>
 
     <!-- Header Navbar -->
@@ -35,13 +37,14 @@
             <!-- Menu Toggle Button -->
             <a>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::guard('web')->user()->name}}</span>
+              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
             </a>
           </li>
       </div>
     </nav>
   </header>
-  <!-- Left side column. contains the logo and sidebar -->
+
+    <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
     <!-- sidebar: style can be found in sidebar.less -->
@@ -57,42 +60,59 @@
           </a>
         </li>
         <li class="active">
-          <a href="/home">
+          <a href="/admin/dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span>DashBoard</span>
           </a>
         </li>
-        <li>
-          <a href="/editAccountDetailsForm">
+        {{-- <li>
+          <a href="/admin/editAccountDetailsForm">
             <i class="fas fa-cogs"></i>
             <span>Account Details</span>
           </a>
-        </li>
+        </li> --}}
         <li>
-          <a href="/viewAllOrders">
+          <a href="/admin/viewAllOrders">
             <i class="fas fa-truck"></i>
             <span>Orders</span>
           </a>
         </li>
-        <li>
-          <a href="/viewCart">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Cart</span>
+        <li class="treeview">
+          <a href="#">
+            <i class="fas fa-users"></i>
+            <span>Mangage Users</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
           </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="/admin/viewAllCustomers">
+                <i class="fas fa-user"></i>
+                Customers
+              </a>
+            </li>
+            <li>
+              <a href="/admin/viewAllPharmacies">
+                <i class="fas fa-user-md"></i>
+                Pharmacies
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
-          <a href="contactUsForm">
+          <a href="/admin/viewAllMessages">
             <i class="fas fa-comment"></i>
-            <span>Contact Admin</span>
+            <span>Messages</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <a href="{{ route('pharmacist.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </a>
 
-          <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+          <form id="logout-form" action="{{ route('pharmacist.logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
           </form>
         </li>
@@ -101,8 +121,7 @@
     </section>
     <!-- /.sidebar -->
   </aside>
- 
-
+  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -110,6 +129,13 @@
       <h1>
         Orders
       </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="/pharmacist/viewAllOrders">
+            <i class="fa fa-dashboard"></i> Orders</a>
+        </li>
+        <li class="active"> {{$customerDetails->name}}</li>
+      </ol>
     </section>
 
     <!-- Main content -->
@@ -119,6 +145,29 @@
         | Your Page Content Here |
         -------------------------->
       <div class="container containerDashboardContent">
+        <div style="min-width:200px; max-width:600px;">
+          <table>
+            <caption>Customer Details</caption>
+            <tbody>
+              <tr>
+                <td data-label="#">Name</td>
+                <td data-label="item">{{$customerDetails->name}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Email</td>
+                <td data-label="item">{{$customerDetails->email}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Contact#</td>
+                <td data-label="item">{{$customerDetails->contact}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Address</td>
+                <td data-label="item">{{$customerDetails->address.' '.$customerDetails->society.', '.$customerDetails->city}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <table>
           <caption>Order Details</caption>
           <thead>
@@ -126,8 +175,6 @@
               <th scope="col">#</th>
               <th scope="col">item</th>
               <th scope="col">type</th>
-              <th scope="col">quantity</th>
-              <th scope="col">pharmacy</th>
             </tr>
           </thead>
           <tbody>
@@ -161,12 +208,6 @@
                 <!-- 7 = Cream -->
                 <td data-label="type">Cream</td>
                 @endif @endif @endforeach
-                <td data-label="item">{{$orderDetail->quantity}}</td>
-                @foreach($pharmacyDetails as $pharmacyDetail) @if($productDetail->pharmacistId == $pharmacyDetail->id)
-                <td data-label="item">
-                  <a href="/pharmacyDetails/{{$pharmacyDetail->id}}">{{$pharmacyDetail->pharmacyName}}</a>
-                </td>
-                @endif @endforeach
               </tr>
               <?php
       $i++;

@@ -30,21 +30,15 @@
           <li class="user user-menu">
             <!-- Menu Toggle Button -->
             <a>
-              @if(Auth::guard('pharmacist')->check())
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
               <span class="hidden-xs">{{Auth::guard('pharmacist')->user()->name}}</span>
-              @endif
-              @if(Auth::guard('admin')->check())
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
-              @endif
+              
             </a>
           </li>
       </div>
     </nav>
   </header>
 
-  @if(Auth::guard('pharmacist')->check())
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -123,94 +117,13 @@
     <!-- /.sidebar -->
   </aside>
 
-  @endif
-  @if(Auth::guard('admin')->check())
-
-    <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
-        <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
-        </li>
-        <li class="active">
-          <a href="/admin/dashboard">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
-        </li>
-        {{-- <li>
-          <a href="/admin/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
-        </li> --}}
-        <li>
-          <a href="/admin/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-users"></i>
-            <span>Mangage Users</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-              <a href="/admin/viewAllCustomers">
-                <i class="fas fa-user"></i>
-                Customers
-              </a>
-            </li>
-            <li>
-              <a href="/admin/viewAllPharmacies">
-                <i class="fas fa-user-md"></i>
-                Pharmacies
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="/admin/viewAllMessages">
-            <i class="fas fa-comment"></i>
-            <span>Messages</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-
-          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
-        </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-  @endif
-  
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Orders
+        Order#{{$order->id}}
+        <small><b>Date</b> {{$order->created_at}}</small>
       </h1>
       <ol class="breadcrumb">
         <li>
@@ -252,12 +165,13 @@
           </table>
         </div>
         <table>
-          <caption>Order Details</caption>
+          <caption>Order Details </caption>
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">item</th>
               <th scope="col">type</th>
+              <th scope="col">Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -267,7 +181,9 @@
               @foreach($orderDetails as $orderDetail)
               <tr>
                 <td data-label="#">{{$i}}</td>
-                @foreach($productDetails as $productDetail) @if($productDetail->id == $orderDetail->id)
+                @foreach($productDetails as $productDetail) 
+                
+                @if($productDetail->id == $orderDetail->productId)
                 <td data-label="item">{{$productDetail->name}}</td>
                 @if($productDetail->type=='1')
                 <!-- 1 = Tablet -->
@@ -291,11 +207,16 @@
                 <!-- 7 = Cream -->
                 <td data-label="type">Cream</td>
                 @endif @endif @endforeach
+              <td data-label="quantity">{{$orderDetail->quantity}}</td>
               </tr>
               <?php
       $i++;
       ?>
                 @endforeach
+                <tr>
+                  <td colspan="2"><b>Total</b></td>
+                <td colspan="2">{{$order->cost}}</td>
+                </tr>
           </tbody>
         </table>
       </div>

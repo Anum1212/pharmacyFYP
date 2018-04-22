@@ -54,7 +54,7 @@ class cartController extends Controller
     public function remove($rowId)
     {
         Cart::remove($rowId);
-        return view('siteView.cart');
+        return redirect('/viewCart');
     }
 
 
@@ -76,7 +76,7 @@ class cartController extends Controller
             Cart::update($itemRowId, $req->qty[$i]);
             $i++;
         }
-        return redirect::back();
+        return redirect('/viewCart');
     }
 
 

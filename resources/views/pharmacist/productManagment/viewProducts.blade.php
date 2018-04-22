@@ -1,4 +1,10 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard')
+
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+@endsection
+
+@section('body')
 
 <div class="wrapper">
 
@@ -144,58 +150,73 @@
         -------------------------->
 
       <div class="container containerDashboardContent">
-        <div class="row">
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Name
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Dosage
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Type
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Price
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Quantity
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            Actions
-          </div>
-        </div>
 
-        @foreach ($products as $product)
-
-        <div class="row">
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            {{$product->name}}
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            {{$product->dosage}}
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            {{$product->type}}
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            {{$product->price}}
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            {{$product->quantity}}
-          </div>
-          <div class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-            <a class="btn btn-success" href="editProduct/{{$product->id}}">
-              <i class="fa fa-edit"></i>
-            </a>
-            <form action="/pharmacist/deleteProduct/{{$product->id}}" method="post">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Dosage</th>
+              <th scope="col">Type</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Edit</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+    $i=1;
+    ?>
+              @foreach ($products as $product)
+              <tr>
+                <td data-label="#">{{$i}}</td>
+                <td data-label="Name">{{$product->name}}</td>
+                <td data-label="Dosage">{{$product->dosage}}</td>
+                @if($product->type=='1')
+                <!-- 1 = Tablet -->
+                <td data-label="Type">Tablet</td>
+                @elseif($product->type=='2')
+                <!-- 2 = Capsule -->
+                <td data-label="Type">Capsule</td>
+                @elseif($product->type=='3')
+                <!-- 3 = Syrup -->
+                <td data-label="Type">Syrup</td>
+                @elseif($product->type=='4')
+                <!-- 4 = Inhaler -->
+                <td data-label="Type">Inhaler</td>
+                @elseif($product->type=='5')
+                <!-- 5 = Drops -->
+                <td data-label="Type">Drops</td>
+                @elseif($product->type=='6')
+                <!-- 6 = Injection -->
+                <td data-label="Type">Injection</td>
+                @elseif($product->type=='7')
+                <!-- 7 = Cream -->
+                <td data-label="Type">Cream</td>
+                @endif
+                <td data-label="Price">{{$product->price}}</td>
+                <td data-label="Quantity">{{$product->quantity}}</td>
+                <td data-label="Edit">
+                <a class="btn btn-success" href="editProduct/{{$product->id}}">
+                    <i class="fas fa-edit"></i>
+                  </a>
+                </td>
+                <td data-label="Delete">
+                <form action="/pharmacist/deleteProduct/{{$product->id}}" method="post">
               {{csrf_field()}} {{method_field('DELETE')}}
-              <button class="btn btn-success" type="submit">
-                <i class="fa fa-trash"></i>
+              <button class="btn btn-danger" type="submit">
+                <i class="fas fa-trash-alt"></i>
               </button>
             </form>
-          </div>
-        </div>
-        @endforeach
+                </td>
+              </tr>
+              <?php
+      $i++;
+      ?>
+                @endforeach
+          </tbody>
+        </table>
       </div>
 
     </section>

@@ -45,6 +45,9 @@ version) --}}
                     <a href="http://localhost/phpmyadmin/" target="_blank">PhpMyAdmin</a>
                 </li>
                 <li>
+                    <a href="https://github.com/Anum1212/pharmacyFYP" target="_blank">GitHub</a>
+                </li>
+                <li>
                     <a href="/test" target="_blank">Test Route</a>
                 </li>
             </ul>

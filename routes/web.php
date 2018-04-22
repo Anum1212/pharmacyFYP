@@ -75,14 +75,20 @@
     Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
     Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
     Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
-// viewAllOrders --> view all messages
+// viewAllOrders --> view all orders
     Route::get('/viewAllOrders', 'AdminController@viewAllOrders');
-// viewAllCustomers --> view all messages
+// viewSpecificOrder --> view specific order
+    Route::get('/viewSpecificOrder/{orderId}', 'AdminController@viewSpecificOrder');
+//viewPharmacySpecificOrder --> view details of a specific order
+    Route::get('/viewPharmacySpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'AdminController@viewPharmacySpecificOrder');
+// viewAllCustomers --> view all customers
     Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
-// viewSpecificCustomer --> view all messages
+// viewSpecificCustomer --> view specific customer details
     Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
-// viewAllPharmacies --> view all messages
+// viewAllPharmacies --> view all pharmacies
     Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
+// pharmacyDetails --> view specific pharmacy details
+    Route::get('/pharmacyDetails/{pharmacyId}', 'AdminController@pharmacyDetails');
 // viewAllMessages --> view all messages
     Route::get('/viewAllMessages', 'messageController@viewAllMessages');
 // viewSpecificMessage --> view details of a specific message

@@ -1,9 +1,5 @@
-@extends('layouts.dashboard') 
-@section('head')
-<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
-@endsection 
-
-@section('body')
+@extends('layouts.dashboard') @section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> @endsection @section('style') @endsection @section('body')
 
 <div class="wrapper">
 
@@ -17,7 +13,7 @@
         <b>O</b>rder</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>O</b>rder</span>
+        <b>O</b>rders</span>
     </a>
 
     <!-- Header Navbar -->
@@ -35,12 +31,14 @@
             <!-- Menu Toggle Button -->
             <a>
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::guard('web')->user()->name}}</span>
+              <span class="hidden-xs">{{Auth::guard('admin')->user()->name}}</span>
+              
             </a>
           </li>
       </div>
     </nav>
   </header>
+
   <!-- Left side column. contains the logo and sidebar -->
   <aside class="main-sidebar">
 
@@ -56,43 +54,60 @@
             <span>Pharmacy</span>
           </a>
         </li>
-        <li class="active">
-          <a href="/home">
+        <li>
+          <a href="/pharmacist/dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span>DashBoard</span>
           </a>
         </li>
         <li>
-          <a href="/editAccountDetailsForm">
+          <a href="/pharmacist/editAccountDetailsForm">
             <i class="fas fa-cogs"></i>
             <span>Account Details</span>
           </a>
         </li>
-        <li>
-          <a href="/viewAllOrders">
+        <li class="active">
+          <a href="/pharmacist/viewAllOrders">
             <i class="fas fa-truck"></i>
             <span>Orders</span>
           </a>
         </li>
-        <li>
-          <a href="/viewCart">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Cart</span>
+        <li class="treeview">
+          <a href="#">
+            <i class="fas fa-database"></i>
+            <span>Product Management</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
           </a>
+          <ul class="treeview-menu">
+            <li>
+              <a href="/pharmacist/viewProducts">
+                <i class="fas fa-search"></i>
+                View Products
+              </a>
+            </li>
+            <li>
+              <a href="/pharmacist/addProduct">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add Products
+              </a>
+            </li>
+          </ul>
         </li>
         <li>
-          <a href="contactUsForm">
+          <a href="/pharmacist/contactUsForm">
             <i class="fas fa-comment"></i>
-            <span>Contact Admin</span>
+            <span>Contact Us</span>
           </a>
         </li>
         <li>
-          <a href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+          <a href="{{ route('pharmacist.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fas fa-sign-out-alt"></i>
             <span>Logout</span>
           </a>
 
-          <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+          <form id="logout-form" action="{{ route('pharmacist.logout') }}" method="POST" style="display: none;">
             {{ csrf_field() }}
           </form>
         </li>
@@ -101,15 +116,22 @@
     </section>
     <!-- /.sidebar -->
   </aside>
- 
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Orders
+        Order#{{$order->id}}
+        <small><b>Date</b> {{$order->created_at}}</small>
       </h1>
+      <ol class="breadcrumb">
+        <li>
+          <a href="/pharmacist/viewAllOrders">
+            <i class="fa fa-dashboard"></i> Orders</a>
+        </li>
+        <li class="active"> {{$customerDetails->name}}</li>
+      </ol>
     </section>
 
     <!-- Main content -->
@@ -119,15 +141,37 @@
         | Your Page Content Here |
         -------------------------->
       <div class="container containerDashboardContent">
+        <div style="min-width:200px; max-width:600px;">
+          <table>
+            <caption>Customer Details</caption>
+            <tbody>
+              <tr>
+                <td data-label="#">Name</td>
+                <td data-label="item">{{$customerDetails->name}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Email</td>
+                <td data-label="item">{{$customerDetails->email}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Contact#</td>
+                <td data-label="item">{{$customerDetails->contact}}</td>
+              </tr>
+              <tr>
+                <td data-label="#">Address</td>
+                <td data-label="item">{{$customerDetails->address.' '.$customerDetails->society.', '.$customerDetails->city}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
         <table>
-          <caption>Order Details</caption>
+          <caption>Order Details </caption>
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">item</th>
               <th scope="col">type</th>
-              <th scope="col">quantity</th>
-              <th scope="col">pharmacy</th>
+              <th scope="col">Quantity</th>
             </tr>
           </thead>
           <tbody>
@@ -137,7 +181,9 @@
               @foreach($orderDetails as $orderDetail)
               <tr>
                 <td data-label="#">{{$i}}</td>
-                @foreach($productDetails as $productDetail) @if($productDetail->id == $orderDetail->id)
+                @foreach($productDetails as $productDetail) 
+                
+                @if($productDetail->id == $orderDetail->productId)
                 <td data-label="item">{{$productDetail->name}}</td>
                 @if($productDetail->type=='1')
                 <!-- 1 = Tablet -->
@@ -161,17 +207,16 @@
                 <!-- 7 = Cream -->
                 <td data-label="type">Cream</td>
                 @endif @endif @endforeach
-                <td data-label="item">{{$orderDetail->quantity}}</td>
-                @foreach($pharmacyDetails as $pharmacyDetail) @if($productDetail->pharmacistId == $pharmacyDetail->id)
-                <td data-label="item">
-                  <a href="/pharmacyDetails/{{$pharmacyDetail->id}}">{{$pharmacyDetail->pharmacyName}}</a>
-                </td>
-                @endif @endforeach
+              <td data-label="quantity">{{$orderDetail->quantity}}</td>
               </tr>
               <?php
       $i++;
       ?>
                 @endforeach
+                <tr>
+                  <td colspan="2"><b>Total</b></td>
+                <td colspan="2">{{$order->cost}}</td>
+                </tr>
           </tbody>
         </table>
       </div>

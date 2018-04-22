@@ -162,7 +162,7 @@
                 @endforeach
                 <td data-label="Cost">{{$order->cost}}</td>
                 <td data-label="View">
-                  <a href="/viewSpecificOrder/{{$order->id}}">
+                  <a href="/admin/viewSpecificOrder/{{$order->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>
                 </td>

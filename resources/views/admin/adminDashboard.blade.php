@@ -119,6 +119,7 @@
     <section class="content-header">
       <h1>
         DashBoard
+        <small>Optional description</small>
       </h1>
     </section>
 
