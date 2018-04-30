@@ -57,7 +57,7 @@ class LoginController extends Controller
         // Check if user was successfully loaded, that the password matches
         // and verificationStatus is 0. If so, override the default error message.
         if ($user && \Hash::check($request->password, $user->password) && $user->verificationStatus == 0) {
-            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Verify Account First');
+            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', "Verify Account First. <a href='/resendVerificationEmail/$user->id'>Click here</a> to resend the activation email.");
         }
         if ($user && \Hash::check($request->password, $user->password) && $user->status == 0) {
             return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Your Account has been Blocked! Contact Admin');

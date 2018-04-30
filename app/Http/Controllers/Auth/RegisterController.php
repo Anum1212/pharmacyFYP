@@ -114,7 +114,7 @@ class RegisterController extends Controller
     }
 
     // to update user status to verified
-    public function sendVerifyEmail($email, $verificationToken)
+    public function verifyCustomerRegistration($email, $verificationToken)
     {
         $user = User::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
         if ($user) {

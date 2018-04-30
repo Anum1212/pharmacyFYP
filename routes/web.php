@@ -41,6 +41,8 @@
 // |---------------------------------- Customer Routes ----------------------------------|
 // customer register login password reset
     Auth::routes();
+// resendVerificationEmail
+    Route::get('/resendVerificationEmail/{id}', 'HomeController@resendVerificationEmail');
 //dashboard --> customer dashboard
     Route::get('/dashboard', 'HomeController@index')->name('dashboard');
 //logout --> customer logout
@@ -55,8 +57,8 @@
     Route::get('/viewAllOrders', 'HomeController@viewAllOrders');
 //viewSpecificOrder --> view details of a specific order
     Route::get('/viewSpecificOrder/{orderId}', 'HomeController@viewSpecificOrder');
-// sendEmailToUser --> Send registration verification email to customer
-    Route::get('sendEmailToUser/{email}/{verificationToken}', 'Auth\RegisterController@sendVerifyEmail')->name('sendEmailToUser');
+// verifyCustomerRegistration --> verify Customer Registration
+    Route::get('verifyCustomerRegistration/{email}/{verificationToken}', 'Auth\RegisterController@verifyCustomerRegistration')->name('verifyCustomerRegistration');
 
 
 
@@ -127,6 +129,8 @@
 //register --> pharmacist register
     Route::get('/register', 'Auth\PharmacistRegisterController@create')->name('pharmacist.register');
     Route::post('/register', 'Auth\PharmacistRegisterController@store')->name('pharmacist.register.store');
+// resendVerificationEmail
+    Route::get('/resendVerificationEmail/{id}', 'PharmacistController@resendVerificationEmail');
 //logout --> pharmacist logout
     Route::post('/logout', 'Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
 //password reset  --> pharmacist password reset
@@ -160,9 +164,9 @@
     Route::get('/viewAllOrders', 'PharmacistController@viewAllOrders');
 //viewSpecificOrder --> view details of a specific order
     Route::get('/viewSpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'PharmacistController@viewSpecificOrder');
+    // sendEmailToPharmacist --> Send registration verification email to pharmacist
+        Route::get('/verifyPharmacistRegistration/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@verifyPharmacistRegistration')->name('verifyPharmacistRegistration');
     });
-// sendEmailToPharmacist --> Send registration verification email to pharmacist
-    Route::get('sendEmailToPharmacist/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@sendVerifyEmail')->name('sendEmailToPharmacist');
 
 
 

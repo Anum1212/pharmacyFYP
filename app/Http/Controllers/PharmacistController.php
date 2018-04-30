@@ -26,6 +26,8 @@ use Illuminate\Support\Facades\Schema;
 use Auth;
 use Curl;
 use Geocode;
+use Mail;
+use App\Mail\verifyEmailToPharmacist;
 use App\User;
 use App\Pharmacist;
 use App\Pharmacistproduct;
@@ -41,7 +43,7 @@ class PharmacistController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:pharmacist')->except(['viewSpecificOrder']);
+        $this->middleware('auth:pharmacist')->except(['viewSpecificOrder', 'resendVerificationEmail']);
         $this->middleware('userTypeAorP')->only(['viewSpecificOrder']);
     }
 
@@ -50,6 +52,16 @@ class PharmacistController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+         //  |---------------------------------- resendVerificationEmail ----------------------------------|
+    public function resendVerificationEmail($id)
+    {
+        $user = Pharmacist::whereId($id)->first();
+        Mail::to($user['email'])->send(new verifyEmailToPharmacist($user));
+        return redirect::back();
+    }
 
 
 

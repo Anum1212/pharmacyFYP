@@ -20,6 +20,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Auth;
 use Geocode;
+use Mail;
+use App\Mail\verifyEmailToUser;
 use App\User;
 use App\Pharmacist;
 use App\Pharmacistproduct;
@@ -35,7 +37,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:web')->except(['viewSpecificOrder']);
+        $this->middleware('auth:web')->except(['viewSpecificOrder', 'resendVerificationEmail']);
         $this->middleware('userTypeAorC')->only(['viewSpecificOrder']);
     }
 
@@ -44,6 +46,16 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+
+
+    //  |---------------------------------- resendVerificationEmail ----------------------------------|
+    public function resendVerificationEmail($id)
+    {
+        $user = User::whereId($id)->first();
+        Mail::to($user['email'])->send(new verifyEmailToUser($user));
+        return redirect::back();
+    }
 
 
 

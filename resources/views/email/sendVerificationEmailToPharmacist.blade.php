@@ -24,7 +24,7 @@
       <br />
       <p>
         to verify email
-        <a href="{{route('sendEmailToPharmacist', [" email " => $pharmacist->email, "verificationToken
+        <a href="{{route('verifyPharmacistRegistration', [" email " => $pharmacist->email, "verificationToken
           " => $pharmacist->verificationToken])}}">Click Here</a>
       </p>
     </div>

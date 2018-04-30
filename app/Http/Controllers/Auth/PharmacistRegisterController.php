@@ -101,7 +101,7 @@ class PharmacistRegisterController extends Controller
     }
 
     // to update Pharmacist status to verified
-    public function sendVerifyEmail($email, $verificationToken)
+    public function verifyPharmacistRegistration($email, $verificationToken)
     {
         $pharmacist = Pharmacist::where(['email' => $email, 'verificationToken' => $verificationToken])->first();
         if ($pharmacist) {

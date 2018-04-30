@@ -37,7 +37,7 @@ class PharmacistLoginController extends Controller
         // if pharmacist hasn't verified email go to login form with form data and appropriate error message
         $pharmacist = Pharmacist::where('email', $request->email)->first();
         if (Auth::guard('pharmacist') && $pharmacist->verificationStatus == '0') {
-            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Verify Account First');
+            return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', "Verify Account First. <a href='/pharmacist/resendVerificationEmail/$pharmacist->id'>Click here</a> to resend the activation email.");
         }
         if (Auth::guard('pharmacist') && $pharmacist->pharmacistStatus == '0') {
             return redirect()->back()->withInput($request->only('email', 'remember'))->with('error', 'Your Account has been Blocked! Contact Admin');
