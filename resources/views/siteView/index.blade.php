@@ -28,8 +28,8 @@
                         <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine"
                             required> Distance(km):
                         <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
-                        <input id="latitude" type="text" name="latitude" hidden>
-                        <input id="longitude" type="text" name="longitude" hidden>
+                        <input id="latitude" type="text" name="latitude" >
+                        <input id="longitude" type="text" name="longitude" >
                         <div class="form-group">
                             <div class="col-md-8 col-md-offset-4">
                                 <button type="submit" class="btn btn-primary">
@@ -93,17 +93,30 @@
     var latitude = document.getElementById("latitude");
     var longitude = document.getElementById("longitude");
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
-        } else {
-            x.innerHTML = "Geolocation is not supported by this browser.";
-        }
-    }
+    $(document).ready(function(){
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(showPosition);
+        // } else {
+        //     x.innerHTML = "Geolocation is not supported by this browser.";
+        // }
+         checkLatLongObtained();
+    $('#latitude, #longitude').change(checkLatLongObtained);
+    });
 
-    function showPosition(position) {
-        latitude.value = position.coords.latitude;
-        longitude.value = position.coords.longitude;
+    // function showPosition(position) {
+    //     latitude.value = position.coords.latitude;
+    //     longitude.value = position.coords.longitude;
+    // }
+
+
+    function checkLatLongObtained(){
+    if ($('#latitude').val().length   >   0   &&
+        $('#longitude').val().length  >   0) {
+        $("input[type=submit]").prop("disabled", false);
+    }
+    else {
+        $("input[type=submit]").prop("disabled", true);
+    }
     }
 
     // Show Div
@@ -111,9 +124,9 @@
         $('.showForm').each(function (index) {
             if ($(this).attr("id") == selectedOne) {
                 $(this).toggle(200);
-                if (selectedOne == 'detectLocation') {
-                    getLocation();
-                }
+                // if (selectedOne == 'detectLocation') {
+                //     getLocation();
+                // }
             } else {
                 $(this).hide(400);
             }
