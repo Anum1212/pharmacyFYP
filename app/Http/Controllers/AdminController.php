@@ -12,6 +12,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\User;
 use App\Pharmacist;
 use App\Pharmacistproduct;
@@ -134,8 +135,6 @@ public function viewSpecificCustomer($customerId)
         $customer = User::find($customerId);
 
         $customer->status='0';
-        // set remember_token=NULL so that user is force logged out if they had used remember me
-        $customer->remember_token=NULL;
         $customer->save();
         return redirect('/admin/viewAllCustomers');
     }
@@ -226,8 +225,6 @@ public function viewAllPharmacies()
         $pharmacy = Pharmacist::find($pharmacyId);
 
         $pharmacy->pharmacistStatus='0';
-        // set remember_token=NULL so that user is force logged out if they had used remember me
-        $pharmacy->remember_token=NULL;
         $pharmacy->save();
         return redirect('/admin/viewAllPharmacies');
     }
