@@ -101,6 +101,29 @@
             <i class="fas fa-comment"></i>
             <span>Messages</span>
           </a>
+        </li>       
+        <li class="treeview">
+          <a href="#">
+            <i class="fas fa-file"></i>
+            <span>Mangage Files</span>
+            <span class="pull-right-container">
+              <i class="fas fa-caret-down"></i>
+            </span>
+          </a>
+          <ul class="treeview-menu">
+            <li>
+          <a href="/admin/viewAllFiles">
+            <i class="fas fa-search"></i>
+            <span>View Files</span>
+          </a>
+            </li>
+            <li>
+          <a href="/admin/uploadFileForm">
+            <i class="fas fa-upload"></i>
+            <span>Upload File</span>
+          </a>
+            </li>
+          </ul>
         </li>
         <li>
           <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

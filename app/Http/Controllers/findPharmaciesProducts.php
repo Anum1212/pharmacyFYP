@@ -87,7 +87,7 @@ class findPharmaciesProducts extends Controller
 
 
     //  |---------------------------------- pharmacyDetails ----------------------------------|
-    public function pharmacyDetails($pharmacyId)
+    public function pharmacyDetails($pharmacyId, $productId) //$productId for displaying the product that the user selected for viewing medicine details
     {
         $pharmacy = Pharmacist::whereId($pharmacyId)->first();
         $allOrderId=[];
@@ -95,7 +95,10 @@ class findPharmaciesProducts extends Controller
         $customer=[];
         $orders=[];
 
-        $orderItems = Orderitem::where('pharmacistId', $pharmacyId)->orderBy('id', 'desc')->get();
+        $selectedProduct = Pharmacistproduct::whereId($productId)->first();
+        $pharmacyProducts = Pharmacistproduct::where('pharmacistId', $pharmacyId)->paginate(15);
+
+        $orderItems = Orderitem::where('pharmacistId', $pharmacyId)->orderBy('id', 'desc')->paginate(15);
         foreach ($orderItems as $orderItem) {
             $allOrderId[] = $orderItem->orderId;
         }
@@ -138,6 +141,6 @@ class findPharmaciesProducts extends Controller
         for ($i=0; $i<count($arrangedCustomerId); $i++) {
             $customers[$i] = User::whereId($arrangedCustomerId[$i])->first();
         }
-        return view('siteView.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
+        return view('siteView.pharmacyDetails', compact('pharmacy', 'pharmacyProducts', 'selectedProduct', 'orders', 'customers'));
     }
 }

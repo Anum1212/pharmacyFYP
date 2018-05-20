@@ -2,7 +2,6 @@
 @section('head')
 <link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
 @endsection
-
 @section('body')
 
 <div class="wrapper">
@@ -55,13 +54,14 @@
             <span>Pharmacy</span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="/admin/dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span>DashBoard</span>
           </a>
         </li>
-        {{-- <li>
+        {{--
+        <li>
           <a href="/admin/editAccountDetailsForm">
             <i class="fas fa-cogs"></i>
             <span>Account Details</span>
@@ -73,7 +73,7 @@
             <span>Orders</span>
           </a>
         </li>
-<li class="treeview active">
+<li class="treeview">
           <a href="#">
             <i class="fas fa-users"></i>
             <span>Mangage Users</span>
@@ -82,7 +82,7 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li class="active">
+            <li>
               <a href="/admin/viewAllCustomers">
                 <i class="fas fa-user"></i>
                 Customers
@@ -146,57 +146,65 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Mangage Pharmacies
+        DashBoard
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content container-fluid">
-
+{{-- |---------------------------------- Search Bar ----------------------------------| --}}
+<div class="searchForm" id="searchForm">
+  <form action="/admin/searchFile" method="POST" role="search" target="_blank">
+    {{ csrf_field() }}
+    <div class="input-group">
+      <input type="text" class="form-control" name="search" placeholder="Search for file">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default">
+          <i class="fas fa-search"></i>
+        </button>
+      </span>
+    </div>
+  </form>
+</div>
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-<div class="container containerDashboardContent">
-
+      <div class="container containerDashboardContent">
         <table>
-          <caption>Customer Details</caption>
+          <caption>Enabled Files ({{count($enabledFiles)}})</caption>
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
-              <th scope="col">Email</th>
-              <th scope="col">Contact</th>
-              <th scope="col">Address</th>
-              <th scope="col">Block/Unblock</th>
               <th scope="col">View</th>
+              <th scope="col">Disable</th>
+              <th scope="col">Delete</th>
             </tr>
           </thead>
           <tbody>
             <?php
     $i=1;
     ?>
-              @foreach($users as $user)
+              @foreach ($enabledFiles as $enabledFile)
               <tr>
                 <td data-label="#">{{$i}}</td>
-                <td data-label="Customer">{{$user->name}}</td>
-                <td data-label="Email">{{$user->email}}</td>
-                <td data-label="Contact">{{$user->contact}}</td>
-                <td data-label="Address">{{$user->address.' '.$user->society.', '.$user->city}}</td>
-                <td data-label="Block/Unblock">
-                  @if($user->status == 0)
-                  <a href="/admin/unBlockCustomer/{{$user->id}}">
-                    <span style="color:green">UnBlock</span>
-                  </a>
-                  @endif
-                  @if($user->status == 1)
-                  <a href="/admin/blockCustomer/{{$user->id}}">
-                    <span style="color:red">Block</span>
-                  </a>
-                  @endif
-                </td><td data-label="View">
-                  <a href="/admin/viewSpecificCustomer/{{$user->id}}">
+                <td data-label="Name">{{$enabledFile->title}}</td>
+                <td data-label="View">
+                  <a href="{{'/admin/editFileForm/'.$enabledFile->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>
                   </a>
+                </td>
+                <td data-label="Mark as read">
+                  <form style="margin-top:15px;" action="{{'/admin/disableFile/'.$enabledFile->id}}" method="post">
+                    {{csrf_field()}} {{method_field('PUT')}}
+                    <button type="submit" class="btn btn-warning">Disable</button>
+                  </form>
+                </td>
+                <td data-label="Delete">
+                  <form style="margin-top:15px;" action="{{'/admin/deleteFile/'.$enabledFile->id}}" method="post">
+                    {{csrf_field()}} {{method_field('DELETE')}}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
                 </td>
               </tr>
               <?php
@@ -205,24 +213,70 @@
                 @endforeach
           </tbody>
         </table>
-      </div>
-
-
+ {{ $enabledFiles->appends(['readTable' => $disabledFiles->currentPage()])->links() }}
+ <hr>
+ {{--  |---------------------------------- Read Messages Table ----------------------------------|--}}
+ <table>
+          <caption>Disabled Files ({{count($disabledFiles)}})
+    </caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">View</th>
+              <th scope="col">Enable</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+    $i=1;
+    ?>
+              @foreach ($disabledFiles as $disabledFile)
+              <tr>
+                <td data-label="#">{{$i}}</td>
+                <td data-label="Name">{{$disabledFile->title}}
+</td>
+                <td data-label="View">
+                  <a href="{{'/admin/editFileForm/'.$disabledFile->id}}">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
+                </td>
+                <td data-label="Enable File">
+                  <form style="margin-top:15px;" action="{{'/admin/enableFile/'.$disabledFile->id}}" method="post">
+            {{csrf_field()}} {{method_field('PUT')}}
+            <button type="submit" class="btn btn-warning">Enable</button>
+          </form>
+                </td>
+                <td data-label="Delete">
+                  <form style="margin-top:15px;" action="{{'/admin/deleteFile/'.$disabledFile->id}}" method="post">
+            {{csrf_field()}} {{method_field('DELETE')}}
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+                </td>
+              </tr>
+              <?php
+      $i++;
+      ?>
+                @endforeach
+          </tbody>
+        </table>
+  {{ $disabledFiles->appends(['unreadTable' => $enabledFiles->currentPage()])->links() }}
     </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
-</div>
-<!-- ./wrapper -->
-@endsection
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+      <!-- To the right -->
+      <div class="pull-right hidden-xs">
+        Anything you want
+      </div>
+      <!-- Default to the left -->
+      <strong>Copyright &copy; 2016
+        <a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+  </div>
+  <!-- ./wrapper -->
+  @endsection

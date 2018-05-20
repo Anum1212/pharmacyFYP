@@ -48,7 +48,7 @@
                 <p class="title">Dosage: {{$product->dosage}} ml</p>
                 @endif @foreach($nearByPharmacies as $nearByPharmacy) @if($product->pharmacistId == $nearByPharmacy->id)
                 <p class="title">Sold By:
-                        <a href="/pharmacyDetails/{{$nearByPharmacy->id}}">{{$nearByPharmacy->pharmacyName}} </a>
+                        <a href="/pharmacyDetails/{{$nearByPharmacy->id}}/{{$product->id}}">{{$nearByPharmacy->pharmacyName}} </a>
                 </p>
                 @endif @endforeach
 

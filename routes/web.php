@@ -16,7 +16,7 @@
 //convertAddress --> convert customer defined location to latitude longitude
     Route::post('/convertAddress', 'findPharmaciesProducts@convertAddressToLatLong');
 //pharmacyDetails --> show the details of a pharmacy
-    Route::get('/pharmacyDetails/{pharmacyId}', 'findPharmaciesProducts@pharmacyDetails');
+    Route::get('/pharmacyDetails/{pharmacyId}/{productId}', 'findPharmaciesProducts@pharmacyDetails');
 //show Pharmacy Rating Page
     Route::get('ratePharmacy', 'ratingController@index');
 //update Pharmacy Rating
@@ -115,6 +115,24 @@
     Route::delete('/deleteMessage/{messageId}', 'messageController@deleteMessage');
 // searchSender --> search for a message sender
     Route::post('/searchSender', 'messageController@searchSender');
+// viewAllFiles --> view all files
+    Route::get('/viewAllFiles', 'AdminController@viewAllFiles');
+// uploadFileForm --> go to upload file form
+    Route::get('/uploadFileForm', 'AdminController@uploadFileForm');
+// uploadFile --> save uploaded file
+    Route::post('/uploadFile', 'AdminController@uploadFile');
+// editFileForm --> go to edit file form
+    Route::get('/editFileForm/{fileId}', 'AdminController@editFileForm');
+// editFile --> save file edit changes
+    Route::post('/editFile/{fileId}', 'AdminController@editFile');
+// enableFile --> enable file download
+    Route::put('/enableFile/{fileId}', 'AdminController@enableFile');
+// disableFile --> disable file download
+    Route::put('/disableFile/{fileId}', 'AdminController@disableFile');
+// deleteFile --> delete uploaded file
+    Route::delete('/deleteFile/{fileId}', 'AdminController@deleteFile');
+// searchFile --> search for uploaded file
+    Route::post('/searchFile', 'AdminController@searchFile');
 });
 
 

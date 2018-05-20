@@ -9,10 +9,10 @@
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-        <b>M</b>sg</span>
+        <b>Dh</b>Bd</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>M</b>essage</span>
+        <b>Dash</b>Board</span>
     </a>
 
     <!-- Header Navbar -->
@@ -68,7 +68,7 @@
             <span>Orders</span>
           </a>
         </li>
-<li class="treeview">
+        <li class="treeview">
           <a href="#">
             <i class="fas fa-users"></i>
             <span>Mangage Users</span>
@@ -91,13 +91,13 @@
             </li>
           </ul>
         </li>
-        <li class="active">
+        <li>
           <a href="/admin/viewAllMessages">
             <i class="fas fa-comment"></i>
             <span>Messages</span>
           </a>
         </li>       
-        <li class="treeview">
+        <li class="treeview active">
           <a href="#">
             <i class="fas fa-file"></i>
             <span>Mangage Files</span>
@@ -112,7 +112,7 @@
             <span>View Files</span>
           </a>
             </li>
-            <li>
+            <li class="active">
           <a href="/admin/uploadFileForm">
             <i class="fas fa-upload"></i>
             <span>Upload File</span>
@@ -141,7 +141,8 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Message
+        DashBoard
+        <small>Optional description</small>
       </h1>
     </section>
 
@@ -151,50 +152,41 @@
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-<div class="row">
-	<!-- Contenedor Principal -->
-    <div class="comments-container">
-		<ul id="comments-list" class="comments-list">
-      @for ($i=0; $i<count($visitorPrevMessage) ; $i++)
-      <li>
-				<div class="comment-main-level">
-					<!-- Contenedor del Comentario -->
-					<div class="comment-box">
-						<div class="comment-head">
-							<h6 class="comment-name by-author"><a href="http://creaticode.com/blog">{{$visitorPrevMessage[$i]->name}}</a></h6>
-							<span>{{$visitorPrevMessage[$i]->created_at}}</span>
-							<i class="fa fa-reply"></i>
-						</div>
-						<div class="comment-content">
-							{{$visitorPrevMessage[$i]->message}}
-						</div>
-					</div>
-				</div>
-        
-				<!-- Respuestas de los comentarios -->
-				<ul class="comments-list reply-list">
-          @for ($j=0; $j<count($adminResponse) ; $j++) 
-    @if($visitorPrevMessage[$i]->id == $adminResponse[$j]->repliedToId)
-					<li>
-						<!-- Contenedor del Comentario -->
-						<div class="comment-box">
-							<div class="comment-head">
-								<h6 class="comment-name">You</h6>
-								<span>{{$adminResponse[$j]->created_at}}</span>
-							</div>
-							<div class="comment-content">
-								{{$adminResponse[$j]->message}}
-							</div>
-						</div>
-          </li>
-          @endif
-          @endfor
-				</ul>
-			</li>
-  @endfor
-		</ul>
-	</div>
-	</div>
+
+
+          <div class="form">
+                              <form class="form-horizontal" method="POST" action="/admin/uploadFile" enctype="multipart/form-data">
+                          {{ csrf_field() }}
+
+                              <div class="form-group">
+  							<label for="fileTitle" class="col-md-4 control-label"><span style="color:red">*</span>File Title</label>
+  							<div class="col-md-6">
+  								<input id="fileTitle" type="text" class="form-control" name="fileTitle" required style="margin-bottom:15px;">
+                              </div>
+                              </div>
+                              <div class="form-group">
+                             <label for="uploadFile" class="col-md-4 control-label"><span style="color:red">*</span> File</label>
+                              <div class="col-md-6 fileupload panel panel-default">
+                  <div class="file-tab panel-body">
+                      <label class="btn btn-default btn-file">
+                          <span>Browse</span>
+                          <!-- The file is stored here. -->
+                          <input type="file" name="uploadFile" required>
+                      </label>
+                  </div>
+              </div>
+              </div>
+              <div class="form-group">
+              <div class="col-md-8 col-md-offset-4">
+  								<button type="submit" class="btn btn-primary">
+  									Upload File
+  								</button>
+  							</div>
+  						</div>
+  					</form>
+          </div>
+
+
 
     </section>
     <!-- /.content -->

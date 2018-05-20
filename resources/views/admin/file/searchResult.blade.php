@@ -1,4 +1,8 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') 
+@section('head')
+<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+@endsection
+@section('body')
 
 <div class="wrapper">
 
@@ -9,10 +13,10 @@
     <a href="index2.html" class="logo">
       <!-- mini logo for sidebar mini 50x50 pixels -->
       <span class="logo-mini">
-        <b>M</b>sg</span>
+        <b>Dh</b>Bd</span>
       <!-- logo for regular state and mobile devices -->
       <span class="logo-lg">
-        <b>M</b>essage</span>
+        <b>Dash</b>Board</span>
     </a>
 
     <!-- Header Navbar -->
@@ -50,13 +54,14 @@
             <span>Pharmacy</span>
           </a>
         </li>
-        <li>
+        <li class="active">
           <a href="/admin/dashboard">
             <i class="fas fa-tachometer-alt"></i>
             <span>DashBoard</span>
           </a>
         </li>
-        {{-- <li>
+        {{--
+        <li>
           <a href="/admin/editAccountDetailsForm">
             <i class="fas fa-cogs"></i>
             <span>Account Details</span>
@@ -91,7 +96,7 @@
             </li>
           </ul>
         </li>
-        <li class="active">
+        <li>
           <a href="/admin/viewAllMessages">
             <i class="fas fa-comment"></i>
             <span>Messages</span>
@@ -141,76 +146,90 @@
     <!-- Content Header (Page header) -->
     <section class="content-header">
       <h1>
-        Message
+        DashBoard
       </h1>
     </section>
 
     <!-- Main content -->
     <section class="content container-fluid">
-
+{{-- |---------------------------------- Search Bar ----------------------------------| --}}
+<div class="searchForm" id="searchForm">
+  <form action="/admin/searchFile" method="POST" role="search" target="_blank">
+    {{ csrf_field() }}
+    <div class="input-group">
+      <input type="text" class="form-control" name="search" placeholder="Search for file">
+      <span class="input-group-btn">
+        <button type="submit" class="btn btn-default">
+          <i class="fas fa-search"></i>
+        </button>
+      </span>
+    </div>
+  </form>
+</div>
       <!--------------------------
         | Your Page Content Here |
         -------------------------->
-<div class="row">
-	<!-- Contenedor Principal -->
-    <div class="comments-container">
-		<ul id="comments-list" class="comments-list">
-      @for ($i=0; $i<count($visitorPrevMessage) ; $i++)
-      <li>
-				<div class="comment-main-level">
-					<!-- Contenedor del Comentario -->
-					<div class="comment-box">
-						<div class="comment-head">
-							<h6 class="comment-name by-author"><a href="http://creaticode.com/blog">{{$visitorPrevMessage[$i]->name}}</a></h6>
-							<span>{{$visitorPrevMessage[$i]->created_at}}</span>
-							<i class="fa fa-reply"></i>
-						</div>
-						<div class="comment-content">
-							{{$visitorPrevMessage[$i]->message}}
-						</div>
-					</div>
-				</div>
-        
-				<!-- Respuestas de los comentarios -->
-				<ul class="comments-list reply-list">
-          @for ($j=0; $j<count($adminResponse) ; $j++) 
-    @if($visitorPrevMessage[$i]->id == $adminResponse[$j]->repliedToId)
-					<li>
-						<!-- Contenedor del Comentario -->
-						<div class="comment-box">
-							<div class="comment-head">
-								<h6 class="comment-name">You</h6>
-								<span>{{$adminResponse[$j]->created_at}}</span>
-							</div>
-							<div class="comment-content">
-								{{$adminResponse[$j]->message}}
-							</div>
-						</div>
-          </li>
-          @endif
-          @endfor
-				</ul>
-			</li>
-  @endfor
-		</ul>
-	</div>
-	</div>
-
-    </section>
+      <div class="container containerDashboardContent">
+        <table>
+          <caption>Search Result ({{count($searchResults)}})</caption>
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">View</th>
+              <th scope="col">Disable</th>
+              <th scope="col">Delete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+    $i=1;
+    ?>
+              @foreach ($searchResults as $searchResult)
+              <tr>
+                <td data-label="#">{{$i}}</td>
+                <td data-label="Name">{{$searchResult->title}}</td>
+                <td data-label="View">
+                  <a href="{{'/admin/editFileForm/'.$searchResult->id}}">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </a>
+                </td>
+                <td data-label="searchResult">
+                  <form style="margin-top:15px;" action="{{'/admin/disableFile/'.$searchResult->id}}" method="post">
+                    {{csrf_field()}} {{method_field('PUT')}}
+                    <button type="submit" class="btn btn-warning">Disable</button>
+                  </form>
+                </td>
+                <td data-label="Delete">
+                  <form style="margin-top:15px;" action="{{'/admin/deleteFile/'.$searchResult->id}}" method="post">
+                    {{csrf_field()}} {{method_field('DELETE')}}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </td>
+              </tr>
+              <?php
+      $i++;
+      ?>
+                @endforeach
+          </tbody>
+        </table>
+ {{ $searchResults->links() }}
+ <hr>
+ </section>
     <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
-</div>
-<!-- ./wrapper -->
-@endsection
+    <!-- /.content-wrapper -->
+
+    <!-- Main Footer -->
+    <footer class="main-footer">
+      <!-- To the right -->
+      <div class="pull-right hidden-xs">
+        Anything you want
+      </div>
+      <!-- Default to the left -->
+      <strong>Copyright &copy; 2016
+        <a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+  </div>
+  <!-- ./wrapper -->
+  @endsection
