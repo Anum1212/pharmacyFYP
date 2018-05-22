@@ -158,6 +158,7 @@
               <th scope="col">Name</th>
               <th scope="col">Dosage</th>
               <th scope="col">Type</th>
+              <th scope="col">Prescription</th>
               <th scope="col">Price</th>
               <th scope="col">Quantity</th>
               <th scope="col">Edit</th>
@@ -195,7 +196,14 @@
                 <!-- 7 = Cream -->
                 <td data-label="Type">Cream</td>
                 @endif
-                <td data-label="Price">{{$product->price}}</td>
+                @if($product->prescription=='0')
+                <!-- 0 = Not Required -->
+                <td data-label="prescription">Not Required</td>
+                @elseif($product->prescription=='1')
+                <!-- 1 = Required -->
+                <td data-label="Type">Required</td>
+                @endif
+                <td data-label="Price">{{$product->id}}</td>
                 <td data-label="Quantity">{{$product->quantity}}</td>
                 <td data-label="Edit">
                 <a class="btn btn-success" href="editProduct/{{$product->id}}">

@@ -62,6 +62,7 @@ class PharmacistProductController extends Controller
         $newProduct->name = $req->productName;
         $newProduct->dosage = $req->dosage;
         $newProduct->type = $req->drugType;
+        $newProduct->prescription = $req->prescription;
         $newProduct->price = $req->price;
         $newProduct->quantity = $req->quantity;
         $newProduct->save();
@@ -78,8 +79,8 @@ class PharmacistProductController extends Controller
         // get logged in pharamcist details
         $userData=Auth::user()->whereId(Auth::user()->id)->first();
         $product = Pharmacistproduct::where([
-                ['id', '=', $userData->id],
-                ['pharmacistId', '=', $productId],
+                ['id', '=', $productId],
+                ['pharmacistId', '=', $userData->id],
              ])->first();
         return view('pharmacist.productManagment.editProduct', compact('product'));
     }
@@ -94,6 +95,7 @@ class PharmacistProductController extends Controller
         $product->name = $req->productName;
         $product->dosage = $req->dosage;
         $product->type = $req->drugType;
+        $product->prescription = $req->prescription;
         $product->price = $req->price;
         $product->quantity = $req->quantity;
         $product->save();

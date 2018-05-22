@@ -165,6 +165,14 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="prescription">Prescription</label>
+            <select class="form-control" id="prescription" name="prescription" required>
+              <option value="">----</option>
+              <option value="0"<?php if($product->prescription=="0") echo 'selected="selected"'; ?>>Not Required</option>
+              <option value="1"<?php if($product->prescription=="1") echo 'selected="selected"'; ?>>Required</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="price">Price:</label>
             <input type="number" class="form-control" id="price" placeholder="Enter price" name="price" value="{{$product->price}}" required>
           </div>
@@ -173,7 +181,7 @@
             <input type="number" class="form-control" id="quantity" placeholder="Enter quantity" name="quantity" value="{{$product->quantity}}"
               required>
           </div>
-          <button type="submit" class="btn btn-default">Add Product</button>
+          <button type="submit" class="btn btn-default">Edit Product</button>
         </form>
       </div>
 

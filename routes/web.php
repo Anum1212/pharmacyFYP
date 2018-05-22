@@ -18,9 +18,9 @@
 //pharmacyDetails --> show the details of a pharmacy
     Route::get('/pharmacyDetails/{pharmacyId}/{productId}', 'findPharmaciesProducts@pharmacyDetails');
 //show Pharmacy Rating Page
-    Route::get('ratePharmacy', 'ratingController@index');
+    Route::get('/ratePharmacy', 'ratingController@index');
 //update Pharmacy Rating
-    Route::post('ratePharmacy/{pharmacyId}', 'ratingController@ratePharmacy');
+    Route::post('/ratePharmacy/{pharmacyId}', 'ratingController@ratePharmacy');
 
 
 
@@ -33,8 +33,12 @@
     Route:: get('/viewCart', 'cartController@view');
 // updateCart --> update cart item quantity
     Route:: post('/updateCart', 'cartController@update');
+// prescriptionUploadForm --> test if cart contains a medicine that needs prescription. if YES go to prescriptionUploadForm if NO call CheckOutCart method
+    Route:: get('/prescriptionUploadForm', 'orderController@prescriptionUploadForm');
+// prescriptionUpload --> save prescriptionUploadForm
+    Route:: post('/prescriptionUpload', 'orderController@prescriptionUpload');
 // CheckOutCart --> change cart item to customer order and save in database as customer order
-    Route:: get('/CheckOutCart', 'orderController@checkout');
+    Route:: get('/checkOutCart', 'orderController@checkout');
 
 
 

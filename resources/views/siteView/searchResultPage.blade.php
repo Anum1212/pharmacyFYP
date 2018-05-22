@@ -50,7 +50,14 @@
                 <p class="title">Sold By:
                         <a href="/pharmacyDetails/{{$nearByPharmacy->id}}/{{$product->id}}">{{$nearByPharmacy->pharmacyName}} </a>
                 </p>
-                @endif @endforeach
+                @endif
+                @if($product->prescription=='1')
+                <!-- 0 = prescription not required -->
+                <!-- 1 = prescription required -->
+                <p class="title"><span style="color:red"> Prescription Required </span></p>
+                @endif
+                
+                @endforeach
 
                 <a href="/addToCart/{{$product->id}}">
                         <i class="fas fa-cart-plus"></i> Add to cart</a>

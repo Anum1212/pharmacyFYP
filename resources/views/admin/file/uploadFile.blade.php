@@ -162,6 +162,12 @@
   							<label for="fileTitle" class="col-md-4 control-label"><span style="color:red">*</span>File Title</label>
   							<div class="col-md-6">
   								<input id="fileTitle" type="text" class="form-control" name="fileTitle" required style="margin-bottom:15px;">
+                </div>
+                </div>
+                <div class="form-group">
+  							<label for="description" class="col-md-4 control-label"><span style="color:red">*</span>Description</label>
+  							<div class="col-md-6">
+                  <textarea rows="5" id="description" class="form-control" name="description" required></textarea>
                               </div>
                               </div>
                               <div class="form-group">

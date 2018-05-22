@@ -22,7 +22,11 @@ class CreateOrdersTable extends Migration
             //     0 -> not delivered
             //     1 -> delivered
             //     2 -> cancelled
-            $table->string('status')->default('0');
+            $table->integer('status')->default('0');
+            // possible prescription status
+            //     0 -> not required
+            //     1 -> required
+            $table->integer('prescription')->default('0');
         });
     }
 

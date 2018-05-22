@@ -33,6 +33,7 @@ use App\Pharmacist;
 use App\Pharmacistproduct;
 use App\Order;
 use App\Orderitem;
+use App\Prescription;
 
 class PharmacistController extends Controller
 {
@@ -223,7 +224,11 @@ class PharmacistController extends Controller
             $productDetails[]=Pharmacistproduct::whereId($orderDetail->productId)->first();
         }
 
-        // dd($orderDetails, $productDetails);
+        if($order->prescription==1){
+        $prescriptions = Prescription::where('orderId', $orderId)->get();
+        return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails', 'order', 'prescriptions'));
+        }
+        else
         return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails', 'order'));
     }
 

@@ -270,6 +270,7 @@ class AdminController extends Controller
 
             $saveFormData = new File;
             $saveFormData->title = $req->fileTitle;
+            $saveFormData->description = $req->description;
             $saveFormData->filename = $req->uploadFile->hashName();
             $saveFormData->status = "1";
             $saveFormData->save();
@@ -303,6 +304,7 @@ class AdminController extends Controller
             $saveFormData->filename = $req->uploadFile->hashName();
         }
         $saveFormData->title = $req->fileTitle;
+        $saveFormData->description = $req->description;
         $saveFormData->save();
         return redirect()->action('AdminController@viewAllFiles');
     }

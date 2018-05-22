@@ -29,6 +29,10 @@ class CreatePharmacistproductsTable extends Migration
             // 7 -> cream
             $table->string('dosage');
             $table->integer('type');
+            // possible prescription status
+            // 0 -> not required
+            // 1 -> required
+            $table->integer('prescription');
             $table->string('price');
             $table->integer('quantity');
         });

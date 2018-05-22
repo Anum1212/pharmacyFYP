@@ -164,6 +164,25 @@
             </tbody>
           </table>
         </div>
+        @if (!empty($prescriptions))
+        <div style="min-width:200px; max-width:600px;">
+          <table>
+            <caption>Prescriptions</caption>
+            <tbody>
+              <?php $i = '1'; ?>
+              @foreach ($prescriptions as $prescription)
+              <tr>
+              <td data-label="#">{{$i}}</td>
+                <td data-label="item">
+                  <a class="btn btn-default" href={{ asset('storage/myAssets/prescriptions/'.$prescription->filename) }} target="_blank">View</a>
+                </td>
+              </tr>
+              <?php $i++; ?>
+              @endforeach
+            </tbody>
+          </table>
+        </div>
+        @endif
         <table>
           <caption>Order Details </caption>
           <thead>

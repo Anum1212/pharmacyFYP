@@ -163,6 +163,14 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="prescription">Prescription</label>
+            <select class="form-control" id="prescription" name="prescription" required>
+              <option value="">----</option>
+              <option value="0">Not Required</option>
+              <option value="1">Required</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="price">Price:</label>
             <input type="number" class="form-control" id="price" placeholder="Enter price" name="price" required>
           </div>

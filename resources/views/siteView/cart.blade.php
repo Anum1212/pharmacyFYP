@@ -135,6 +135,7 @@
 								<th scope="col">Product</th>
 								<th scope="col">Seller</th>
 								<th scope="col">Price</th>
+								<th scope="col">Prescription</th>
 								<th scope="col">Quantity</th>
 								<th scope="col">Subtotal</th>
 								<th scope="col">Remove</th>
@@ -151,6 +152,13 @@
 									<td data-label="Seller">
 										<a href="{{'/pharmacyDetails/'.$row->options->pharmacistId}}">{{$row->options->pharmacistName}}</td>
 									<td data-label="Price">{{$row->price}}</td>
+									@if($row->options->prescription==0)
+                						<!-- 0 = Not Required -->
+                						<td data-label="prescription">Not Required</td>
+                						@elseif($row->options->prescription==1)
+                						<!-- 1 = Required -->
+                						<td data-label="prescription">Required</td>
+                					@endif
 									<td data-label="Quantity">
 										<input type="number" name="qty[]" max="99" min="1" maxlength="2" value="{{$row->qty}}" />
 									</td>
@@ -170,7 +178,7 @@
 										<td>
 											<b>Total</b>
 										</td>
-										<td colspan="6">{{Cart::total()}}</td>
+										<td colspan="7">{{Cart::total()}}</td>
 									</tr>
 
 									<tr>
@@ -178,12 +186,12 @@
 											<a href="/" class="btn btn-warning btn-block">
 												<i class="fas fa-caret-left"></i> Continue Shopping</a>
 										</td>
-										<td colspan="3">
+										<td colspan="4">
 											<button type="submit" class="btn btn-info btn-block">
 												<i class="fas fa-sync-alt"></i> UpdateCart</button>
 										</td>
 										<td colspan="2">
-											<a href="{{'/CheckOutCart'}}" class="btn btn-success btn-block">Checkout
+											<a href="{{'/prescriptionUploadForm'}}" class="btn btn-success btn-block">Checkout
 												<i class="fas fa-caret-right"></i>
 											</a>
 										</td>

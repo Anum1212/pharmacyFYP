@@ -44,7 +44,7 @@ class cartController extends Controller
     public function addToCart($productId)
     {
         $productDetails = Pharmacistproduct::whereId($productId)->first();
-        $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName]);
+        $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
         return redirect('/viewCart'); // change in future
     }
 
