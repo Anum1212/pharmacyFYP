@@ -16,7 +16,7 @@
 //convertAddress --> convert customer defined location to latitude longitude
     Route::post('/convertAddress', 'findPharmaciesProducts@convertAddressToLatLong');
 //pharmacyDetails --> show the details of a pharmacy
-    Route::get('/pharmacyDetails/{pharmacyId}/{productId}', 'findPharmaciesProducts@pharmacyDetails');
+    Route::get('/pharmacyDetails/{pharmacyId}/{productId?}', 'findPharmaciesProducts@pharmacyDetails');
 //show Pharmacy Rating Page
     Route::get('/ratePharmacy', 'ratingController@index');
 //update Pharmacy Rating
@@ -70,7 +70,7 @@
 //admin route for our multi-auth system
     Route::prefix('admin')->group(function () {
 //dashboard --> admin dashboard
-    Route::get('/', 'AdminController@index')->name('admin.dashboard');
+    Route::get('/dashboard', 'AdminController@index')->name('admin.dashboard');
 //login --> admin login
     Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
@@ -87,11 +87,15 @@
     Route::get('/viewSpecificOrder/{orderId}', 'AdminController@viewSpecificOrder');
 //viewPharmacySpecificOrder --> view details of a specific order
     Route::get('/viewPharmacySpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'AdminController@viewPharmacySpecificOrder');
+// searchOrder --> search for a order
+    Route::get('/searchOrder', 'AdminController@searchOrder');
 // viewAllCustomers --> view all customers
     Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
 // viewSpecificCustomer --> view specific customer details
     Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
-    // blockCustomer --> block a Customer
+// searchCustomer --> search for a customer [build if needed]
+    // Route::get('/searchCustomer', 'AdminController@searchCustomer');
+// blockCustomer --> block a Customer
     Route::get('/blockCustomer/{customerId}', 'AdminController@blockCustomer');
 // unblockCustomer --> unblock a Customer
     Route::get('/unBlockCustomer/{customerId}', 'AdminController@unBlockCustomer');
@@ -99,6 +103,8 @@
     Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
 // pharmacyDetails --> view specific pharmacy details
     Route::get('/pharmacyDetails/{pharmacyId}', 'AdminController@pharmacyDetails');
+// searchPharmacy --> search for a Pharmacy [build if needed]
+    // Route::get('/searchPharmacy', 'AdminController@searchPharmacy');
 // blockPharmacy --> block a pharmacy
     Route::get('/blockPharmacy/{pharmacyId}', 'AdminController@blockPharmacy');
 // unblockPharmacy --> unblock a pharmacy
@@ -118,7 +124,7 @@
 // deleteMessage --> delete a message
     Route::delete('/deleteMessage/{messageId}', 'messageController@deleteMessage');
 // searchSender --> search for a message sender
-    Route::post('/searchSender', 'messageController@searchSender');
+    Route::get('/searchSender', 'messageController@searchSender');
 // viewAllFiles --> view all files
     Route::get('/viewAllFiles', 'AdminController@viewAllFiles');
 // uploadFileForm --> go to upload file form
@@ -136,7 +142,7 @@
 // deleteFile --> delete uploaded file
     Route::delete('/deleteFile/{fileId}', 'AdminController@deleteFile');
 // searchFile --> search for uploaded file
-    Route::post('/searchFile', 'AdminController@searchFile');
+    Route::get('/searchFile', 'AdminController@searchFile');
 });
 
 

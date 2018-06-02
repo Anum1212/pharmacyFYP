@@ -124,7 +124,7 @@ class orderController extends Controller
             Cart::destroy();
             return $this->generateInvoice($lastInsertId);
         } else {
-            return redirect('/');
+            return redirect('/')->with('message', 'Cart Empty');
         }
     }
 

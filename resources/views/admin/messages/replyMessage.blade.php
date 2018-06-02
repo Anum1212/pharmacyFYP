@@ -1,215 +1,180 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') @section('head') @endsection @section('style') @endsection @section('body')
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index">
+                <span>Lumino</span>Admin</a>
+        </div>
+    </div>
+</nav>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                <span class="capitalWord">{{Auth::user()->name}}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
 
-<div class="wrapper">
-
-  <!-- Main Header -->
-  <header class="main-header">
-
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">
-        <b>M</b>sg</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">
-        <b>M</b>essage</span>
-    </a>
-
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a class="sidebar-toggle" data-toggle="push-menu" role="button">
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
-            </a>
-          </li>
-      </div>
-    </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
+    <ul class="nav menu">
+        <form role="search" action="/admin/searchSender" method="get">
+            <div class="form-group">
+                <input type="text" class="form-control" name="search" placeholder="Search for message by" required>
+            </div>
+        </form>
         <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
+            <a href="/admin/dashboard">
+                <em class="fa fa-dashboard">&nbsp;</em> Dashboard</a>
         </li>
         <li>
-          <a href="/admin/dashboard">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
+            <a href="widgets.html">
+                <em class="fa fa-cogs">&nbsp;</em> Account Details</a>
         </li>
-        {{-- <li>
-          <a href="/admin/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
-        </li> --}}
         <li>
-          <a href="/admin/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
-        </li>
-<li class="treeview">
-          <a href="#">
-            <i class="fas fa-users"></i>
-            <span>Mangage Users</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-              <a href="/admin/viewAllCustomers">
-                <i class="fas fa-user"></i>
-                Customers
-              </a>
-            </li>
-            <li>
-              <a href="/admin/viewAllPharmacies">
-                <i class="fas fa-user-md"></i>
-                Pharmacies
-              </a>
-            </li>
-          </ul>
+            <a href="/admin/viewAllOrders">
+                <em class="fa fa-truck">&nbsp;</em> Orders</a>
         </li>
         <li class="active">
-          <a href="/admin/viewAllMessages">
-            <i class="fas fa-comment"></i>
-            <span>Messages</span>
-          </a>
-        </li>       
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-file"></i>
-            <span>Mangage Files</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-          <a href="/admin/viewAllFiles">
-            <i class="fas fa-search"></i>
-            <span>View Files</span>
-          </a>
-            </li>
-            <li>
-          <a href="/admin/uploadFileForm">
-            <i class="fas fa-upload"></i>
-            <span>Upload File</span>
-          </a>
-            </li>
-          </ul>
+            <a href="/admin/viewAllMessages">
+                <em class="fa fa-comment">&nbsp;</em> Messages</a>
+        </li>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#users">
+                <em class="fa fa-users">&nbsp;</em> Mangage Users
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="users">
+                <li>
+                    <a class="" href="/admin/viewAllCustomers">
+                        <span class="fa fa-user">&nbsp;</span> Customers
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/viewAllPharmacies">
+                        <span class="fa fa-user-md">&nbsp;</span> Pharmacies
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#files">
+                <em class="fa fa-file">&nbsp;</em> Mangage Files
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="files">
+                <li>
+                    <a class="" href="/admin/viewAllFiles">
+                        <span class="fa fa-search">&nbsp;</span> View Files
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/uploadFileForm">
+                        <span class="fa fa-upload">&nbsp;</span> Upload File
+                    </a>
+                </li>
+            </ul>
         </li>
         <li>
-          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-
-          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
+            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <em class="fa fa-power-off">&nbsp;</em> Logout</a>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
         </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Message
-      </h1>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
-
-
-<div class="row">
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<div class="panel panel-default">
-<div class="panel-heading">
-<strong>{{$message->name}} - &lt;{{$message->senderEmail}}&gt;</strong> <span class="text-muted"> {{$message->created_at}}</span>
-    <div class="btn pull-right">
-    <a href="/admin/viewAllMessagesOfSpecificSender/{{$message->id}}" target="_blank"> View Previous Messages </a> 
+    </ul>
 </div>
-<div class="clearfix"></div></div>
-<div class="panel-body">
-{{$message->message}}
-</div><!-- /panel-body -->
-</div><!-- /panel panel-default -->
-</div><!-- /col-sm-5 -->
-</div><!-- /row -->
+<!--/.sidebar-->
 
-
-<div class="row">
-
-<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-<div class="panel panel-default">
-<div class="panel-body">
-     <form class="form-horizontal" method="POST" action="{{'/admin/replyMessage/'.$message->id}}">
-      {{ csrf_field() }}
-    <textarea rows="5" id="messageReply" class="form-control" name="messageReply" required></textarea>
-</div><!-- /panel-body -->
-<div class="panel-footer">
-    <div class="btn pull-right">
-    <button type="submit" class="btn btn-primary">
-            Send Reply
-          </button>
-</div>
-<div class="clearfix"></div>
-</div>
-  </form>
-</div><!-- /panel panel-default -->
-</div><!-- /col-sm-5 -->
-</div><!-- /row -->
-
-
-
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">
+                    <em class="fa fa-home"></em>
+                </a>
+            </li>
+            <li class="active">Dashboard</li>
+        </ol>
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
+    <!--/.row-->
+
+    {{-- <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Messages</h1>
+        </div>
+    </div> --}}
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default chat">
+                <div class="panel-heading">
+                    Reply
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                    <span class="pull-right">
+                        <a href="/admin/viewAllMessagesOfSpecificSender/{{$message->id}}"> View Previous Messages </a> 
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li class="left clearfix">
+                            <span class="chat-img pull-left">
+                                Sender
+                                <br>
+                                <br>
+                                <br>
+                                Message
+								</span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">{{$message->name}} - &lt;{{$message->senderEmail}}&gt;</div>
+                                <hr>
+                                <p>{{$message->message}}</p>
+                            </div>
+                        </li>
+                    </ul>
+                    <form class="form-horizontal" method="POST" action="{{'/admin/replyMessage/'.$message->id}}">
+                        {{ csrf_field() }}
+                        <fieldset>
+                            <!-- Message body -->
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="messageReply">Reply</label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" id="messageReply" name="messageReply" placeholder="Please enter your message here..." rows="5" required></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Form actions -->
+                            <div class="form-group">
+                                <div class="col-md-12 widget-right">
+                                    <button type="submit" class="btn btn-default btn-md pull-right">Submit</button>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.row-->
+
+
 </div>
-<!-- ./wrapper -->
-@endsection
+<!--/.row-->
+</div>
+<!--/.main-->
+@endsection @section('script') @endsection

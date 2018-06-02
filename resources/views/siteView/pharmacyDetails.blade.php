@@ -35,7 +35,7 @@
     </div>
 </div><!-- /panel-body -->
 
-
+@if(!empty($selectedProduct))
 <div class="selectedProduct col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <div class="card col-md-4">
                 @if($selectedProduct->type=='1')
@@ -88,7 +88,7 @@
                         <i class="fas fa-cart-plus"></i> Add to cart</a>
         </div>
 </div>
-
+@endif
 
 <div class="allProducts col-lg-12 col-md-12 col-sm-12 col-xs-12">
         @foreach($pharmacyProducts as $pharmacyProduct)

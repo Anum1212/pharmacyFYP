@@ -87,7 +87,7 @@ class findPharmaciesProducts extends Controller
 
 
     //  |---------------------------------- pharmacyDetails ----------------------------------|
-    public function pharmacyDetails($pharmacyId, $productId) //$productId for displaying the product that the user selected for viewing medicine details
+    public function pharmacyDetails($pharmacyId, $productId = null) //$productId for displaying the product that the user selected for viewing medicine details
     {
         $pharmacy = Pharmacist::whereId($pharmacyId)->first();
         $allOrderId=[];

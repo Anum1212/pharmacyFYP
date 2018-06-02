@@ -1,157 +1,135 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') @section('head') @endsection @section('style') @endsection @section('body')
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index">
+                <span>Lumino</span>Admin</a>
+        </div>
+    </div>
+</nav>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                <span class="capitalWord">{{Auth::user()->name}}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
 
-<div class="wrapper">
-
-  <!-- Main Header -->
-  <header class="main-header">
-
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">
-        <b>Ct</b>Us</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">
-        <b>Contact</b>Us</span>
-    </a>
-
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">
-                {{Auth::guard('web')->user()->name}}</span>
-            </a>
-          </li>
-      </div>
-    </nav>
-  </header>
-
-  @if(Auth::guard('web')->check()) {{-- Customer NavBar --}}
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
+    <ul class="nav menu">
         <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
+            <a href="/home">
+                <em class="fa fa-dashboard">&nbsp;</em> Dashboard</a>
+        </li>
+        <li>
+            <a href="/editAccountDetailsForm">
+                <em class="fa fa-cogs">&nbsp;</em> Account Details</a>
+        </li>
+        <li>
+            <a href="/viewAllOrders">
+                <em class="fa fa-truck">&nbsp;</em> Orders</a>
+        </li>
+        <li>
+            <a href="/viewCart">
+                <em class="fa fa-shopping-cart">&nbsp;</em> Cart</a>
         </li>
         <li class="active">
-          <a href="/home">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
+            <a href="contactUsForm">
+                <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
         </li>
         <li>
-          <a href="/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
+            <a href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <em class="fa fa-power-off">&nbsp;</em> Logout</a>
+            <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
         </li>
-        <li>
-          <a href="/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
-        </li>
-        <li>
-          <a href="/viewCart">
-            <i class="fas fa-shopping-cart"></i>
-            <span>Cart</span>
-          </a>
-        </li>
-        <li>
-          <a href="contactUsForm">
-            <i class="fas fa-comment"></i>
-            <span>Contact Admin</span>
-          </a>
-        </li>
-        <li>
-          <a href="{{ route('user.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-          <form id="logout-form" action="{{ route('user.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
-        </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-  @endif
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Contact Us
-      </h1>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
-
-
-      <div class="container containerDashboardContent">
-        <form action="/contactUs" method="POST">
-          {{ csrf_field() }}
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" class="form-control" name="name" value="{{ Auth::user()->name }}" required autofocus></input>
-          </div>
-          <div class="form-group">
-            <label for="dosage">Email:</label>
-            <input type="text" id="email" class="form-control" name="email" value="{{ Auth::user()->email }}" required autofocus></input>
-          </div>
-          <div class="form-group">
-            <label for="price">Message:</label>
-            <textarea rows="5" id="message" class="form-control" name="message" value="{{ old('message') }}" required autofocus></textarea>
-          </div>
-          <button type="submit" class="btn btn-success">Send Message</button>
-        </form>
-      </div>
-
-
-
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
+    </ul>
 </div>
-<!-- ./wrapper -->
-@endsection
+<!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">
+                    <em class="fa fa-home"></em>
+                </a>
+            </li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+    <!--/.row-->
+
+    {{-- <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">File Managment</h1>
+        </div>
+    </div> --}}
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Contact Admin
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+                  <form class="form-horizontal" action="/contactUs" method="POST">
+          {{ csrf_field() }}
+							<fieldset>
+								<!-- Customer Name-->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="name">Name</label>
+									<div class="col-md-9">
+										<input id="name" name="name" type="text" class="form-control" value="{{ Auth::user()->name }}" required autofocus>
+									</div>
+								</div>
+							
+								<!-- Customer Email-->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="email">Your E-mail</label>
+									<div class="col-md-9">
+										<input id="email" name="email" type="text" class="form-control" value="{{ Auth::user()->email }}" required autofocus>
+									</div>
+								</div>
+								
+								<!-- Customer Message -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="message">Your message</label>
+									<div class="col-md-9">
+										<textarea class="form-control" id="message" name="message" rows="5" required autofocus></textarea>
+									</div>
+								</div>
+								
+								<!-- Form actions -->
+								<div class="form-group">
+									<div class="col-md-12 widget-right">
+										<button type="submit" class="btn btn-default btn-md pull-right">Submit</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.row-->
+
+
+</div>
+<!--/.row-->
+</div>
+<!--/.main-->
+@endsection @section('script') @endsection

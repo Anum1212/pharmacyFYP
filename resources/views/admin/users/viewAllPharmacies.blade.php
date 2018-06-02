@@ -1,165 +1,128 @@
-@extends('layouts.dashboard') 
-@section('head')
-<link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
-@endsection
+@extends('layouts.dashboard') @section('head') @endsection @section('style') @endsection @section('body')
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index">
+                <span>Lumino</span>Admin</a>
+        </div>
+    </div>
+</nav>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                <span class="capitalWord">{{Auth::user()->name}}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
 
-@section('body')
-
-<div class="wrapper">
-
-  <!-- Main Header -->
-  <header class="main-header">
-
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">
-        <b>Dh</b>Bd</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">
-        <b>Dash</b>Board</span>
-    </a>
-
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a class="sidebar-toggle" data-toggle="push-menu" role="button">
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
+    <ul class="nav menu">
+        <li>
+            <a href="/admin/dashboard">
+                <em class="fa fa-dashboard">&nbsp;</em> Dashboard</a>
+        </li>
+        <li>
+            <a href="widgets.html">
+                <em class="fa fa-cogs">&nbsp;</em> Account Details</a>
+        </li>
+        <li>
+            <a href="/admin/viewAllOrders">
+                <em class="fa fa-truck">&nbsp;</em> Orders</a>
+        </li>
+        <li>
+            <a href="/admin/viewAllMessages">
+                <em class="fa fa-comment">&nbsp;</em> Messages</a>
+        </li>
+        <li class="parent active">
+            <a data-toggle="collapse" href="#users">
+                <em class="fa fa-users">&nbsp;</em> Mangage Users
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
             </a>
-          </li>
-      </div>
-    </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
+            <ul class="children collapse" id="users">
+                <li>
+                    <a class="" href="/admin/viewAllCustomers">
+                        <span class="fa fa-user">&nbsp;</span> Customers
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/viewAllPharmacies">
+                        <span class="fa fa-user-md">&nbsp;</span> Pharmacies
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#files">
+                <em class="fa fa-file">&nbsp;</em> Mangage Files
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="files">
+                <li>
+                    <a class="" href="/admin/viewAllFiles">
+                        <span class="fa fa-search">&nbsp;</span> View Files
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/uploadFileForm">
+                        <span class="fa fa-upload">&nbsp;</span> Upload File
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <em class="fa fa-power-off">&nbsp;</em> Logout</a>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
+        </li>
+    </ul>
+</div>
+<!--/.sidebar-->
 
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
-        <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
-        </li>
-        <li>
-          <a href="/admin/dashboard">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
-        </li>
-        {{-- <li>
-          <a href="/admin/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
-        </li> --}}
-        <li>
-          <a href="/admin/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
-        </li>
-<li class="treeview active">
-          <a href="#">
-            <i class="fas fa-users"></i>
-            <span>Mangage Users</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
             <li>
-              <a href="/admin/viewAllCustomers">
-                <i class="fas fa-user"></i>
-                Customers
-              </a>
+                <a href="#">
+                    <em class="fa fa-home"></em>
+                </a>
             </li>
-            <li class="active">
-              <a href="/admin/viewAllPharmacies">
-                <i class="fas fa-user-md"></i>
-                Pharmacies
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="/admin/viewAllMessages">
-            <i class="fas fa-comment"></i>
-            <span>Messages</span>
-          </a>
-        </li>       
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-file"></i>
-            <span>Mangage Files</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-          <a href="/admin/viewAllFiles">
-            <i class="fas fa-search"></i>
-            <span>View Files</span>
-          </a>
-            </li>
-            <li>
-          <a href="/admin/uploadFileForm">
-            <i class="fas fa-upload"></i>
-            <span>Upload File</span>
-          </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+    <!--/.row-->
 
-          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
-        </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
+    {{-- <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">File Managment</h1>
+        </div>
+    </div> --}}
+    <!--/.row-->
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Mangage Pharmacies
-      </h1>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
-<div class="container containerDashboardContent">
-
-        <table>
-          <caption>Pharmacy Details</caption>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Registered Pharmacies ({{$totalUsers}})
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+   <table>
           <thead>
             <tr>
               <th scope="col">#</th>
@@ -173,12 +136,9 @@
             </tr>
           </thead>
           <tbody>
-            <?php
-    $i=1;
-    ?>
               @foreach($users as $user)
               <tr>
-                <td data-label="#">{{$i}}</td>
+                <td data-label="#">{{ (($users->currentPage() - 1 ) * $users->perPage() ) + $loop->iteration }}</td>
                 <td data-label="Customer">{{$user->name}}</td>
                 <td data-label="Email">{{$user->email}}</td>
                 <td data-label="Email">{{$user->pharmacyName}}</td>
@@ -202,30 +162,19 @@
                   </a>
                 </td>
               </tr>
-              <?php
-      $i++;
-      ?>
                 @endforeach
           </tbody>
         </table>
-      </div>
-
-
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
+        {{ $users->links() }}
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
+    <!--/.row-->
+
+
 </div>
-<!-- ./wrapper -->
-@endsection
+<!--/.row-->
+</div>
+<!--/.main-->
+@endsection @section('script') @endsection

@@ -70,8 +70,9 @@ class HomeController extends Controller
     //  |---------------------------------- viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
-        $orders = Order::where('userId', Auth::user()->id)->get();
-        return view('customer.orders.allOrders', compact('orders'));
+        $totalOrders = Order::where('userId', Auth::user()->id)->count();
+        $orders = Order::where('userId', Auth::user()->id)->paginate(30);
+        return view('customer.orders.allOrders', compact('orders', 'totalOrders'));
     }
 
 
@@ -129,6 +130,6 @@ class HomeController extends Controller
         $customerDetails->latitude = $latitude;
         $customerDetails->save();
 
-        return redirect('/dashboard');
+        return redirect('/dashboard')->with('message', 'Edit successful');
     }
 }

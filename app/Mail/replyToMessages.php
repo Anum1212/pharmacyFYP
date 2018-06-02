@@ -33,6 +33,6 @@ class replyToMessages extends Mailable
         return $this->from('anamamer0@gmail.com', 'Laravel Pharmacy Project')
       ->to($this->recipientData->senderEmail)
       ->subject('Reply from Pharmacy for : ' . $this->recipientData->name)
-      ->view('email.replyToMessage',['reply'=>$req->message]);
+      ->view('email.replyToMessage',['reply'=>$req->messageReply]);
     }
 }

@@ -1,7 +1,5 @@
 <?php
 
-
-
 // controller Details
 // ------------------
 // methods and their details
@@ -23,16 +21,13 @@
 // 2 -> admin replied to messages
 // 3 -> indicates that message is admin response
 
-
-
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Message;
-use App\User;
-use App\Pharmacist;
-use Mail;
 use App\Mail\replyToMessages;
+use App\Message;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Mail;
 
 class messageController extends Controller
 {
@@ -40,8 +35,6 @@ class messageController extends Controller
     {
         $this->middleware('auth:admin')->except(['contactUs']);
     }
-
-
 
     // |---------------------------------- contactUs ----------------------------------|
     public function contactUs(Request $req)
@@ -55,20 +48,21 @@ class messageController extends Controller
         return redirect('/')->with('message', 'Admin will soon get in contact with you.');
     }
 
-
-
     // |---------------------------------- viewAllMessages ----------------------------------|
     public function viewAllMessages(Request $req)
     {
-        $unreadMessages = Message::where('status', '0')->latest()->paginate(10, ['*'], 'unreadTable');
+        $totalUnreadMessages = Message::where('status', '0')->count();
+        $unreadMessages = Message::where('status', '0')->latest()->paginate(3, ['*'], 'unreadTable');
+        $totalReadMessages = Message::where([ // count only messages that are 1->read or 2->replied to
+            ['status', '!=', '0'],
+            ['status', '!=', '3'],
+        ])->count();
         $readMessages = Message::where([ // show only messages that are 1->read or 2->replied to
-    ['status', '!=','0'],
-    ['status', '!=','3'],
-    ])->latest()->paginate(10, ['*'], 'readTable');
-        return view('admin.messages.viewAllMessages', compact('unreadMessages', 'readMessages'));
+            ['status', '!=', '0'],
+            ['status', '!=', '3'],
+        ])->latest()->paginate(3, ['*'], 'readTable');
+        return view('admin.messages.viewAllMessages', compact('unreadMessages', 'readMessages', 'totalUnreadMessages', 'totalReadMessages'));
     }
-
-
 
     // |---------------------------------- viewMessage ----------------------------------|
     public function viewMessage($messageId)
@@ -77,8 +71,6 @@ class messageController extends Controller
         $allPreviousEmails = Message::where('senderEmail', $message->senderEmail)->get();
         return view('admin.messages.replyMessage', compact('message', '$allPreviousEmails'));
     }
-
-
 
     // |---------------------------------- viewAllMessagesOfSpecificSender ----------------------------------|
     public function viewAllMessagesOfSpecificSender($messageId)
@@ -95,8 +87,6 @@ class messageController extends Controller
         return view('admin.messages.oldMessages', compact('visitorPrevMessage', 'adminResponse'));
     }
 
-
-
     // |---------------------------------- replyMessage ----------------------------------|
     public function replyMessage(Request $req, $messageId)
     {
@@ -110,13 +100,11 @@ class messageController extends Controller
         $reply->status = '3'; // indicates admin response
         $reply->save();
 
-        $recipientData->status='2'; // changes visitor message state to replied
+        $recipientData->status = '2'; // changes visitor message state to replied
         $recipientData->save();
         Mail::send(new replyToMessages($recipientData));
         return redirect('admin/viewAllMessages')->with('message', 'Email Sent');
     }
-
-
 
     // |---------------------------------- markAsUnreadMessage ----------------------------------|
     public function markAsUnreadMessage($messageId)
@@ -125,10 +113,8 @@ class messageController extends Controller
         $message->status = "0";
         $message->save();
 
-        return redirect()->action('messageController@viewAllMessages');
+        return redirect()->action('messageController@viewAllMessages')->with('message', 'Mark as unread successful');
     }
-
-
 
     // |---------------------------------- markAsReadMessage ----------------------------------|
     public function markAsReadMessage($messageId)
@@ -137,10 +123,8 @@ class messageController extends Controller
         $message->status = "1";
         $message->save();
 
-        return redirect()->action('messageController@viewAllMessages');
+        return redirect()->action('messageController@viewAllMessages')->with('message', 'Mark as read successful');
     }
-
-
 
     // |---------------------------------- deleteMessage ----------------------------------|
     public function deleteMessage($messageId)
@@ -148,15 +132,14 @@ class messageController extends Controller
         $message = Message::find($messageId);
         $message->delete();
 
-        return redirect()->action('messageController@viewAllMessages');
+        return redirect()->action('messageController@viewAllMessages')->with('message', 'Delete successful');
     }
-
-
 
     // |---------------------------------- searchSender ----------------------------------|
     public function searchSender(Request $req)
     {
-        $searchResults = Message::where('name', 'LIKE', '%'.$req->search.'%')->orWhere('senderEmail', 'LIKE', '%'.$req->search.'%')->get();
-        return view('admin.messages.searchResult', compact('searchResults'));
+        $totalSearchResults = Message::where('name', 'LIKE', '%' . $req->search . '%')->orWhere('senderEmail', 'LIKE', '%' . $req->search . '%')->count();
+        $searchResults = Message::where('name', 'LIKE', '%' . $req->search . '%')->orWhere('senderEmail', 'LIKE', '%' . $req->search . '%')->paginate(30);
+        return view('admin.messages.searchResult', compact('searchResults', 'totalSearchResults'));
     }
 }

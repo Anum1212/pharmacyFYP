@@ -1,173 +1,538 @@
-@extends('layouts.dashboard') @section('body')
-
-<div class="wrapper">
-
-  <!-- Main Header -->
-  <header class="main-header">
-
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">
-        <b>Dh</b>Bd</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">
-        <b>Dash</b>Board</span>
-    </a>
-
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a class="sidebar-toggle" data-toggle="push-menu" role="button">
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
-            </a>
-          </li>
-      </div>
-    </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
-        <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
-        </li>
-        <li class="active">
-          <a href="/admin/dashboard">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
-        </li>
-        {{-- <li>
-          <a href="/admin/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
-        </li> --}}
-        <li>
-          <a href="/admin/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-users"></i>
-            <span>Mangage Users</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-              <a href="/admin/viewAllCustomers">
-                <i class="fas fa-user"></i>
-                Customers
-              </a>
-            </li>
-            <li>
-              <a href="/admin/viewAllPharmacies">
-                <i class="fas fa-user-md"></i>
-                Pharmacies
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="/admin/viewAllMessages">
-            <i class="fas fa-comment"></i>
-            <span>Messages</span>
-          </a>
-        </li>       
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-file"></i>
-            <span>Mangage Files</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-          <a href="/admin/viewAllFiles">
-            <i class="fas fa-search"></i>
-            <span>View Files</span>
-          </a>
-            </li>
-            <li>
-          <a href="/admin/uploadFileForm">
-            <i class="fas fa-upload"></i>
-            <span>Upload File</span>
-          </a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-
-          <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
-        </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        DashBoard
-        <small>Optional description</small>
-      </h1>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
-
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
+@extends('layouts.dashboard') @section('head') @endsection @section('style') @endsection @section('body')
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index">
+                <span>Lumino</span>Admin</a>
+        </div>
     </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
+</nav>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                <span class="capitalWord">{{Auth::user()->name}}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
+
+    <ul class="nav menu">
+        <li class="active">
+            <a href="/admin/dashboard">
+                <em class="fa fa-dashboard">&nbsp;</em> Dashboard</a>
+        </li>
+        <li>
+            <a href="widgets.html">
+                <em class="fa fa-cogs">&nbsp;</em> Account Details</a>
+        </li>
+        <li>
+            <a href="/admin/viewAllOrders">
+                <em class="fa fa-truck">&nbsp;</em> Orders</a>
+        </li>
+        <li>
+            <a href="/admin/viewAllMessages">
+                <em class="fa fa-comment">&nbsp;</em> Messages</a>
+        </li>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#users">
+                <em class="fa fa-users">&nbsp;</em> Mangage Users
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="users">
+                <li>
+                    <a class="" href="/admin/viewAllCustomers">
+                        <span class="fa fa-user">&nbsp;</span> Customers
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/viewAllPharmacies">
+                        <span class="fa fa-user-md">&nbsp;</span> Pharmacies
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#files">
+                <em class="fa fa-file">&nbsp;</em> Mangage Files
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="files">
+                <li>
+                    <a class="" href="/admin/viewAllFiles">
+                        <span class="fa fa-search">&nbsp;</span> View Files
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/admin/uploadFileForm">
+                        <span class="fa fa-upload">&nbsp;</span> Upload File
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="{{ route('admin.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <em class="fa fa-power-off">&nbsp;</em> Logout</a>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
+        </li>
+    </ul>
 </div>
-<!-- ./wrapper -->
-@endsection
+<!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">
+                    <em class="fa fa-home"></em>
+                </a>
+            </li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+    <!--/.row-->
+
+    {{-- <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Dashboard</h1>
+        </div>
+    </div> --}}
+    <!--/.row-->
+
+    <div class="panel panel-container">
+        <div class="row">
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-teal panel-widget border-right">
+                    <div class="row no-padding">
+                        <em class="fa fa-xl fa-shopping-cart color-blue"></em>
+                        <div class="large">120</div>
+                        <div class="text-muted">New Orders</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-blue panel-widget border-right">
+                    <div class="row no-padding">
+                        <em class="fa fa-xl fa-comments color-orange"></em>
+                        <div class="large">52</div>
+                        <div class="text-muted">Comments</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-orange panel-widget border-right">
+                    <div class="row no-padding">
+                        <em class="fa fa-xl fa-users color-teal"></em>
+                        <div class="large">24</div>
+                        <div class="text-muted">New Users</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+                <div class="panel panel-red panel-widget ">
+                    <div class="row no-padding">
+                        <em class="fa fa-xl fa-search color-red"></em>
+                        <div class="large">25.2k</div>
+                        <div class="text-muted">Page Views</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.row-->
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    Site Traffic Overview
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <div class="canvas-wrapper">
+                        <canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>New Orders</h4>
+                    <div class="easypiechart" id="easypiechart-blue" data-percent="92">
+                        <span class="percent">92%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Comments</h4>
+                    <div class="easypiechart" id="easypiechart-orange" data-percent="65">
+                        <span class="percent">65%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>New Users</h4>
+                    <div class="easypiechart" id="easypiechart-teal" data-percent="56">
+                        <span class="percent">56%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6 col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body easypiechart-panel">
+                    <h4>Visitors</h4>
+                    <div class="easypiechart" id="easypiechart-red" data-percent="27">
+                        <span class="percent">27%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="panel panel-default chat">
+                <div class="panel-heading">
+                    Chat
+                    <ul class="pull-right panel-settings panel-button-tab-right">
+                        <li class="dropdown">
+                            <a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <ul class="dropdown-settings">
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <ul>
+                        <li class="left clearfix">
+                            <span class="chat-img pull-left">
+                                <img src="http://placehold.it/60/30a5ff/fff" alt="User Avatar" class="img-circle" />
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">John Doe</strong>
+                                    <small class="text-muted">32 mins ago</small>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper
+                                    sed, dapibus ac nunc.</p>
+                            </div>
+                        </li>
+                        <li class="right clearfix">
+                            <span class="chat-img pull-right">
+                                <img src="http://placehold.it/60/dde0e6/5f6468" alt="User Avatar" class="img-circle" />
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="pull-left primary-font">Jane Doe</strong>
+                                    <small class="text-muted">6 mins ago</small>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper
+                                    sed, dapibus ac nunc.</p>
+                            </div>
+                        </li>
+                        <li class="left clearfix">
+                            <span class="chat-img pull-left">
+                                <img src="http://placehold.it/60/30a5ff/fff" alt="User Avatar" class="img-circle" />
+                            </span>
+                            <div class="chat-body clearfix">
+                                <div class="header">
+                                    <strong class="primary-font">John Doe</strong>
+                                    <small class="text-muted">32 mins ago</small>
+                                </div>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ante turpis, rutrum ut ullamcorper
+                                    sed, dapibus ac nunc.</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input id="btn-input" type="text" class="form-control input-md" placeholder="Type your message here..." />
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-md" id="btn-chat">Send</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    To-do List
+                    <ul class="pull-right panel-settings panel-button-tab-right">
+                        <li class="dropdown">
+                            <a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <ul class="dropdown-settings">
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+                    <ul class="todo-list">
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-1" />
+                                <label for="checkbox-1">Make coffee</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-2" />
+                                <label for="checkbox-2">Check emails</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-3" />
+                                <label for="checkbox-3">Reply to Jane</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-4" />
+                                <label for="checkbox-4">Make more coffee</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-5" />
+                                <label for="checkbox-5">Work on the new design</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                        <li class="todo-list-item">
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox-6" />
+                                <label for="checkbox-6">Get feedback on design</label>
+                            </div>
+                            <div class="pull-right action-buttons">
+                                <a href="#" class="trash">
+                                    <em class="fa fa-trash"></em>
+                                </a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="panel-footer">
+                    <div class="input-group">
+                        <input id="btn-input" type="text" class="form-control input-md" placeholder="Add new task" />
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary btn-md" id="btn-todo">Add</button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+
+
+        <div class="col-md-6">
+            <div class="panel panel-default ">
+                <div class="panel-heading">
+                    Timeline
+                    <ul class="pull-right panel-settings panel-button-tab-right">
+                        <li class="dropdown">
+                            <a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
+                                <em class="fa fa-cogs"></em>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
+                                    <ul class="dropdown-settings">
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 1
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 2
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li>
+                                            <a href="#">
+                                                <em class="fa fa-cog"></em> Settings 3
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body timeline-container">
+                    <ul class="timeline">
+                        <li>
+                            <div class="timeline-badge">
+                                <em class="glyphicon glyphicon-pushpin"></em>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Lorem ipsum dolor sit amet</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at sodales nisl. Donec
+                                        malesuada orci ornare risus finibus feugiat.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-badge primary">
+                                <em class="glyphicon glyphicon-link"></em>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Lorem ipsum dolor sit amet</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-badge">
+                                <em class="glyphicon glyphicon-camera"></em>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Lorem ipsum dolor sit amet</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer at sodales nisl. Donec
+                                        malesuada orci ornare risus finibus feugiat.</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="timeline-badge">
+                                <em class="glyphicon glyphicon-paperclip"></em>
+                            </div>
+                            <div class="timeline-panel">
+                                <div class="timeline-heading">
+                                    <h4 class="timeline-title">Lorem ipsum dolor sit amet</h4>
+                                </div>
+                                <div class="timeline-body">
+                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--/.col-->
+        <div class="col-sm-12">
+            <p class="back-link">Lumino Theme by
+                <a href="https://www.medialoot.com">Medialoot</a>
+            </p>
+        </div>
+    </div>
+    <!--/.row-->
+</div>
+<!--/.main-->
+@endsection @section('script') @endsection

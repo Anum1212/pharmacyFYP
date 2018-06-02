@@ -36,8 +36,9 @@ class PharmacistProductController extends Controller
 
     public function viewProducts()
     {
-        $products = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->get();
-        return view('pharmacist.productManagment.viewProducts', compact('products'));
+        $totalProducts = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->count();
+        $products = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->paginate(30);
+        return view('pharmacist.productManagment.viewProducts', compact('products', 'totalProducts'));
     }
 
 
@@ -67,7 +68,7 @@ class PharmacistProductController extends Controller
         $newProduct->quantity = $req->quantity;
         $newProduct->save();
 
-        return redirect('/pharmacist/viewProducts');
+        return redirect('/pharmacist/viewProducts')->with('message', 'Product add successful');
     }
 
 
@@ -100,7 +101,7 @@ class PharmacistProductController extends Controller
         $product->quantity = $req->quantity;
         $product->save();
 
-        return redirect('/pharmacist/viewProducts');
+        return redirect('/pharmacist/viewProducts')->with('message', 'Edit successful');
     }
 
 
@@ -109,8 +110,8 @@ class PharmacistProductController extends Controller
 
     public function deleteProduct($productId)
     {
-        $deleteRecord = Pharmacistproduct::find(Auth::user()->id);
+        $deleteRecord = Pharmacistproduct::find($productId);
         $deleteRecord->delete();
-        return redirect('/pharmacist/viewProducts');
+        return redirect('/pharmacist/viewProducts')->with('message', 'Delete successful');
     }
 }

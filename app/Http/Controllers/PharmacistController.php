@@ -10,7 +10,7 @@
 // 2) storeProductsInTable --> set dataSorce to use database for saving data
 // 3) savePharmacyApi --> test given api if test pass then set DataSource to use api
 // 4) viewAllOrders --> view all customer orders
-// 5) viewSpecificOrder --> view order details of a specific customer
+// 5) viewSpecificOrder --> view order details of a specific customer [error if product gets deleted. Solution??]
 // 6) editAccountDetailsForm --> goto edit pharamacy details form
 // 7) editAccountDetails --> save pharamcy edit changes
 // 8) contactUsForm --> goto contact admin form
@@ -94,7 +94,7 @@ class PharmacistController extends Controller
         $saveRecord = Pharmacist::find(Auth::user()->id);
         $saveRecord->dataSource = '2';
         $saveRecord->save();
-        return redirect()->action('PharmacistController@index')->with('message', 'Record Saved');
+        return redirect()->action('PharmacistController@index')->with('message', 'You can now add products to our databse');
     }
 
 
@@ -111,6 +111,10 @@ class PharmacistController extends Controller
         // *************************** use this api for testing purposes (if no own api)***************************
         // in actual program pharmacist api will be tested
         // $clinAPI = 'https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search';
+        // random medicine name for testing
+        // Aceon
+        // Cambia
+        // CALAN
 
         $medicine = $req->medicine;
         $medNotFound = '0';
@@ -220,7 +224,10 @@ class PharmacistController extends Controller
             ])->get();
 
         $customerDetails =  User::whereId($customerId)->first();
+
+// error if product gets deleted. Solution??
         foreach ($orderDetails as $orderDetail) {
+            echo $orderDetail->productId;
             $productDetails[]=Pharmacistproduct::whereId($orderDetail->productId)->first();
         }
 
@@ -246,13 +253,43 @@ class PharmacistController extends Controller
     //  |---------------------------------- editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
+        $pharmacyDetails = Pharmacist::find(Auth::user()->id);
         $address = $req->address.' '.$req->society.' '.$req->city;
+        $savedAddress = $pharmacyDetails->address.' '.$pharmacyDetails->society.' '.$pharmacyDetails->city;
+        
+        // check if user changed address if db saved address = form address then no need to call latlong function
+        if($savedAddress === $address)
+        {
+        $pharmacyDetails->name = $req->name;
+        $pharmacyDetails->email = $req->email;
+        $pharmacyDetails->contact = $req->contact;
+        $pharmacyDetails->pharmacyName = $req->pharmacyName;
+        $pharmacyDetails->address = $req->address;
+        $pharmacyDetails->society = $req->society;
+        $pharmacyDetails->city = $req->city;
+        // $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
+        $pharmacyDetails->save();
+
+        return redirect('/pharmacist/dashboard')->with('message', 'Edit successful');
+        }
+
+        // if db saved address != form address then call latlong function
+        else{
         $addressToLatLng = Geocode::make()->address($address);
 
+        // check if geocode fun was successful if not save other form details n return back to form with error message
+        if($addressToLatLng ==false){
+        $pharmacyDetails->name = $req->name;
+        $pharmacyDetails->email = $req->email;
+        $pharmacyDetails->contact = $req->contact;
+        $pharmacyDetails->pharmacyName = $req->pharmacyName;
+        return redirect::back()->with('error', 'failed to detect location. Try again later');
+        }
+        // if geocode fun was successful save form details n return back to form
+        else{
         $latitude = $addressToLatLng->latitude();
         $longitude = $addressToLatLng->longitude();
 
-        $pharmacyDetails = Pharmacist::find(Auth::user()->id);
         $pharmacyDetails->name = $req->name;
         $pharmacyDetails->email = $req->email;
         $pharmacyDetails->contact = $req->contact;
@@ -262,10 +299,12 @@ class PharmacistController extends Controller
         $pharmacyDetails->city = $req->city;
         $pharmacyDetails->longitude = $longitude;
         $pharmacyDetails->latitude = $latitude;
-        $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
+        // // $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
         $pharmacyDetails->save();
 
-        return redirect('/pharmacist/dashboard');
+        return redirect('/pharmacist/dashboard')->with('message', 'Edit successful');
+        }
+        }
     }
 
 

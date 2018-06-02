@@ -1,245 +1,191 @@
-@extends('layouts.dashboard') @section('body')
+@extends('layouts.dashboard') @section('head') @endsection @section('style') @endsection @section('body')
+<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#sidebar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/index">
+                <span>Lumino</span>Admin</a>
+        </div>
+    </div>
+</nav>
+<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+    <div class="profile-sidebar">
+        <div class="profile-usertitle">
+            <div class="profile-usertitle-name">
+                <span class="capitalWord">{{Auth::user()->name}}</span>
+            </div>
+        </div>
+        <div class="clear"></div>
+    </div>
+    <div class="divider"></div>
 
-<div class="wrapper">
-
-  <!-- Main Header -->
-  <header class="main-header">
-
-    <!-- Logo -->
-    <a href="index2.html" class="logo">
-      <!-- mini logo for sidebar mini 50x50 pixels -->
-      <span class="logo-mini">
-        <b>Ac</b>Dt</span>
-      <!-- logo for regular state and mobile devices -->
-      <span class="logo-lg">
-        <b>Account</b>Details</span>
-    </a>
-
-    <!-- Header Navbar -->
-    <nav class="navbar navbar-static-top" role="navigation">
-      <!-- Sidebar toggle button-->
-      <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
-        <span class="sr-only">Toggle navigation</span>
-      </a>
-      <!-- Navbar Right Menu -->
-      <div class="navbar-custom-menu">
-        <ul class="nav navbar-nav">
-
-          <!-- User Account Menu -->
-          <li class="user user-menu">
-            <!-- Menu Toggle Button -->
-            <a>
-              <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">{{Auth::user()->name}}</span>
-            </a>
-          </li>
-      </div>
-    </nav>
-  </header>
-  <!-- Left side column. contains the logo and sidebar -->
-  <aside class="main-sidebar">
-
-    <!-- sidebar: style can be found in sidebar.less -->
-    <section class="sidebar">
-
-      <!-- Sidebar Menu -->
-      <ul class="sidebar-menu" data-widget="tree">
-        <!-- Optionally, you can add icons to the links -->
+    <ul class="nav menu">
         <li>
-          <a href="/index">
-            <i class="fas fa-home"></i>
-            <span>Pharmacy</span>
-          </a>
-        </li>
-        <li>
-          <a href="/pharmacist/dashboard">
-            <i class="fas fa-tachometer-alt"></i>
-            <span>DashBoard</span>
-          </a>
+            <a href="/pharmacist/dashboard">
+                <em class="fa fa-dashboard">&nbsp;</em> Dashboard</a>
         </li>
         <li class="active">
-          <a href="/pharmacist/editAccountDetailsForm">
-            <i class="fas fa-cogs"></i>
-            <span>Account Details</span>
-          </a>
+            <a href="/pharmacist/editAccountDetailsForm">
+                <em class="fa fa-cogs">&nbsp;</em> Account Details</a>
         </li>
         <li>
-          <a href="/pharmacist/viewAllOrders">
-            <i class="fas fa-truck"></i>
-            <span>Orders</span>
-          </a>
+            <a href="/pharmacist/viewAllOrders">
+                <em class="fa fa-truck">&nbsp;</em> Orders</a>
         </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fas fa-database"></i>
-            <span>Product Management</span>
-            <span class="pull-right-container">
-              <i class="fas fa-caret-down"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li>
-              <a href="/pharmacist/viewProducts">
-                <i class="fas fa-search"></i>
-                View Products
-              </a>
-            </li>
-            <li>
-              <a href="/pharmacist/addProduct">
-                <i class="fa fa-plus" aria-hidden="true"></i>
-                Add Products
-              </a>
-            </li>
-          </ul>
+        <li class="parent ">
+            <a data-toggle="collapse" href="#products">
+                <em class="fa fa-database">&nbsp;</em> Product Management
+                <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right">
+                    <em class="fa fa-plus"></em>
+                </span>
+            </a>
+            <ul class="children collapse" id="products">
+                <li>
+                    <a class="" href="/pharmacist/viewProducts">
+                        <span class="fa fa-search">&nbsp;</span> View Products
+                    </a>
+                </li>
+                <li>
+                    <a class="" href="/pharmacist/addProduct">
+                        <span class="fa fa-plus">&nbsp;</span> Add Products
+                    </a>
+                </li>
+            </ul>
         </li>
         <li>
-          <a href="/pharmacist/contactUsForm">
-            <i class="fas fa-comment"></i>
-            <span>Contact Us</span>
-          </a>
+            <a href="/pharmacist/contactUsForm">
+                <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
         </li>
         <li>
-          <a href="{{ route('pharmacist.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-            <i class="fas fa-sign-out-alt"></i>
-            <span>Logout</span>
-          </a>
-
-          <form id="logout-form" action="{{ route('pharmacist.logout') }}" method="POST" style="display: none;">
-            {{ csrf_field() }}
-          </form>
+            <a href="{{ route('pharmacist.logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <em class="fa fa-power-off">&nbsp;</em> Logout</a>
+            <form id="logout-form" action="{{ route('pharmacist.logout') }}" method="POST" style="display: none;">
+                {{ csrf_field() }}
+            </form>
         </li>
-      </ul>
-      <!-- /.sidebar-menu -->
-    </section>
-    <!-- /.sidebar -->
-  </aside>
-
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <section class="content-header">
-      <h1>
-        Account Details
-      </h1>
-    </section>
-
-    <!-- Main content -->
-    <section class="content container-fluid">
-
-      <!--------------------------
-        | Your Page Content Here |
-        -------------------------->
-
-
-      <form class="form-horizontal" role="form" method="POST" action="/pharmacist/editAccountDetails">
-        {{ csrf_field() }} {{-- ---------------------------- Name ----------------------------- --}}
-        <div class="form-group">
-          <label for="name" class="col-md-4 control-label">Name</label>
-          <div class="col-md-6">
-            <input id="name" type="name" class="form-control" name="name" value="{{ $pharmacyDetails->name }}" required>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Email ----------------------------- --}}
-        <div class="form-group">
-          <label for="email" class="col-md-4 control-label">E-Mail Address</label>
-
-          <div class="col-md-6">
-            <input id="email" type="email" class="form-control" name="email" value="{{ $pharmacyDetails->email }}" required>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Contact ----------------------------- --}}
-        <div class="form-group">
-          <label for="contact" class="col-md-4 control-label">Contact</label>
-
-          <div class="col-md-6">
-            <input id="contact" type="text" class="form-control" name="contact" minlength="11" maxlength="11" value="{{ $pharmacyDetails->contact }}"
-              required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Pharmacy Name ----------------------------- --}}
-        <div class="form-group">
-          <label for="pharmacyName" class="col-md-4 control-label">Pharmacy Name</label>
-
-          <div class="col-md-6">
-            <input id="pharmacyName" type="text" class="form-control" name="pharmacyName" value="{{ $pharmacyDetails->pharmacyName }}"
-              required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Address ----------------------------- --}}
-        <div class="form-group">
-          <label for="address" class="col-md-4 control-label">Address</label>
-
-          <div class="col-md-6">
-            <input id="address" type="text" class="form-control" name="address" value="{{ $pharmacyDetails->address }}" required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Society ----------------------------- --}}
-        <div class="form-group">
-          <label for="society" class="col-md-4 control-label">Society</label>
-
-          <div class="col-md-6">
-            <input id="society" type="text" class="form-control" name="society" value="{{ $pharmacyDetails->society }}" required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- City ----------------------------- --}}
-        <div class="form-group">
-          <label for="city" class="col-md-4 control-label">City</label>
-
-          <div class="col-md-6">
-            <input id="city" type="text" class="form-control" name="city" value="{{ $pharmacyDetails->city }}" required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Max Purchase for Free Delivery ----------------------------- --}}
-        <div class="form-group">
-          <label for="freeDeliveryPurchase" class="col-md-4 control-label">Max Purchase for Free Delivery</label>
-
-          <div class="col-md-6">
-            <input id="freeDeliveryPurchase" type="text" class="form-control" name="freeDeliveryPurchase" value="{{ $pharmacyDetails->freeDeliveryPurchase }}"
-              required autofocus>
-          </div>
-        </div>
-
-        {{-- ---------------------------- Password ----------------------------- --}} {{--
-        <div class="form-group">
-          <label for="password" class="col-md-4 control-label">Password</label>
-
-          <div class="col-md-6">
-            <input id="password" type="password" class="form-control" name="password" required>
-          </div>
-        </div> --}}
-
-        <div class="form-group">
-          <div class="col-md-6 col-md-offset-4">
-            <button type="submit" class="btn btn-primary">
-              Save Changes
-            </button>
-          </div>
-        </div>
-      </form>
-
-
-    </section>
-    <!-- /.content -->
-  </div>
-  <!-- /.content-wrapper -->
-
-  <!-- Main Footer -->
-  <footer class="main-footer">
-    <!-- To the right -->
-    <div class="pull-right hidden-xs">
-      Anything you want
-    </div>
-    <!-- Default to the left -->
-    <strong>Copyright &copy; 2016
-      <a href="#">Company</a>.</strong> All rights reserved.
-  </footer>
+    </ul>
 </div>
-<!-- ./wrapper -->
-@endsection
+<!--/.sidebar-->
+
+<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+    <div class="row">
+        <ol class="breadcrumb">
+            <li>
+                <a href="#">
+                    <em class="fa fa-home"></em>
+                </a>
+            </li>
+            <li class="active">Dashboard</li>
+        </ol>
+    </div>
+    <!--/.row-->
+
+    {{-- <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">File Managment</h1>
+        </div>
+    </div> --}}
+    <!--/.row-->
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    
+                    <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                        <em class="fa fa-toggle-up"></em>
+                    </span>
+                </div>
+                <div class="panel-body">
+                  <form class="form-horizontal" method="POST" action="/pharmacist/editAccountDetails">
+        {{ csrf_field() }} 
+							<fieldset>
+								<!-- Pharmacy Owner Name -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="name">Name</label>
+									<div class="col-md-9">
+										<input id="name" name="name" type="text" class="form-control" value="{{ $pharmacyDetails->name }}" required>
+									</div>
+								</div>
+							
+								<!-- Pharmacy Email -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="email">E-mail</label>
+									<div class="col-md-9">
+										<input id="email" name="email" type="email" class="form-control" value="{{ $pharmacyDetails->email }}" required>
+									</div>
+                </div>
+                
+								<!-- Pharmacy Contact -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="contact">Contact#</label>
+									<div class="col-md-9">
+										<input id="contact" name="contact" type="text" class="form-control" minlength="11" maxlength="11" value="{{ $pharmacyDetails->contact }}" required>
+									</div>
+                </div>
+                
+								<!-- Pharmacy Name -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="pharmacyName">Pharmacy Name</label>
+									<div class="col-md-9">
+										<input id="pharmacyName" name="pharmacyName" type="text" class="form-control" value="{{ $pharmacyDetails->pharmacyName }}" required>
+									</div>
+                </div>
+
+								<!-- Pharmacy Address -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="address">House#-Block</label>
+									<div class="col-md-9">
+										<input id="address" name="address" type="text" class="form-control" value="{{ $pharmacyDetails->address }}" required>
+									</div>
+                </div>
+                
+								<!-- Pharmacy Society -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="society">Society</label>
+									<div class="col-md-9">
+										<input id="society" name="society" type="text" class="form-control" value="{{ $pharmacyDetails->society }}" required>
+									</div>
+								</div>
+								
+								<!-- Pharmacy City -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="city">City</label>
+									<div class="col-md-9">
+										<input id="city" name="city" type="text" class="form-control" value="{{ $pharmacyDetails->city }}" required>
+									</div>
+                </div>
+                
+								{{-- <!-- Pharmacy freeDeliveryPurchase -->
+								<div class="form-group">
+									<label class="col-md-3 control-label" for="freeDeliveryPurchase">Max Purchase for Free Delivery</label>
+									<div class="col-md-9">
+										<input id="freeDeliveryPurchase" name="freeDeliveryPurchase" type="text" class="form-control" value="{{ $pharmacyDetails->freeDeliveryPurchase }}" required>
+									</div>
+								</div> --}}
+								
+								<!-- Form actions -->
+								<div class="form-group">
+									<div class="col-md-12 widget-right">
+										<button type="submit" class="btn btn-default btn-md pull-right">Submit</button>
+									</div>
+								</div>
+							</fieldset>
+						</form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/.row-->
+
+
+</div>
+<!--/.row-->
+</div>
+<!--/.main-->
+@endsection @section('script') @endsection
