@@ -8,6 +8,13 @@
   <title>Document</title>
 
   <style>
+
+    #header {
+      background: #30A5FF;
+      color: white;
+      text-align: center;
+    }
+
     .inv-container {
       font-family: 'Lato', sans-serif;
       margin: 20px auto;
@@ -221,82 +228,90 @@
 </head>
 
 <body>
-
-  <div class="inv-container">
-    <div class="inv-note">
-      Hi
-      <span class="fillme">{{$recipientData->name}}</span>, the following is an invoice for
-      <span class="fillme">Order# {{$order->id}}</span>. It's been a pleasure working with you.
+  <div id="emailBody">
+    <div id="header">
+      <h1>Pharmacy</h1>
     </div>
-    <div class="inv-header">
-      <div class="inv-date">
-        <b>Delivery Address </b>{{$recipientData->address}} {{$recipientData->society}}, {{$recipientData->city}}
-        <br>
-        <b>Order Date </b>{{date_format($order->created_at,"d/m/Y")}}
-        <br>
+    <div class="inv-container">
+      <div class="inv-note">
+        Hi
+        <b>{{$recipientData->name}}</b>, the following is an invoice for
+        <b>Order# {{$order->id}}</b>. It's been a pleasure working with you.
       </div>
-    </div>
-    <table class="inv-table">
-      <thead>
-        <tr>
-          <th class="u-left">Item</th>
-          <th class="u-left">Type</th>
-          <th class="u-right">Price</th>
-          <th class="u-mid">Quantity</th>
-          <th class="u-right">Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for($i=0; $i
-        <count($product); $i++) <tr>
-          <td class="u-left">{{$product[$i]->name}}</td>
-          @if($product[$i]->type=='1')
-          <!-- 1 = Tablet -->
-          <td class="left">Tablet</td>
-          @elseif($product[$i]->type=='2')
-          <!-- 2 = Capsule -->
-          <td class="left">Capsule </td>
-          @elseif($product[$i]->type=='3')
-          <!-- 3 = Syrup -->
-          <td class="left">Syrup</td>
-          @elseif($product[$i]->type=='4')
-          <!-- 4 = Inhaler -->
-          <td class="left">Inhaler</td>
-          @elseif($product[$i]->type=='5')
-          <!-- 5 = Drops -->
-          <td class="left">Drops
-            </> @elseif($product[$i]->type=='6')
-            <!-- 6 = Injection -->
-            <td class="left">Injection
-              </> @elseif($product[$i]->type=='7')
-              <!-- 7 = Cream -->
-              <td class="left">Cream</td>
-              @endif
-              <td class="u-right">{{$product[$i]->price}}</td>
-              <td class="u-mid">{{$orderItems[$i]->quantity}}</td>
-              <td class="u-right">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
-              </tr>
-              @endfor
-      </tbody>
-      <tfoot>
-        <tr>
-          <td/>
-          <td colspan="2" class="total">Subtotal</td>
-          <td class="total">{{$order->cost}}</td>
-        </tr>
-        {{--
-        <tr>
-          <td/>
-          <td colspan="2">Tax @ 13%</td>
-          <td>61.56</td>
-        </tr> --}}
-        <tr>
-          <td/>
-          <td colspan="2" class="total">Total</td>
-          <td class="total">{{$order->cost}} rs</td>
-        </tr>
-      </tfoot>
+      <div class="inv-header">
+        <div class="inv-date">
+          <b>Delivery Address </b>{{$recipientData->address}} {{$recipientData->society}}, {{$recipientData->city}}
+          <br>
+          <b>Order Date </b>{{date_format($order->created_at,"d/m/Y")}}
+          <br>
+        </div>
+      </div>
+      <table class="inv-table">
+        <thead>
+          <tr>
+            <th class="u-left">Item</th>
+            <th class="u-left">Type</th>
+            <th class="u-right">Price</th>
+            <th class="u-mid">Quantity</th>
+            <th class="u-right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for($i=0; $i
+          <count($product); $i++) <tr>
+            <td class="u-left">{{$product[$i]->name}}</td>
+            @if($product[$i]->type=='1')
+            <!-- 1 = Tablet -->
+            <td class="left">Tablet</td>
+            @elseif($product[$i]->type=='2')
+            <!-- 2 = Capsule -->
+            <td class="left">Capsule </td>
+            @elseif($product[$i]->type=='3')
+            <!-- 3 = Syrup -->
+            <td class="left">Syrup</td>
+            @elseif($product[$i]->type=='4')
+            <!-- 4 = Inhaler -->
+            <td class="left">Inhaler</td>
+            @elseif($product[$i]->type=='5')
+            <!-- 5 = Drops -->
+            <td class="left">Drops
+              </> @elseif($product[$i]->type=='6')
+              <!-- 6 = Injection -->
+              <td class="left">Injection
+                </> @elseif($product[$i]->type=='7')
+                <!-- 7 = Cream -->
+                <td class="left">Cream</td>
+                @endif
+                <td class="u-right">{{$product[$i]->price}}</td>
+                <td class="u-mid">{{$orderItems[$i]->quantity}}</td>
+                <td class="u-right">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
+                </tr>
+                @endfor
+        </tbody>
+        <tfoot>
+          <tr>
+            <td/>
+            <td colspan="2" class="total">Subtotal</td>
+            <td class="total">{{$order->cost}}</td>
+          </tr>
+          {{--
+          <tr>
+            <td/>
+            <td colspan="2">Tax @ 13%</td>
+            <td>61.56</td>
+          </tr> --}}
+          <tr>
+            <td/>
+            <td colspan="2" class="total">Total</td>
+            <td class="total">{{$order->cost}} rs</td>
+          </tr>
+        </tfoot>
 
+      </div>
+      <br>
+      <br>
+      <br>
+      <br>
       <div class="inv-notefinal u-mid">Thank you 🙂</div>
   </div>
 </body>

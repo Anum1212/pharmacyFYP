@@ -82,14 +82,36 @@ class HomeController extends Controller
     {
         $productDetails =[];
         $pharmacyDetails =[];
+        // find the order
+        $order = Order::whereId($orderId)->first();
+        // check if $order is empty
+        // if $order not empty
+        if(!empty($order)){
+            // check if $orderId belongs to the logged in user (to prevent unauthorized access by other users)
+        if($order->userId == Auth::user()->id){
+        // if everything is satisfied fetch order details
         $orderDetails = Orderitem::where('orderId', $orderId)->get();
-
+        // check if $orderDetails is empty
+        if(count($orderDetails)>0){
+            // if $orderDetails is not empty fetch remaining details n return view
         foreach ($orderDetails as $orderDetail) {
             $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
             $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
         }
         return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
     }
+    // if $orderDetails is empty return with error
+    else
+    return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+}   
+// if $orderId does not belong to logged in user return with error
+    else
+        return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+    }
+    // if $orderId not found return with error
+        else
+        return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+}
 
 
 

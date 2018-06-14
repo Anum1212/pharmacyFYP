@@ -1,134 +1,101 @@
 @extends('layouts.siteView') @section('style') @endsection @section('body')
+
 <div class="wrapper">
-
-    <!--
-  ********************************************************************
-                        Detect Location Div
-  ********************************************************************
-  -->
-
-    <div id="detectLocationWrapper" class="menuItem">
-        <a class="btn btn-primary" id="showDetectLocationForm" onclick="javascript:showDiv('detectLocation');" href="#detectLocation">Detect My Location</a>
-
-
-        <div class="showForm" id="detectLocation" style="display: none;">
-
-            <!--
-  ********************************************************************
-                        Detect Location Form
-  ********************************************************************
-  -->
-            <div class="form">
-                detect location
-                <form class="form-horizontal" method="POST" action="/detectPharmacy">
-                    {{ csrf_field() }}
-
-                    <div class="col-md-6">
-                        Medicine:
-                        <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine"
-                            required> Distance(km):
-                        <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
-                        <input id="latitude" type="text" name="latitude" >
-                        <input id="longitude" type="text" name="longitude" >
-                        <div class="form-group">
-                            <div class="col-md-8 col-md-offset-4">
-                                <button type="submit" class="btn btn-primary">
-                                    Search Medicine
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6 colxs-12">
+                    <div id="imaginary_container">
+                        <div class="input-group stylish-input-group">
+                            <input type="text" class="form-control" id="address" placeholder="Enter an Address">
+                            <span class="detectLocationAddon input-group-addon">
+                                <button type="button" onclick="getLocation()" class="detectLocation">
+                                    <span class="fa fa-bullseye"></span>
                                 </button>
-                            </div>
+                            </span>
+                            <span class="input-group-addon">
+                                <button type="botton" onclick="addressToCoOrdinates()">
+                                    <span class="fa fa-search"></span>
+                                </button>
+                            </span>
                         </div>
-                </form>
-
-                </div>
-            </div>
-        </div>
-
-        <!--
-                ********************************************************************
-                Enter A Location Div
-                ********************************************************************
-  -->
-        <div id="enterALocationWrapper" class="menuItem">
-            <div class="menuItemHeading">
-                <a class="btn btn-primary" id="showEnterALocationForm" onclick="javascript:showDiv('enterALocation');" href="#enterALocation">
-                    Enter a Location</a>
-            </div>
-            <div class="showForm" id="enterALocation" style="display: none;">
-
-                <!--
-  ********************************************************************
-                        Enter A Location Form
-  ********************************************************************
-  -->
-                <div class="form">
-                    <form class="form-horizontal" method="POST" action="/convertAddress">
-                        {{ csrf_field() }}
-
-                        <div class="col-md-6">
-                            Medicine:
-                            <input id="searchBar" type="text" class="form-control" name="medicineSearched" placeholder="search medicine"
-                                required> @if (Auth::check()) Address:
-                            <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required value="{{Auth::user()->address.' '.Auth::user()->society.' '.Auth::user()->city}}"> @else Address:
-                            <input id="address" type="text" class="form-control" name="address" placeholder="enter address" required> @endif Distance(km):
-                            <input id="distance" type="number" class="form-control" name="distance" value="1" placeholder="enter distance" required>
-                            <div class="form-group">
-                                <div class="col-md-8 col-md-offset-4">
-                                    <button type="submit" class="btn btn-primary">
-                                        Search Medicine
-                                    </button>
-                                </div>
-                            </div>
-                    </form>
                     </div>
                 </div>
             </div>
-        </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 medicineForm">
+                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    <form class="form-horizontal" action="/detectPharmacy" method="POST">
+                        {{ csrf_field() }}
+                        <div class="form-group">
+                            <input id="medicineSearched" name="medicineSearched" type="text" class="form-control" placeholder="Medicine" required>
+                        </div>
+                        <div class="form-group">
+                            <input id="distance" name="distance" type="number" class="form-control" placeholder="Search Radius" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary search">Search</button>
+                        <br>
+                        <br>
+                        <input type="text" name="latitude" id="lat" value="" style="display:none">
+                        <input type="text" name="longitude" id="lng" value="" style="display:none">
+                    </form>
+                </div> {{-- medicineForm --}}
+            </div> {{-- medicineForm --}}
+        </div> {{-- row --}}
+    </div> {{-- Container --}}
+</div> {{-- Wrapper --}} @endsection @section('script') {{--
+<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script> --}}
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb86GIW2pKc-uVB8LdJrP_YKsYj7LedUo">
+</script>
 
-    </div>
-</div>
-
-</div>
-@endsection @section('script')
 <script>
-    var latitude = document.getElementById("latitude");
-    var longitude = document.getElementById("longitude");
-
-    $(document).ready(function(){
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(showPosition);
-        // } else {
-        //     x.innerHTML = "Geolocation is not supported by this browser.";
-        // }
-         checkLatLongObtained();
-    $('#latitude, #longitude').change(checkLatLongObtained);
+    $(document).ready(function () {
+        $('.medicineForm').hide();
     });
 
-    // function showPosition(position) {
-    //     latitude.value = position.coords.latitude;
-    //     longitude.value = position.coords.longitude;
-    // }
 
-
-    function checkLatLongObtained(){
-    if ($('#latitude').val().length   >   0   &&
-        $('#longitude').val().length  >   0) {
-        $("input[type=submit]").prop("disabled", false);
-    }
-    else {
-        $("input[type=submit]").prop("disabled", true);
-    }
+    function getLocation() {
+        if (navigator.geolocation) {
+            var x = navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
     }
 
-    // Show Div
-    function showDiv(selectedOne) {
-        $('.showForm').each(function (index) {
-            if ($(this).attr("id") == selectedOne) {
-                $(this).toggle(200);
-                // if (selectedOne == 'detectLocation') {
-                //     getLocation();
-                // }
-            } else {
-                $(this).hide(400);
+    function showPosition(position) {
+        $('#lat').val(position.coords.latitude);
+        $('#lng').val(position.coords.longitude);
+
+        var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+        var geocoder = new google.maps.Geocoder;
+        geocoder.geocode({
+            'latLng': latlng
+        }, function (results, status) {
+            if (status == google.maps.GeocoderStatus.OK) {
+                $('#address').val(results[0].formatted_address);
+            }
+        });
+        if ($('#lat').val() != "") {
+            $('.medicineForm').show();
+        }
+    }
+
+
+    function addressToCoOrdinates() {
+        var geocoder = new google.maps.Geocoder();
+        var address = jQuery('#address').val();
+
+        geocoder.geocode({
+            'address': address
+        }, function (results, status) {
+
+            if (status == google.maps.GeocoderStatus.OK) {
+                var latitude = results[0].geometry.location.lat();
+                var longitude = results[0].geometry.location.lng();
+                $('#lat').val(latitude);
+                $('#lng').val(longitude);
+                if ($('#lat').val() != "") {
+                    $('.medicineForm').show();
+                }
             }
         });
     }

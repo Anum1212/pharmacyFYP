@@ -68,14 +68,19 @@ class messageController extends Controller
     public function viewMessage($messageId)
     {
         $message = Message::find($messageId);
+        if(!empty($message)){
         $allPreviousEmails = Message::where('senderEmail', $message->senderEmail)->get();
         return view('admin.messages.replyMessage', compact('message', '$allPreviousEmails'));
+        }
+        else
+    return redirect()->action('messageController@viewAllMessages')->with('error', 'Message not found');
     }
 
     // |---------------------------------- viewAllMessagesOfSpecificSender ----------------------------------|
     public function viewAllMessagesOfSpecificSender($messageId)
     {
         $recipientData = Message::find($messageId); // visitor Message
+        if(!empty($recipientData)){
         $visitorPrevMessages = Message::where('senderEmail', $recipientData->senderEmail)->get();
         $adminResponses = Message::where('recipientEmail', $recipientData->senderEmail)->get();
         foreach ($visitorPrevMessages as $individualVisitorPrevMessage) {
@@ -86,6 +91,11 @@ class messageController extends Controller
         }
         return view('admin.messages.oldMessages', compact('visitorPrevMessage', 'adminResponse'));
     }
+
+    else
+    return redirect()->action('messageController@viewAllMessages')->with('error', 'Messages not found');
+}
+
 
     // |---------------------------------- replyMessage ----------------------------------|
     public function replyMessage(Request $req, $messageId)

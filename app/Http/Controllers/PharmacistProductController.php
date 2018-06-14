@@ -66,6 +66,8 @@ class PharmacistProductController extends Controller
         $newProduct->prescription = $req->prescription;
         $newProduct->price = $req->price;
         $newProduct->quantity = $req->quantity;
+        // $newProduct->status is set to 1 by default; see migration table
+
         $newProduct->save();
 
         return redirect('/pharmacist/viewProducts')->with('message', 'Product add successful');
@@ -83,7 +85,10 @@ class PharmacistProductController extends Controller
                 ['id', '=', $productId],
                 ['pharmacistId', '=', $userData->id],
              ])->first();
+        if(!empty($product))
         return view('pharmacist.productManagment.editProduct', compact('product'));
+    else
+    return redirect()->action('PharmacistProductController@viewProducts')->with('error', 'product# '.$productId.' not found');
     }
 
 
@@ -99,6 +104,7 @@ class PharmacistProductController extends Controller
         $product->prescription = $req->prescription;
         $product->price = $req->price;
         $product->quantity = $req->quantity;
+        // $product->status is set to 1 by default; see migration table
         $product->save();
 
         return redirect('/pharmacist/viewProducts')->with('message', 'Edit successful');
@@ -111,7 +117,8 @@ class PharmacistProductController extends Controller
     public function deleteProduct($productId)
     {
         $deleteRecord = Pharmacistproduct::find($productId);
-        $deleteRecord->delete();
+        $deleteRecord->status = '0';
+        $deleteRecord->save();
         return redirect('/pharmacist/viewProducts')->with('message', 'Delete successful');
     }
 }

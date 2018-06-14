@@ -33,6 +33,7 @@ class testController extends Controller {
     }
     
   public function index() {
-    echo 'this is a test controller for testing the new code befoore implimenting in actual code';
+    return view('email.sendVerificationEmailToUser');
+    // echo 'this is a test controller for testing the new code befoore implimenting in actual code';
   }
 }

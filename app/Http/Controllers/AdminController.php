@@ -66,6 +66,7 @@ class AdminController extends Controller
     public function viewSpecificOrder($orderId)
     {
         $order = Order::whereId($orderId)->first();
+        if(!empty($order)) {
         $customerDetails = User::whereId($order->userId)->first();
 
         $productDetails = [];
@@ -78,12 +79,17 @@ class AdminController extends Controller
         }
         return view('admin.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'customerDetails'));
     }
+    else
+    return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
+}
 
     //  |---------------------------------- viewPharmacySpecificOrder ----------------------------------|
     public function viewPharmacySpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails = [];
         $order = Order::whereId($orderId)->first();
+        if(!empty($order)){
+
         $orderDetails = Orderitem::where([
             ['orderId', $orderId],
             ['pharmacistId', $pharmacyId],
@@ -97,6 +103,9 @@ class AdminController extends Controller
         // dd($orderDetails, $productDetails);
         return view('admin.orders.pharmacySpecificOrder', compact('order', 'orderDetails', 'productDetails', 'customerDetails'));
     }
+    else
+    return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
+}
 
     //  |---------------------------------- searchOrder ----------------------------------|
     public function searchOrder(Request $req)
@@ -117,28 +126,38 @@ class AdminController extends Controller
     public function viewSpecificCustomer($customerId)
     {
         $customer = User::find($customerId);
+        if(!empty($customer)){
         $orders = Order::where('userId', $customerId)->paginate(30);
         return view('admin.users.customerDetails', compact('customer', 'orders'));
     }
+    else
+    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+}
 
     //  |---------------------------------- blockCustomer ----------------------------------|
     public function blockCustomer($customerId)
     {
         $customer = User::find($customerId);
-
+        if(!empty($customer)){
         $customer->status = '0';
         $customer->save();
         return redirect('/admin/viewAllCustomers')->with('message', 'Block successful');
     }
+    else
+    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+}
 
     //  |---------------------------------- unBlockCustomer ----------------------------------|
     public function unBlockCustomer($customerId)
     {
         $customer = User::find($customerId);
-
+        if(!empty($customer)){
         $customer->status = '1';
         $customer->save();
-        return redirect('/admin/viewAllCustomers')->with('message', 'Unblock successful');
+        return redirect('/admin/viewAllCustomers')->with('message', 'UnBlock successful');
+    }
+    else
+    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
     }
 
     // |---------------------------------- viewAllPharmacies ----------------------------------|

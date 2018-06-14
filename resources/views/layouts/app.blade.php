@@ -96,8 +96,8 @@
             </div>
         </nav>
 <div style = "margin-top:25px">
-  @include('partials.message')
-  @include('partials.error')
+  @include('includes.message')
+  @include('includes.error')
 </div>
         @yield('body')
     </div>

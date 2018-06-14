@@ -12,9 +12,7 @@
 //contactUs --> save message to database
     Route::post('/contactUs', 'messageController@contactUs');
 //detectPharmacy --> find pharmacies in the customer defined radius
-    Route::post('/detectPharmacy/{latitude?}/{longitude?}', 'findPharmaciesProducts@findPharmacies');
-//convertAddress --> convert customer defined location to latitude longitude
-    Route::post('/convertAddress', 'findPharmaciesProducts@convertAddressToLatLong');
+    Route::post('/detectPharmacy', 'findPharmaciesProducts@findPharmacies');
 //pharmacyDetails --> show the details of a pharmacy
     Route::get('/pharmacyDetails/{pharmacyId}/{productId?}', 'findPharmaciesProducts@pharmacyDetails');
 //show Pharmacy Rating Page

@@ -218,6 +218,7 @@ class PharmacistController extends Controller
     {
         $productDetails =[];
         $order = Order::whereId($orderId)->first();
+            if(!empty($order)){
         $orderDetails = Orderitem::where([
             ['orderId', $orderId],
             ['pharmacistId', $pharmacyId]
@@ -238,6 +239,9 @@ class PharmacistController extends Controller
         else
         return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails', 'order'));
     }
+    else
+    return redirect()->action('PharmacistController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+}
 
 
 

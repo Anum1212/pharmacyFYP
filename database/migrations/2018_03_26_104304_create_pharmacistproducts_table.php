@@ -35,6 +35,10 @@ class CreatePharmacistproductsTable extends Migration
             $table->integer('prescription');
             $table->string('price');
             $table->integer('quantity');
+            // possible status type
+            // 0 -> product discontinued
+            // 1 -> product offered by pharmacist
+            $table->integer('status')->default('1');
         });
     }
 

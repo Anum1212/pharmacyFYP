@@ -1,0 +1,53 @@
+body{
+    font-family: "Montserrat", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.navbar {
+    border: 0;
+}
+
+.navbar input {
+    border: 0;
+    background: #444;
+    color: #fff;
+}
+
+.navbar input:focus {
+    color: #fff;
+    background: #555;
+    border: 1px solid #30a5ff;
+    outline: 0;
+    box-shadow: inset 0px 0px 0px 1px #30a5ff;
+}
+
+.navbar-custom {
+    background: #30A5FF;
+    height: 60px;
+}
+
+.navbar-header .navbar-brand {
+    color: #fff;
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 500;
+    height: 60px;
+    padding-top: 18px;
+}
+
+.navbar-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 12px;
+    margin-top: 10px;
+}
+
+.navbar-toggle:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.navbar-top-links li:last-child {
+    margin-right: 15px;
+}
+
+  .navbar-header {
+      width: 100%;
+  }
