@@ -37,7 +37,7 @@
 		<div class="profile-sidebar">
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name">
-					{{{ ucwords(trans(Auth::user()->name))  }}}
+					{{{ ucwords(trans(Auth::guard('pharmacist')->user()->name))  }}}
 				</div>
 			</div>
 			<div class="clear"></div>

@@ -6,8 +6,6 @@
 @section('style')
 @endsection
 
-@section('panelHeading', 'panelHeadingHere')
-
 @section('body')
     cat
 @endsection

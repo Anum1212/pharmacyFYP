@@ -1,6 +1,4 @@
-@extends('layouts.adminDashboard') 
-
-@section('panelHeading', 'panelHeadingHere')
+@extends('layouts.adminDashboard')
 
 @section('searchBar')
 <form role="search" action="/admin/searchFile" method="get" role="search">

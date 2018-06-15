@@ -1,7 +1,5 @@
 @extends('layouts.adminDashboard')
 
-@section('panelHeading', 'panelHeadingHere') 
-
 @section('body')
 <div class="row">
   <div class="col-md-12">

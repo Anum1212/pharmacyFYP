@@ -8,8 +8,8 @@
     <title>Document</title>
     <link href="{{ asset('css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="{{asset('css/siteViewGeneral.css')}}"> 
-    <link rel="stylesheet" href="{{asset('css/siteViewNavBar.css')}}"> 
+    <link rel="stylesheet" href="{{asset('css/siteView/siteViewGeneral.css')}}"> 
+    <link rel="stylesheet" href="{{asset('css/siteView/siteViewNavBar.css')}}"> 
     
     @section('head') @show 
     @section('style') @show

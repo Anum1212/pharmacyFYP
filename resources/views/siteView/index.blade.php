@@ -1,4 +1,6 @@
-@extends('layouts.siteView') @section('style') @endsection @section('body')
+@extends('layouts.siteView')
+
+@section('body')
 
 <div class="wrapper">
     <div class="container">

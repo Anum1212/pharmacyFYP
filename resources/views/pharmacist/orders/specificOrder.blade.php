@@ -1,6 +1,4 @@
-@extends('layouts.pharmacistDashboard') 
-
-@section('panelHeading', 'panelHeadingHere')
+@extends('layouts.pharmacistDashboard')
 
 @section('body')
 <div class="row">

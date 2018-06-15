@@ -4,8 +4,6 @@
     <link href="{{ asset('css/map.css') }}" rel="stylesheet">
 @endsection
 
-@section('panelHeading', 'panelHeadingHere') 
-
 @section('body')
 <div class="row">
     <div class="col-md-12">

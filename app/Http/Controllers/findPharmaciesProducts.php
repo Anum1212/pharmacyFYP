@@ -32,7 +32,7 @@ class findPharmaciesProducts extends Controller
 
 //  |---------------------------------- findPharmacies ----------------------------------|
     // find pharmacies within the specified distance
-    public function findPharmacies(Request $req, $lat = null, $lng = null)
+    public function findPharmacies(Request $req)
     {
             $latitude = $req->latitude;
             $longitude = $req->longitude;
