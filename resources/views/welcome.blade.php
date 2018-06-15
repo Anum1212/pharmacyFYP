@@ -1,279 +1,367 @@
-<!DOCTYPE html>
-<html lang="{{ config('app.locale') }}">
+@extends('layouts.customerDashboard')
 
-<head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('customHeaderIncludes')
+<script src="{{asset('customFiles/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('customFiles/js/dataTables.bootstrap4.min.js')}}"></script>
+<script src="{{asset('customFiles/js/bootstrap-confirmation.min.js')}}"></script>
+<link rel="stylesheet" href="{{asset('customFiles/css/dataTables.bootstrap4.min.css')}}">
+<link rel="stylesheet" href="{{asset('customFiles/css/custom_app.css')}}">
+<style>
+div.dataTables_wrapper div.dataTables_length label {
+  display:none;
+}
+div.dataTables_wrapper div.dataTables_filter input{
+  display:none;
+}
+div.dataTables_wrapper div.dataTables_filter label{
+    display:none;
+}
 
-  <!-- CSRF Token -->
-  <meta name="csrf-token" content="{{ csrf_token() }}">
+</style>
+<script type="text/javascript">
+  $(document).ready(function() {
+    var quantitiy=0;
+    //e.preventDefault();
+   $('.quantity-right-plus').click(function(e){
+        
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        
+        // If is not undefined
+            
+            $('#quantity').val(quantity + 10);
 
-  <title>{{ config('app.name', 'Laravel') }}</title>
+          
+            // Increment
+        
+    });
 
-  <!-- Styles -->
+     $('.quantity-left-minus').click(function(e){
+        // Stop acting like a button
+       // e.preventDefault();
+        // Get the field name
+        var quantity = parseInt($('#quantity').val());
+        
+        // If is not undefined
+      
+            // Increment
+            if(quantity>0){
+            $('#quantity').val(quantity - 10);
+            }
+    });
+    // $.noConflict();
+    $.ajaxSetup({
+      headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
+    });
 
+    
+    
+  });
+  
+function fetchMediDetails(data)
+{
+     // var data=$("#MediName").val();
+     console.log(data);
+     window.location.href="medicneDetails?id="+data+"";
+     /*data="panadol";
+      $.getJSON("https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search?terms="+data+" &ef=STRENGTHS_AND_FORMS", function(data) {
+   console.log(data[1][0]);
+     console.log(data[2].STRENGTHS_AND_FORMS[0][0]);
+    }); */
+  /* ;*/ // or alert($(this).attr('id'));
+  /*  $("#action").val("Disapprove");
+    var form =$('#editUsers');
+    form.submit();*/
+}
+function getMedicineInformations(data)
+{
 
-  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
-    crossorigin="anonymous">
+  window.location.href="getMedicineInformations?id="+data+"";
+}
+function getVal()
+{
+  // e.preventDefault();
+  console.log($("#pref-perpage").val());
+  console.log($("#search").val());
+  console.log($("#pref-orderby").val());
+  /*if($("input:radio[name='optradio1']").is(":checked")) {
+         //write your code 
+         console.log($("#optradio1").val());        
+}
+else if($("input:radio[name='optradio2']").is(":checked"))
+{
+console.log($("#optradio1").val());
+}
+else
+{
+  alert();
+}*/
+  
+if($('#optradio1')[0].checked) {
+     console.log($("#optradio1").val());
+}
+else if($('#optradio2')[0].checked) {
+    console.log($("#optradio2").val());
+} 
+else
+{
+  alert("kindly select generic or brand");
+}
 
-  <style>
-    /* SLIDE */
+}
+//quantity button
 
-    .btnSlide.btnBlueGreen {
-      background: 0;
-    }
-
-    .btnSlide.btnBlueGreen .top {
-      background: #00AE68;
-    }
-
-    .btnSlide.btnOrange .top {
-      background: #FFAA40;
-    }
-
-    .btnSlide.btnPurple .top {
-      background: #A74982;
-    }
-
-    /* for mobile display */
-
-    @media screen and (max-width:600px) {
-      .button {
-        margin-bottom: 100px;
+function getMedicineDetails(){
+  //$('#patientCategory').empty();
+ if ( ! $.fn.DataTable.isDataTable( '#patientCategory' ) )
+ {
+  var table = $('#patientCategory').DataTable({
+      responsive: true,
+      "pagingType": "full_numbers",
+      "lengthMenu": [5, 7, 10, 25, 50, 75, 75, 100],
+      "pageLength": 10,
+      "language": {
+        "lengthMenu": "Display _MENU_ Records Per Page",
+        "zeroRecords": "Nothing Found - Sorry",
+      // "info": "Showing Page _PAGE_ of _PAGES_",
+      "infoEmpty": "No Records Available",
+      "infoFiltered": "(Filtered From _MAX_ Total Records)"
+    },
+    "processing": true
+  });
+}
+else
+{
+  var table = $('#patientCategory').DataTable();
+  table
+    .clear()
+    .draw();
+}
+//table.empty();
+var search=$("#search").val();
+/*if(search.length==0)
+{
+  alert("provide two keywords for search");
+  return false;
+}*/
+    $.ajax({
+      type: "GET",
+      url: "fetchMedicineName",
+      dataType: "json",
+      cache:false,
+      data:{ search : search},
+      success: function(data) 
+      {
+        table
+    .clear()
+    .draw();
+        console.log(data);
+        var size=data.length;
+        for(var i = 0; i <size; i++) 
+        {
+          var row = $('<tr>')
+          .append($('<td>').html(data[i].id))
+          .append($('<td>').html(data[i].brandName))
+          .append($('<td>').html(data[i].genericName))
+          .append('<td><div style="display:inline"><button type="button" class="btn btn-primary" style="margin-right:7px" id="View" onclick=" fetchMediDetails('+data[i].id+')">Types</button><button type="button" class="btn btn-warning"  style="margin-right:7px" onclick=" getMedicineInformations('+data[i].id+')">Guidance</button><button type="button" class="btn btn-success"   onclick="searchMedicine('+data[i].id+')"  data-toggle="confirmation" data-placement="top" >Search</button></div><input id="delId" value='+data[i].id+' style="display:none"></input><input id="MediName" value='+data[i].name+' style="display:none"></input></td>')  
+        table.row.add(row);
+          // t .draw() is used to remove the msg no data available message 
+       table.draw();
+          $('#patientCategory tbody').prepend(row);
+        
+        }
       }
-
-      /* button outer */
-      .button .top {
-        font-weight: 600;
-        text-align: center;
-        line-height: 25px;
-        color: #FFF;
-        border-radius: 5px;
-        transition: all 0.2s;
-        margin-bottom: 100px;
-        padding-top: 10px;
-      }
-
-      .button .top i {
-        font-size: 2em;
-      }
-
-      /* button inner */
-      .button .bottom {
-        font-weight: 600;
-        text-align: center;
-        line-height: 50px;
-        color: #FFF;
-        border-radius: 5px;
-        transition: all 0.2s;
-        margin-bottom: 100px;
-      }
+    });
     }
+</script>
+@endsection
+@section('content')
 
-    @media screen and (min-width:601px) {
-      .button .top {
-        font-weight: 600;
-        text-align: center;
-        line-height: 25px;
-        color: #FFF;
-        border-radius: 5px;
-        transition: all 0.2s;
-        padding-top: 10px;
-      }
 
-      .button .top i {
-        font-size: 3em;
-      }
 
-      .button .bottom {
-        font-weight: 600;
-        text-align: center;
-        line-height: 50px;
-        color: #FFF;
-        border-radius: 5px;
-        transition: all 0.2s;
-      }
+
+<script>
+//var x = document.getElementById("demo");
+window.onload=getLocation();
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else { 
+      //  x.innerHTML = "Geolocation is not supported by this browser.";
+      alert("Geolocation is not supported by this browser");
     }
+}
+
+function showPosition(position) {
+    //x.innerHTML = "Latitude: " + position.coords.latitude + 
+    "<br>Longitude: " + position.coords.longitude;
+    $('#lat').val(position.coords.latitude);
+     $('#lon').val( position.coords.longitude);
+}
+</script>
+
+<div class="container">
+  <div class="row">
+    @include('partials.message')
+     @include('error')
+    {{-- <a href="patientCategory/create" class="btn btn-primary pull-right"> Add New Category</a> --}}
+  <h3>Distance <strong>/Km</strong></h3>
+    <div class="col-lg-2 " >
+                                        <div class="input-group  ">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                                          <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </span>
+                                    <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+
+    <div class="col-md-12">
+      <h2>Medicine Category</h2>
+        <div class="panel panel-default">
+            <div class="panel-body">
+     <form class="form-inline" role="form">
+                <div class="form-group">
+                  <label class="filter-col" style="margin-right:0;" for="pref-perpage">Categories Per Page:</label>
+                  <select id="pref-perpage" class="form-control">
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option selected="selected" value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="40">40</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="300">300</option>
+                    <option value="400">400</option>
+                    <option value="500">500</option>
+                    <option value="1000">1000</option>
+                  </select>                                
+                </div> <!-- form group [rows] -->
+                <div class="form-group">
+                  <label class="filter-col" style="margin-right:0;" for="pref-orderby">Filter By:</label>
+                  <select id="pref-orderby" class="form-control">
+                    <option val="1">Discount</option>
+                    <option val="2">Location</option>
+                    <option val="3">Amount</option>
+                  </select>                                
+                </div> <!-- form group [order by] --> 
+                <div class="form-group">
+                  <label class="filter-col" style="margin-right:0;" for="pref-search" >Search:</label>
+                  <input type="text" class="form-control input-sm" id="search"  placeholder="Search here" onkeypress="getMedicineDetails()" >
+                </div><!-- form group [search] -->
 
 
-    .btnSlide .top {
-      position: absolute;
-      top: 0px;
-      left: 0;
-      width: 120px;
-      height: 85px;
-      background: #00AE68;
-      z-index: 10;
-      transition: all 0.2s;
-      border-radius: 5px;
-    }
+                            <!-- <button type="submit" class="btn btn-danger filter-col" >
+                                <span class="glyphicon glyphicon-search"></span> Search
+                              </button>  --> 
+                              <form >
+ {{csrf_field()}}
+                                <label class="radio-inline">
+                                  <input type="radio" name="optradio" id="optradio1" value="a"><b>By Name</b>
+                                </label>
+                                <label class="radio-inline">
+                                  <input type="radio" name="optradio" id="optradio2" value="b"><b>By Generic Name</b>
+                                </label>
+                                <button type="button" class="btn btn-danger filter-col" onclick="getVal()"   >
+                                 Search
+                                </button> 
+                              </form>
+                              
+                        </div>
+                            </div>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>    
+              </div>
+          </div>
+      <form style=" display: inline-block;" method="post" action="" id="patientCategoryDel">
+        {{csrf_field()}}
+        {{method_field('DELETE')}}
+      </form>
+      <table class="table table-striped" id="patientCategory">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Generic</th>
+            <th>Action</th>
 
-    .btnSlide:hover .top {
-      top: 100px;
-    }
-
-    .btnSlide .bottom {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 120px;
-      height: 100px;
-      color: #000;
-      z-index: 5;
-      border-radius: 5px;
-    }
-  </style>
-
-  <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-
-</head>
-
-<body>
-  <nav class="navbar navbar-default navbar-static-top">
-    <div class="container">
-      <div class="navbar-header">
-
-        <!-- Collapsed Hamburger -->
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-          <span class="sr-only">Toggle Navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-
-        <!-- Branding Image -->
-        <a class="navbar-brand" href="{{ url('/') }}">
-          {{ config('app.name', 'Pharmacy') }}
-        </a>
-      </div>
-
-      <div class="collapse navbar-collapse" id="app-navbar-collapse">
-        <!-- Left Side Of Navbar -->
-        <ul class="nav navbar-nav">
-          &nbsp;
-        </ul>
-
-        <!-- Right Side Of Navbar -->
-        <ul class="nav navbar-nav navbar-right">
-
-          {{-- in final verion remove from here --}} @if (Auth::user())
-          <li>
-            <a href="/ratePharmacy">Rate Pharmacy</a>
-          </li>
-          @endif
-          <!-- Authentication Links -->
-          @if (Auth::guest())
-          <!-- Collect the nav links, forms, and other content for toggling -->
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Login
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="{{ route('login') }}">As User</a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li>
-                  <a href="{{ route('pharmacist.login') }}">As Pharmacist</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav">
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Register
-                <span class="caret"></span>
-              </a>
-              <ul class="dropdown-menu">
-                <li>
-                  <a href="{{ route('register') }}">As User</a>
-                </li>
-                <li role="separator" class="divider"></li>
-                <li>
-                  <a href="{{ route('pharmacist.register') }}">As Pharmacist</a>
-                </li>
-              </ul>
-            </li>
-          </ul>
-          @else
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-              {{ Auth::user()->name }}
-              <span class="caret"></span>
-            </a>
-
-            <ul class="dropdown-menu" role="menu">
-              <li>
-                <a href="{{ route('logout') }}" onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                  Logout
-                </a>
-
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                  {{ csrf_field() }}
-                </form>
-              </li>
-            </ul>
-          </li>
-          @endif
-        </ul>
-      </div>
+          </tr>
+        </thead>
+      </table>
     </div>
-  </nav>
-
-
-  <div style="margin-top:25px">
-    @include('partials.message') @include('partials.error')
   </div>
-
-  <div class="col-lg-10 col-lg-offset-2 col-md-10 col-md-offset-2 col-sm-10 col-sm-offset-2 col-xs-10 col-xs-offset-2">
-    {{-- Admin Div --}}
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnBlueGreen">
-      <span class="top">
-        <i class="fa fa-cog"></i>
-        <br /> Admin
-
-      </span>
-      <div class="bottom">
-        <a href="{{ route('admin.login') }}">Login</a>
-      </div>
-    </div>
-
-    {{-- Pharmacist Div --}}
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnOrange">
-      <span class="top">
-        <i class="fa fa-user-md"></i>
-        <br /> Pharmacist
-
-      </span>
-      <div class="bottom">
-        <a href="{{ route('pharmacist.login') }}">Login</a>
-        <br>
-        <a href="{{ route('pharmacist.register') }}">Register</a>
-      </div>
-    </div>
-
-    {{-- User div --}}
-    <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12 button btnSlide btnPurple">
-      <span class="top">
-        <i class="fa fa-user"></i>
-        <br /> User
-
-      </span>
-      <div class="bottom">
-        <a href="{{ route('login') }}">Login</a>
-        <br>
-        <a href="{{ route('register') }}">Register</a>
-      </div>
-    </div>
-  </div>
-
-
-
-  <!-- Scripts -->
-  <script src="{{ asset('js/app.js') }}"></script>
-</body>
-
-</html>
+</div>
+<form name="searchMedicneForm" id="searchMedicneForm"  method="post" action="searchAskMed" />
+{{ csrf_field() }}
+<input type="hidden" name="medId" id="medId" />
+<input type="hidden" name="distance" id="distance" />
+<input type="hidden" name="lat" id="lat" />
+<input type="hidden" name="lon" id="lon" />
+</form>
+<script>
+   function ConfirmDelete()
+    {
+      var x = confirm("Are you sure you want to delete?");
+      if (x)
+         delOperation();
+      else
+        return ("False");
+    }
+/*function del()
+{
+  console.log("call");
+  $('[data-toggle=confirmation]').confirmation({
+    title: 'Are you sure to delete record??',
+    rootSelector: '[data-toggle=confirmation]',
+    btnOkIcon: '',
+    btnOkClass: 'btn btn-danger',
+    btnCancelIcon: '',
+    btnCancelClass: 'btn btn-success',
+    onConfirm: function() {
+      delOperation();
+    },
+    onCancel: function() {
+      console.log('Deleted rejected');
+    }
+  }); 
+}*/
+function searchMedicine(data)
+{
+ // alert(data);
+  $('#medId').val(data);
+  $('#distance').val($('#quantity').val());
+  var form =$('#searchMedicneForm');
+  //form.attr('action','patientCategory/id='+data+'&''distance='+$('#quantity').val()+'');
+  form.submit();
+  //alert($('#quantity').val());
+  //alert(data);
+}
+function delOperation()
+{
+  var Id=$('#delId').val();
+  var form =$('#patientCategoryDel');
+  form.attr('action','patientCategory/'+Id+'');
+  form.submit();
+}
+</script> 
+@endsection

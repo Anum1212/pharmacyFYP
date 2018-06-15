@@ -1,4 +1,4 @@
-@extends('layouts.auth') 
+@extends('layouts.authCustomer') 
 
 @section('tabTitle', 'Login') 
 

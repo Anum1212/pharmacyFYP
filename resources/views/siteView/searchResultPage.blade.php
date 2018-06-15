@@ -50,17 +50,21 @@
                         <p class="title">Dosage: {{$product->dosage}} mg</p>
                         @else
                         <p class="title">Dosage: {{$product->dosage}} ml</p>
-                        @endif @foreach($nearByPharmacies as $nearByPharmacy) @if($product->pharmacistId == $nearByPharmacy->id)
+                        @endif 
+                        {{-- @foreach($nearByPharmacies as $nearByPharmacy) @if($product->pharmacistId == $nearByPharmacy->id)
                         <p class="title">Sold By:
                                 <a href="/pharmacyDetails/{{$nearByPharmacy->id}}/{{$product->id}}">{{$nearByPharmacy->pharmacyName}} </a>
                         </p>
-                        @endif @if($product->prescription=='1')
+                        @endif
+                        @endforeach
+                        --}}
+                         @if($product->prescription=='1')
                         <!-- 0 = prescription not required -->
                         <!-- 1 = prescription required -->
                         <p class="title">
                                 <span style="color:red"> Prescription Required </span>
                         </p>
-                        @endif @endforeach
+                        @endif
                         <div class="row">
 
                                 <div class="col-lg-12 price">
@@ -69,7 +73,7 @@
                                         </h3>
                                 </div>
                                 <div class="col-lg-12">
-                                        <a href="/addToCart/{{$product->id}}" class="btn btn-success btn-product" style="width: 100%">
+                                <a href="/addToCart/{{$product->id}}/{{$product->productSource}}" class="btn btn-success btn-product" style="width: 100%">
                                                 <i class="fa fa-cart-plus"></i> Add to cart</a>
 
                                 </div>

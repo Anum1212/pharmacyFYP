@@ -3,6 +3,13 @@
 // |---------------------------------- Test Routes (for testing purposes) ----------------------------------|
     Route::get('/test', 'testController@index');
     Route::get('/', 'testController@allRoutes');
+    Route::get('/search', function (/*Geocoder $geocoder*/) {
+    return view('search');});
+    Route::get('/fetchMedicineName','findPharmaciesProducts@fetchMedicineName');
+    Route::post('searchAskMed','findPharmaciesProducts@searchAskMed');
+    Route::get('/chatView','testController@chat');
+    Route::get('getMessages','testController@getMessages');
+    Route::get('storeChatData','testController@storeChatData');
 
 
 
@@ -24,7 +31,7 @@
 
 // |---------------------------------- Cart Managment Routes ----------------------------------|
 // addToCart --> add item to cart
-    Route::get('/addToCart/{productId}', 'cartController@addToCart');
+    Route::get('/addToCart/{productId}/{productSource}', 'cartController@addToCart');
 // removeFromCart --> remove item from cart
     Route:: get('/removeFromCart/{product}', 'cartController@remove');
 // viewCart --> view items present in the cart
@@ -212,6 +219,6 @@
 
 
 // *************** ROLE MANAGEMENT ROUTES(trash) ***************
-// Route::get('/roles', function () {
-//     return view('welcome'); // *** change page name in future ***
-// });
+Route::get('/roles', function () {
+    return view('welcomeTrash'); // *** change page name in future ***
+});

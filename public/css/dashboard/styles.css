@@ -193,21 +193,14 @@ input.form-control {
 
 .dropdown-messages {
   border: 1px solid #fff;
-  width: 360px;
+  text-align: center;
   background: rgba(255, 255, 255, 0.9);
   color: #444;
   font-size: 0.9em;
 }
 
-.dropdown-messages img {
-  margin: 5px 10px;
-  float: left;
-}
-
 .dropdown-messages .message-body {
   margin: 5px;
-  float: left;
-  width: 280px;
 }
 
 .dropdown small {

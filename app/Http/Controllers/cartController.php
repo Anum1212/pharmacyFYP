@@ -41,10 +41,19 @@ class cartController extends Controller
 
 
     // |---------------------------------- addToCart ----------------------------------|
-    public function addToCart($productId)
+    public function addToCart($productId, $productSource)
     {
-        $productDetails = Pharmacistproduct::whereId($productId)->first();
+        if($productSource == 1)
+        {
+            $productDetails = Pharmacistproduct::whereId($productId)->first();
         $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
+        }
+
+        if($productSource == 2)
+        {
+            echo 'under development';
+        }
+        
         return redirect('/viewCart'); // change in future
     }
 

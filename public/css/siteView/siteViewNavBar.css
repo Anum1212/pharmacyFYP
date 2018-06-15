@@ -6,6 +6,7 @@ body{
     border: 0;
 }
 
+
 .navbar input {
     border: 0;
     background: #444;
@@ -51,3 +52,79 @@ body{
   .navbar-header {
       width: 100%;
   }
+
+  .dropdown {
+      background: rgba(255, 255, 255, 0.1);
+      float: left;
+      margin: 10px 8px;
+      padding: 0px;
+      border-radius: 4px;
+  }
+
+  .dropdown a.dropdown-toggle {
+      color: #fff;
+      height: 40px;
+      width: 40px;
+      padding-top: 11px;
+      padding-left: 9px;
+  }
+
+  .dropdown:hover {
+      color: #fff;
+      background: rgba(255, 255, 255, 0.2);
+  }
+
+  .dropdown .label {
+      top: -4px;
+      left: 22px;
+      padding-top: 4px;
+      padding-bottom: 4px;
+      position: absolute;
+      border-radius: 9999px;
+  }
+.dropdown-messages {
+    border: 1px solid #fff;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.9);
+    color: #444;
+    font-size: 0.9em;
+}
+
+.dropdown-messages .message-body {
+    margin: 5px;
+}
+
+.dropdown small {
+    color: #999;
+}
+
+.dropdown em {
+    margin: 0 5px;
+}
+
+.dropdown-menu>li>a {
+    padding: 5px 10px;
+}
+
+.dropdown-menu li .message-body a {
+    color: #444;
+}
+
+.dropdown-menu li a:hover {
+    color: #30a5ff;
+    text-decoration: none;
+    background: none;
+}
+
+.divider,
+.clear {
+    clear: both;
+}
+
+.dropdown-alerts {
+    border: 1px solid #fff;
+    width: 260px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #444;
+    font-size: 0.9em;
+}

@@ -1,10 +1,11 @@
-@extends('layouts.siteView')
+@extends('layouts.authCustomer') 
+
+@section('tabTitle', 'Reset Password') 
 
 @section('body')
-<div class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <div class="panel panel-default">
+<div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <div class="fullPage panel panel-default">
                 <div class="panel-heading">Reset Password</div>
 
                 <div class="panel-body">
@@ -69,8 +70,6 @@
                         </div>
                     </form>
                 </div>
-            </div>
         </div>
     </div>
-</div>
-@endsection
+    @endsection

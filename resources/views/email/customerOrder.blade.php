@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -237,14 +236,14 @@
       <div class="inv-note" style="font-weight: 400;font-style: italic;color: #333;line-height: 140%;padding: 0 5px 20px 5px;border-bottom: 1px solid #eee;margin-bottom: 10px;">
         Hi
         <b>{{$recipientData->name}}</b>, the following is an invoice for
-        <b>Order# {{$order->id}}</b>. It's been a pleasure working with you.
+        <b>Order# {{$order->id}}</b>. Here are the customer details.
       </div>
+      
       <div class="inv-header" style="margin: 30px 5px;vertical-align: top;">
         <div class="inv-date" style="margin-right: 5%;display: inline-block;width: 45%;">
-          <b>Delivery Address </b>{{$recipientData->address}} {{$recipientData->society}}, {{$recipientData->city}}
-          <br>
-          <b>Order Date </b>{{date_format($order->created_at,"d/m/Y")}}
-          <br>
+        <b>Name </b> {{$customerDetails->name}}<br>
+      <b>Contact </b> {{$customerDetails->contact}}<br>
+      <b>Delivery Address </b> {{$customerDetails->address}}, {{$customerDetails->society}}, {{$customerDetails->city}},<br>
         </div>
       </div>
       <table class="inv-table" style="width: 100%;border-spacing: 0;border-collapse: collapse;">
@@ -258,7 +257,8 @@
           </tr>
         </thead>
         <tbody>
-          @for($i=0; $i<count($product); $i++) <tr>
+          @for($i=0; $i<count($product); $i++) 
+          @if($product[$i]->pharmacistId == $recipientData->id)<tr>
             <td class="u-left" style="padding: 5px;text-align: left;">{{$product[$i]->name}}</td>
             @if($product[$i]->type=='1')
             <!-- 1 = Tablet -->
@@ -275,36 +275,21 @@
             @elseif($product[$i]->type=='5')
             <!-- 5 = Drops -->
             <td class="left" style="padding: 5px;">Drops</td>
-             @elseif($product[$i]->type=='6')
+                @elseif($product[$i]->type=='6')
               <!-- 6 = Injection -->
-              <td class="left" style="padding: 5px;">Injection</td>
+             <td class="left" style="padding: 5px;">Injection</td>
               @elseif($product[$i]->type=='7')
                 <!-- 7 = Cream -->
-                <td class="left" style="padding: 5px;">Cream</td>
+            <td class="left" style="padding: 5px;">Cream</td>
                 @endif
-                <td class="u-right">{{$product[$i]->price}}</td>
-                <td class="u-mid">{{$orderItems[$i]->quantity}}</td>
-                <td class="u-right">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
-                </tr>
+                <td class="u-right" style="padding: 5px;text-align: right;">{{$product[$i]->price}}</td>
+                <td class="u-mid" style="padding: 5px;text-align: center;">{{$orderItems[$i]->quantity}}</td>
+                <td class="u-right" style="padding: 5px;text-align: right;">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
+            </tr>
+            @endif
                 @endfor
-        <tfoot>
-          <tr>
-            <td style="padding: 5px;text-align: right;"></td>
-            <td colspan="2" class="total" style="padding: 5px;text-align: right;border-top: 1px solid #eee;">Subtotal</td>
-            <td class="total" style="padding: 5px;text-align: right;border-top: 1px solid #eee;">{{$order->cost}}</td>
-          </tr>
-          {{--
-          <tr>
-            <td style="padding: 5px;text-align: right;"></td>
-            <td colspan="2" style="padding: 5px;text-align: right;">Tax @ 13%</td>
-            <td style="padding: 5px;text-align: right;">61.56</td>
-          </tr> --}}
-          <tr>
-            <td style="padding: 5px;text-align: right;"></td>
-            <td colspan="2" class="total" style="padding: 5px;text-align: right;border-top: 1px solid #eee;">Total</td>
-            <td class="total" style="padding: 5px;text-align: right;border-top: 1px solid #eee;">{{$order->cost}} rs</td>
-          </tr>
-        </tfoot>
+        </tbody>
+ 
 
       </table></div>
       <br>

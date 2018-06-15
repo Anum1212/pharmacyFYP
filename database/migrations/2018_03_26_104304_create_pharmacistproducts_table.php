@@ -38,7 +38,12 @@ class CreatePharmacistproductsTable extends Migration
             // possible status type
             // 0 -> product discontinued
             // 1 -> product offered by pharmacist
-            $table->integer('status')->default('1');
+            $table->integer('status')->default('1');            
+            // possible productSource type
+            // 1 -> local website Storage
+            // 2 -> api
+            // 3 -> socket
+            $table->integer('productSource')->default('1');
         });
     }
 

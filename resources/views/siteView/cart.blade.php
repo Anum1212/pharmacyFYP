@@ -61,7 +61,7 @@
 									<td data-label="Subtotal">{{$row->total}}</td>
 									<td data-label="Remove">
 										<a href="{{'/removeFromCart/'.$row->rowId}}">
-											<i class="fas fa-trash-alt" style="color:red"></i>
+											<i class="fa fa-trash" style="color:red"></i>
 										</a>
 									</td>
 								</tr>

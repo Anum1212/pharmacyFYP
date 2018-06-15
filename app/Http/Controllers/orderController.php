@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Input;
 use App\File;
 use Auth;
 use App\User;
+use App\Pharmacist;
 use App\Pharmacistproduct;
 use App\Order;
 use App\Orderitem;
@@ -27,6 +28,7 @@ use App\Prescription;
 use Cart;
 use Mail;
 use App\Mail\invoice;
+use App\Mail\customerOrder;
 
 class orderController extends Controller
 {
@@ -155,7 +157,7 @@ class orderController extends Controller
                 $orderItem->save();
             }
 
-            Cart::destroy();
+            // Cart::destroy();
             return $this->generateInvoice($lastInsertId);
         } else {
             return redirect('/');
@@ -168,16 +170,41 @@ class orderController extends Controller
     public function generateInvoice($lastInsertId)
     {
         $product=[];
+        $allPharmacistId=[];
         $order = Order::whereId($lastInsertId)->first();
         $customerDetails = User::whereId($order->userId)->first();
 
-        $orderItems = Orderitem::where('orderId', $lastInsertId)->take(15)->get();
-        // dd($orderItems);
+        $orderItems = Orderitem::where('orderId', $lastInsertId)->get();
+        // $orderItems = Orderitem::where('orderId', $lastInsertId)->take(15)->get();
         foreach ($orderItems as $orderItem) {
             $productId = $orderItem->productId;
+            $allPharmacistId[] = $orderItem->pharmacistId;
             $product[] = Pharmacistproduct::whereId($productId)->first();
         }
+        
+        // to remove duplicates
+        $pharmacistId = array_unique($allPharmacistId);
+                // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
+        // index => value
+        // 0     =>   1
+        // 2     =>   3 
+        // 7     =>   9 
+        // to fix this we use array_values()
+        // which will give the result
+        // index => value
+        // 0     =>   1
+        // 1     =>   3 
+        // 2     =>   9
+        $arrangedPharmacistId = array_values($pharmacistId);
+
+        for ($i=0; $i<count($arrangedPharmacistId); $i++) {
+            $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
+        }
         Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
+
+        foreach($pharmacistId as $pharmacist){
+        Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
+        }
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }
 }

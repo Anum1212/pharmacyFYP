@@ -49,11 +49,228 @@ class findPharmaciesProducts extends Controller
       ['pharmacistId', '=', $nearByPharmacy->id],
       ['name', 'LIKE', '%'.$req->medicineSearched.'%'],
       ['status', '=', '1']
-      ])->paginate('2');
+      ])->paginate('30');
         }
-
+        // dd($searchedProducts);
         return view('siteView.searchResultPage', compact('searchedProducts', 'nearByPharmacies'));
     }
+
+
+
+//  |---------------------------------- fetchMedicineName ----------------------------------|
+    public  function fetchMedicineName(Request $request){
+        $data=DB::table('medicine_names')->where('brandName','like','%' . $_GET['search'].'%')->take(3)->get();
+        echo json_encode($data);
+}
+
+
+
+//  |---------------------------------- searchAskMed ----------------------------------|
+    public function searchAskMed(Request $request){
+        $array=array(
+        0 => 'http://keer.aua.net.pk/mediDetails',
+        1 => 'http://keer.aua.net.pk/mediDetails2'
+        );
+        $response=$this->multiRequest($array);
+        // get size of $response
+        $responseSize = sizeof($response);
+        // loop for json decoding
+        for($i=0; $i<$responseSize-1; $i++)
+        $searchedProduct[] = json_decode($response[$i]);
+        // converting to collection to match output result with findPharmacies method
+        $searchedProducts[] = collect($searchedProduct);
+        // dd($searchedProduct);
+        return view('siteView.searchResultPage', compact('searchedProducts'));
+}
+
+
+
+//  |---------------------------------- multiRequest ----------------------------------|
+    function multiRequest($data, $options = array()) {
+         // array of curl handles
+         $curly = array();
+         // data to be returned
+         $result = array();
+         // multi handle
+         $mh = curl_multi_init();
+         // loop through $data and create curl handles
+         // then add them to the multi-handle
+         foreach ($data as $id => $d) {
+
+        $curly[$id] = curl_init();
+
+        $url = (is_array($d) && !empty($d['url'])) ? $d['url'] : $d;
+        curl_setopt($curly[$id], CURLOPT_URL,            $url);
+        curl_setopt($curly[$id], CURLOPT_HEADER,         0);
+        curl_setopt($curly[$id], CURLOPT_RETURNTRANSFER, 1);
+
+        // post?
+        if (is_array($d)) {
+          if (!empty($d['post'])) {
+            curl_setopt($curly[$id], CURLOPT_POST,       1);
+            curl_setopt($curly[$id], CURLOPT_POSTFIELDS, $d['post']);
+          }
+        }
+    
+        // extra options?
+        if (!empty($options)) {
+          curl_setopt_array($curly[$id], $options);
+        }
+    
+        curl_multi_add_handle($mh, $curly[$id]);
+     }      
+
+        // execute the handles
+        $running = null;
+        do {
+          curl_multi_exec($mh, $running);
+        } while($running > 0);
+    
+    
+        // get content and remove handles
+        foreach($curly as $id => $c) {
+          $result[$id] = curl_multi_getcontent($c);
+          curl_multi_remove_handle($mh, $c);
+        }
+
+        // all done
+        curl_multi_close($mh);
+
+        return $result;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     //  |---------------------------------- pharmacyDetails ----------------------------------|
@@ -66,9 +283,9 @@ class findPharmaciesProducts extends Controller
         $orders=[];
 
         $selectedProduct = Pharmacistproduct::whereId($productId)->first();
-        $pharmacyProducts = Pharmacistproduct::where('pharmacistId', $pharmacyId)->paginate(15);
+        $pharmacyProducts = Pharmacistproduct::where('pharmacistId', $pharmacyId)->paginate(30);
 
-        $orderItems = Orderitem::where('pharmacistId', $pharmacyId)->orderBy('id', 'desc')->paginate(15);
+        $orderItems = Orderitem::where('pharmacistId', $pharmacyId)->orderBy('id', 'desc')->paginate(30);
         foreach ($orderItems as $orderItem) {
             $allOrderId[] = $orderItem->orderId;
         }
@@ -87,6 +304,7 @@ class findPharmaciesProducts extends Controller
         // 0     =>   1
         // 1     =>   3 
         // 2     =>   9
+
         $arrangedOrderId = array_values($orderId);
         for ($i=0; $i<count($arrangedOrderId); $i++) {
             $orders[$i] = Order::whereId($arrangedOrderId[$i])->first();
