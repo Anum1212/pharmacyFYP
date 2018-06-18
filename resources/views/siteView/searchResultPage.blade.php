@@ -1,7 +1,7 @@
 @extends('layouts.siteView') @section('body')
-<div class="wrapper">
+<div class="wrapper searchResultPageWrapper">
 @foreach($searchedProducts as $searchedProduct) @foreach($searchedProduct as $product)
-<div class="col-sm-6 col-lg-2 col-lg-offset-1">
+<div class="col-sm-6 col-lg-2">
         <div class="thumbnail">
                 @if($product->type=='1')
                 <!-- 1 = Tablet -->
@@ -80,6 +80,7 @@
                         </div>
                 </div>
         </div>
+</div>
 </div>
 
 @endforeach @endforeach @endsection

@@ -78,15 +78,15 @@
 									</tr>
 
 									<tr>
-										<td colspan="2">
+										{{-- <td colspan="2">
 											<a href="/" class="btn btn-warning btn-block">
 												<i class="fa fa-caret-left"></i> Continue Shopping</a>
-										</td>
+										</td> --}}
 										<td colspan="4">
 											<button type="submit" class="btn btn-info btn-block">
 												<i class="fa fa-refresh"></i> UpdateCart</button>
 										</td>
-										<td colspan="2">
+										<td colspan="4">
 											<a href="{{'/prescriptionUploadForm'}}" class="btn btn-success btn-block">Checkout
 												<i class="fa fa-caret-right"></i>
 											</a>

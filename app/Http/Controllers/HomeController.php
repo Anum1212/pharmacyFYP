@@ -28,6 +28,7 @@ use App\Pharmacist;
 use App\Pharmacistproduct;
 use App\Order;
 use App\Orderitem;
+use App\Rating;
 
 class HomeController extends Controller
 {
@@ -36,10 +37,12 @@ class HomeController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Request $request)
     {
+        $this->request = $request;
         $this->middleware('auth:web')->except(['viewSpecificOrder', 'resendVerificationEmail']);
         $this->middleware('userTypeAorC')->only(['viewSpecificOrder']);
+        $this->middleware('rateOrder');
     }
 
     /**
@@ -63,16 +66,21 @@ class HomeController extends Controller
     //  |---------------------------------- index ----------------------------------|
     public function index()
     {
-        return view('customer.customerDashboard');
+        $pharmacyRatings = $this->request->get('pharmacyRatings');
+        $orderId = $this->request->get('orderId');
+        return view('customer.customerDashboard', compact('pharmacyRatings', 'orderId'));
     }
+
 
 
     //  |---------------------------------- viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
+        $pharmacyRatings = $this->request->get('pharmacyRatings');
+        $orderId = $this->request->get('orderId');
         $totalOrders = Order::where('userId', Auth::user()->id)->count();
         $orders = Order::where('userId', Auth::user()->id)->paginate(30);
-        return view('customer.orders.allOrders', compact('orders', 'totalOrders'));
+        return view('customer.orders.allOrders', compact('orders', 'totalOrders', 'pharmacyRatings', 'orderId'));
     }
 
 
@@ -118,7 +126,9 @@ class HomeController extends Controller
     // |---------------------------------- contactUsForm ----------------------------------|
     public function contactUsForm()
     {
-        return view('customer.messageToAdminForm');
+        $pharmacyRatings = $this->request->get('pharmacyRatings');
+        $orderId = $this->request->get('orderId');
+        return view('customer.messageToAdminForm', compact('pharmacyRatings', 'orderId'));
     }
 
 
@@ -126,8 +136,10 @@ class HomeController extends Controller
     //  |---------------------------------- editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
+        $pharmacyRatings = $this->request->get('pharmacyRatings');
+        $orderId = $this->request->get('orderId');
         $customerDetails = User::whereId(Auth::user()->id)->first();
-        return view('customer.editCustomerDetails', compact('customerDetails'));
+        return view('customer.editCustomerDetails', compact('customerDetails', 'pharmacyRatings', 'orderId'));
     }
 
 
@@ -153,5 +165,48 @@ class HomeController extends Controller
         $customerDetails->save();
 
         return redirect('/dashboard')->with('message', 'Edit successful');
+    }
+
+
+
+    // |---------------------------------- ratePharmacy ----------------------------------|
+    public function ratePharmacy(Request $req)
+    {
+        $currentRatings = [];
+        $newCustomerRatings = [];
+        $loopRange = count($req->pharmacyId);
+        
+        for($i=0; $i<$loopRange; $i++){
+            $currentRatings[] = Rating::where('pharmacyId', $req->pharmacyId[$i])->first();
+            $newCustomerRatings[] = $req->rating[$i];
+        }
+        
+        $i = 0;
+        foreach($currentRatings as $currentRating){
+            // to convert the average back to total points
+            $totalRating = $currentRating->rating*$currentRating->noOfUserThatRated;
+            //adding 1 to old noOfUserThatRated to get new noOfUserThatRated
+            $currentRating->noOfUserThatRated = $currentRating->noOfUserThatRated+1;
+            // average formula (old total points + new user points)/ total number of people that rated
+            $currentRating->rating = ($totalRating+$newCustomerRatings[$i])/$currentRating->noOfUserThatRated;
+            // update rating
+            $currentRating->update();
+            $i++;
+        }
+        $order = Order::where([['userId', Auth::user()->id], ['ratingStatus', '1']])->first();
+        $order->ratingStatus = '2';
+        $order->update();
+    }
+    
+    
+    
+    // |---------------------------------- ratePharmacyLater ----------------------------------|
+    public function ratePharmacyLater()
+    {
+        $orderId = $this->request->get('orderId');
+        $changeStatusToLater = Order::find($orderId);
+        $changeStatusToLater->ratingStatus = '3';
+        $changeStatusToLater->update();
+        return redirect()->back();
     }
 }

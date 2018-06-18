@@ -27,6 +27,12 @@ class CreateOrdersTable extends Migration
             //     0 -> not required
             //     1 -> required
             $table->integer('prescription')->default('0');
+            // possible rating status
+            //     0 -> initial state (nothing happens)
+            //     1 -> rating requires (after 12 hours of order cron job changes rating status to 1 and rate product alert starts showing)
+            //     2 -> rating done
+            //     3 -> user doesn't want to rate
+            $table->integer('ratingStatus')->default('0');
         });
     }
 

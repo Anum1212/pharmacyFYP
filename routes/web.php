@@ -13,6 +13,12 @@
 
 
 
+// |---------------------------------- Cron Routes ----------------------------------|
+// changeStatus -> change order rating Status to 1 if diff b/w created_at and now > 12 hours
+    Route::get('/changeStatus', 'cronController@changeStatus');
+
+
+    
 // |---------------------------------- General Site Navigation Routes ----------------------------------|
 //index --> return site home page
     Route::get('/index', 'siteViewController@index');
@@ -22,10 +28,10 @@
     Route::post('/detectPharmacy', 'findPharmaciesProducts@findPharmacies');
 //pharmacyDetails --> show the details of a pharmacy
     Route::get('/pharmacyDetails/{pharmacyId}/{productId?}', 'findPharmaciesProducts@pharmacyDetails');
-//show Pharmacy Rating Page
-    Route::get('/ratePharmacy', 'ratingController@index');
 //update Pharmacy Rating
-    Route::post('/ratePharmacy/{pharmacyId}', 'ratingController@ratePharmacy');
+    Route::post('/ratePharmacy', 'HomeController@ratePharmacy');
+//mark Pharmacy Rating as later
+    Route::post('/ratePharmacyLater', 'HomeController@ratePharmacyLater');
 
 
 

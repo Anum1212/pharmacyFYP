@@ -71,7 +71,7 @@ class orderController extends Controller
 
 
 
-    // |---------------------------------- prescriptionUpload ----------------------------------|
+    // |---------------------------------- (checkout with) prescriptionUpload ----------------------------------|
     public function prescriptionUpload(Request $req)
     {
         $userId = Auth::user()->id;
@@ -175,7 +175,6 @@ class orderController extends Controller
         $customerDetails = User::whereId($order->userId)->first();
 
         $orderItems = Orderitem::where('orderId', $lastInsertId)->get();
-        // $orderItems = Orderitem::where('orderId', $lastInsertId)->take(15)->get();
         foreach ($orderItems as $orderItem) {
             $productId = $orderItem->productId;
             $allPharmacistId[] = $orderItem->pharmacistId;
@@ -200,11 +199,11 @@ class orderController extends Controller
         for ($i=0; $i<count($arrangedPharmacistId); $i++) {
             $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
         }
-        Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
+        // Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
 
-        foreach($pharmacistId as $pharmacist){
-        Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
-        }
+        // foreach($pharmacistId as $pharmacist){
+        // Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
+        // }
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }
 }

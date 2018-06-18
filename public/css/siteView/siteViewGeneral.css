@@ -6,6 +6,15 @@
 .medicineForm {
     margin-top: 60px;
 }
+
+
+/* -------------------------- Search Result Page --------------------------*/
+
+.thumbnail img{
+    height: 150px;
+    width: 150px;
+}
+
 /* -------------------------- Address Bar --------------------------*/
 #imaginary_container {
     margin-top: 20%;

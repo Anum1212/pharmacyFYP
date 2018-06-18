@@ -1,7 +1,7 @@
 
 
  @extends('layouts.customerDashboard')
-  @section('customHeaderIncludes')
+  @section('head')
    <link rel="stylesheet" href="{{asset('css/alertify.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/default.css')}}">
   <script src="{{asset('js/alertify.min.js')}}"></script>
@@ -153,7 +153,7 @@ var messages=$('#text').val();
 }
   </script>
 @endsection
-@section('content')
+@section('body')
 <div class="form-group">
 
 	 <div class="col-xs-4">
