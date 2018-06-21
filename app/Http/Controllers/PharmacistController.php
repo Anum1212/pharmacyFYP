@@ -19,6 +19,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Schema\Blueprint;
@@ -80,7 +81,8 @@ class PharmacistController extends Controller
         // if dataSource is NOT 0 it means user has provided an api or chose manual data entry
           // hence take pharamcist to dashboard
         } else {
-            return view('pharmacist.pharmacistDashboard', compact('userData'));
+              $medicines=DB::table('mostsearch')->select('name',DB::raw('count(name) as total'))->whereMonth('created_at','=', date('m'))->groupBy('name')->orderBy('total','DESC')->take(10)->get();
+            return view('pharmacist.pharmacistDashboard', compact('userData', 'medicines'));
         }
     }
 
@@ -92,7 +94,7 @@ class PharmacistController extends Controller
     public function storeProductsInTable()
     {
         $saveRecord = Pharmacist::find(Auth::user()->id);
-        $saveRecord->dataSource = '1';
+        $saveRecord->dataSource = '2';
         $saveRecord->save();
         return redirect()->action('PharmacistController@index')->with('message', 'You can now add products to our databse');
     }
@@ -142,8 +144,8 @@ class PharmacistController extends Controller
         else {
             $saveRecord = Pharmacist::find(Auth::user()->id);
 
-            //dataSource 2 means pharmacist provided api
-            $saveRecord->dataSource = '2';
+            //dataSource 1 means pharmacist provided api
+            $saveRecord->dataSource = '1';
 
             $saveRecord->dbAPI = $req->dbAPI;
             $saveRecord->save();
@@ -318,4 +320,14 @@ class PharmacistController extends Controller
     {
         return view('pharmacist.messageToAdminForm');
     }
+
+
+
+    //  |---------------------------------- 9) chat ----------------------------------|
+     public function chat(Request $request)
+        {                    //user names
+                      $data=DB::table('users')->get();
+                return view('pharmacist.chatView',compact('data'));
+            }
 }
+
