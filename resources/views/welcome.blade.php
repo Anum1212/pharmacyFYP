@@ -114,6 +114,7 @@ else
 //quantity button
 
 function getMedicineDetails(){
+  alert();
   //$('#patientCategory').empty();
  if ( ! $.fn.DataTable.isDataTable( '#patientCategory' ) )
  {

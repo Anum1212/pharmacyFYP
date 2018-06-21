@@ -207,3 +207,7 @@ class orderController extends Controller
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }
 }
+//API FOR SMS
+/*$response = Curl::to('http://sendpk.com/api/sms.php')
+                ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=>923134983849,'message'=>'Hey'])
+                ->post();*/

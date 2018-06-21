@@ -163,8 +163,9 @@ public function storeChatData(Request $request)
    if(Auth::check()){
    DB::insert('insert into  chat_records (pharmicistName,userName,senderName,message,created_at) values(?,?,?,?,?)',[$request->reciever,Auth()->user()->name,Auth()->user()->name,$request->message,new \dateTime]);
        //Remember to set your credentials below.
+   //dd($request);
        $id=DB::table('pharmacists')->where('name',$request->reciever)->get();
-      // dd($id);
+     //  dd($id);
        $id=$id[0]->id;
      $senderName=Auth()->user()->name;
      $reciever="pharmicist";
@@ -222,5 +223,38 @@ $content="msg";
 
         //Send a message to notify channel with an event name of notify-event
     $pusher->trigger('notify', 'notify-event', $message);  
+}
+public function storeSearhData(Request $request)
+{
+
+  if(isset($request->medId))
+  {
+$medicineName=DB::table('medicine_names')->select('brandName')->where('id',$request->medId)->get();
+$medicine=$medicineName[0]->brandName;
+  }
+  else
+  {
+$medicine=$request->name;
+  }
+  if(DB::table('mostsearch')->whereDate('created_at', '=', \Carbon\Carbon::today()->toDateString())->where('userId',1)->where('name',$medicine)->count()<4)
+    {
+// allow him rto store the data
+      DB::insert('insert into  mostsearch(userId,name,created_at) values(?,?,?)',[1,$medicine,\Carbon\Carbon::today()->toDateString()]);
+    }
+    else
+    {
+      // do not save record
+    }
+ /* dd(\Carbon\Carbon::today()->toDateString());*/
+  echo json_encode($request->medId);
+}
+public function displayMostSearchMedicines()
+{
+  $medicines=DB::table('mostsearch')->select('name',DB::raw('count(name) as total'))->whereMonth('created_at','=', date('m'))->groupBy('name')->orderBy('total','DESC')->take(10)->get();
+  //dd($medicines);
+  return view('graph',compact('medicines'));
+
+
+        
 }
 }

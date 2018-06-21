@@ -24,12 +24,24 @@ function ConfirmDelete() {
   }); 
 }*/
 function searchMedicine(data) {
-    // alert(data);
+     console.log(data);
+     alert(data);
+    //most search medicine call
+     $.ajax({
+        type: "GET",
+        url: "storeSearhData",
+        dataType: "json",
+        cache: false,
+        data: { medId: data },
+        success: function (data) {
+            console.log(data);
+        }
+    });
     $('#medId').val(data);
     $('#distance').val($('#quantity').val());
     var form = $('#searchMedicneForm');
     //form.attr('action','patientCategory/id='+data+'&''distance='+$('#quantity').val()+'');
-    form.submit();
+   /* form.submit();*/
     //alert($('#quantity').val());
     //alert(data);
 }

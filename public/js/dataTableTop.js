@@ -58,7 +58,19 @@ function getMedicineInformations(data) {
     window.location.href = "getMedicineInformations?id=" + data + "";
 }
 function getVal() {
+    var medicine=$('#search').val();
     // e.preventDefault();
+
+    $.ajax({
+        type: "GET",
+        url: "storeSearhData",
+        dataType: "json",
+        cache: false,
+        data: { name: medicine },
+        success: function (data) {
+            console.log(data);
+        }
+    });
     console.log($("#pref-perpage").val());
     console.log($("#search").val());
     console.log($("#pref-orderby").val());

@@ -92,7 +92,7 @@ class PharmacistController extends Controller
     public function storeProductsInTable()
     {
         $saveRecord = Pharmacist::find(Auth::user()->id);
-        $saveRecord->dataSource = '2';
+        $saveRecord->dataSource = '1';
         $saveRecord->save();
         return redirect()->action('PharmacistController@index')->with('message', 'You can now add products to our databse');
     }
@@ -142,8 +142,8 @@ class PharmacistController extends Controller
         else {
             $saveRecord = Pharmacist::find(Auth::user()->id);
 
-            //dataSource 1 means pharmacist provided api
-            $saveRecord->dataSource = '1';
+            //dataSource 2 means pharmacist provided api
+            $saveRecord->dataSource = '2';
 
             $saveRecord->dbAPI = $req->dbAPI;
             $saveRecord->save();

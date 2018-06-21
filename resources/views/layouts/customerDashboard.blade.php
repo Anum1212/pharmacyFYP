@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/dashboard/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/table.css') }}" rel="stylesheet"> @section('head') @show @section('style') @show
+    <link href="{{ asset('css/table.css') }}" rel="stylesheet">
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+      @section('head') @show @section('style') @show
 
 
     <!--Custom Font-->
@@ -68,6 +70,10 @@
                 <a href="/viewCart">
                     <em class="fa fa-shopping-cart">&nbsp;</em> Cart</a>
             </li>
+            <li class="{{{ (Request::is('chatView') ? 'active' : '') }}}">
+                <a href="/chatView">
+                    <em class="fa fa-shopping-cart">&nbsp;</em> Chat</a>
+            </li>
             <li class="{{{ (Request::is('contactUsForm') ? 'active' : '') }}}">
                 <a href="contactUsForm">
                     <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
@@ -100,7 +106,7 @@
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/custom.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/confirmDelete.js') }}"></script>
-
+@yield('script')
 {{-- trigger rating modal if customer rating is needed --}}
     @if(!empty($pharmacyRatings))
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">

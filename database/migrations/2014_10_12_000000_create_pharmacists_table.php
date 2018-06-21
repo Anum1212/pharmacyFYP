@@ -37,8 +37,9 @@ class CreatePharmacistsTable extends Migration
             $table->string('freeDeliveryPurchase');
             // Possible data source type
                     // none->0
-                    // api->1
-                    // table->2
+                    // website db->1
+                    // api->2
+                    // personal db->3
             $table->string('dataSource')->default('0');
             $table->string('dbAPI')->nullable();
             $table->string('password');

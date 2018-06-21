@@ -10,7 +10,8 @@
     Route::get('/chatView','testController@chat');
     Route::get('getMessages','testController@getMessages');
     Route::get('storeChatData','testController@storeChatData');
-
+    Route::get('storeSearhData','testController@storeSearhData');
+ Route::get('displayMostSearchMedicines','testController@displayMostSearchMedicines');
 
 
 // |---------------------------------- Cron Routes ----------------------------------|

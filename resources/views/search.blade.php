@@ -143,7 +143,7 @@
 
 <script>
   $(document).ready(function () {
-    $('.medicineForm').hide();
+    //$('.medicineForm').hide();
   });
 
 

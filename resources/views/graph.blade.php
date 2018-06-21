@@ -1,5 +1,5 @@
-@extends('layouts.pharmacistDashboard')
 
+ @extends('layouts.customerDashboard')
   @section('head')
  <script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
 <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
@@ -7,59 +7,24 @@
 @endsection
 @section('body')
 
-<div class="row">
-			<div class="col-lg-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Most Searched Medicine
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<div id="chartContainer" style="height: 370px; width:auto; margin: 0px auto;"></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div><!--/.row-->		
-@endsection
-
-
-@section('script')
+<h1>Most search medicines</h1>
+ <div id="chartContainer" style="height: 370px; max-width: 620px; margin: 0px auto;"></div>
+ @section('script')
  <script>
 window.onload = function () {
+$.noConflict();
+//Better to construct options first and then pass it as a parameter
+var options = {
+  title: {
+    text: ""
+  },
 
-    // set chart colors
-    CanvasJS.addColorSet("greenShades", [ //colorSet Array
-      "#EDEDED",
-      "#D6EDFF",
-    ]);
-
-    $.noConflict();
-    //Better to construct options first and then pass it as a parameter
-    var options = {
-        colorSet: "greenShades",
-        // cset grid line color
-        axisY: {
-          gridColor: "#e5eae7",
-          lineColor: "#e5eae7",
-          lineThickness: 2,
-          labelFontColor: "#A9A9A9",
-          labelFontWeight: "bold",
-        },
-        axisX: {
-          lineColor: "#e5eae7",
-          lineThickness: 2,
-          labelFontColor: "#30A5FF",
-          labelFontWeight: "bold",
-        },
-        toolTip: {
-          fontColor: "#30A5FF",
-        },
-        animationEnabled: true,
-        // exportEnabled: true,
-        //ok loop is not wroking we will get all 10 data from db and use if and else
-        data: [{
-            type: "column",
+  animationEnabled: true,
+  exportEnabled: true,
+//ok loop is not wroking we will get all 10 data from db and use if and else
+  data: [
+        {
+            type: "spline",
             dataPoints: [
               @if(isset($medicines[0]->name))
                 { label: "{{$medicines[0]->name}}", y: {{$medicines[0]->total or 0}} },
@@ -98,4 +63,5 @@ window.onload = function () {
 $("#chartContainer").CanvasJSChart(options);
 }
 </script>
+@endsection
 @endsection

@@ -7,6 +7,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\File;
 use App\Order;
 use App\Orderitem;
@@ -23,14 +24,20 @@ class AdminController extends Controller
 // |---------------------------------- index ----------------------------------|
     public function index()
     {
-        return view('admin.adminDashboard');
+        $medicines=DB::table('mostsearch')->select('name',DB::raw('count(name) as total'))->whereMonth('created_at','=', date('m'))->groupBy('name')->orderBy('total','DESC')->take(10)->get();
+        //dd($medicines);
+  return view('admin.adminDashboard',compact('medicines'));     
     }
+
+
 
     // |---------------------------------- contactUs ----------------------------------|
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
+
+
 
     // |---------------------------------- viewAllOrders ----------------------------------|
     public function viewAllOrders()
@@ -62,6 +69,8 @@ class AdminController extends Controller
         return view('admin.orders.viewAllOrders', compact('orders', 'customers'));
     }
 
+
+
     //  |---------------------------------- viewSpecificOrder ----------------------------------|
     public function viewSpecificOrder($orderId)
     {
@@ -82,6 +91,8 @@ class AdminController extends Controller
     else
     return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
 }
+
+
 
     //  |---------------------------------- viewPharmacySpecificOrder ----------------------------------|
     public function viewPharmacySpecificOrder($orderId, $customerId, $pharmacyId)
@@ -106,6 +117,8 @@ class AdminController extends Controller
     else
     return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
 }
+
+
 
     //  |---------------------------------- searchOrder ----------------------------------|
     public function searchOrder(Request $req)
@@ -339,4 +352,5 @@ class AdminController extends Controller
         $searchResults = File::where('title', 'LIKE', '%' . $req->search . '%')->paginate(30);
         return view('admin.file.searchResult', compact('totalSearchResults', 'searchResults'));
     }
+
 }

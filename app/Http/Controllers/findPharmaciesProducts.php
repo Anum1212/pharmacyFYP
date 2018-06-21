@@ -67,18 +67,32 @@ class findPharmaciesProducts extends Controller
 
 //  |---------------------------------- searchAskMed ----------------------------------|
     public function searchAskMed(Request $request){
-        $array=array(
-        0 => 'http://keer.aua.net.pk/mediDetails',
+         $array=array(
+        // 0 => 'http://127.0.0.1:8000/api/api1/getAllMedicines', for local host ignore
+
+        // ------------------------------------
+        // arham in routes ko use krna hai
+        // ------------------------------------
+        
+        // see keer web routes and controller further details of all methods
+        // to get all medicines
+        0 => 'http://keer.aua.net.pk/api1/getAllMedicines',
+        // // to get medicine by id
+        // 0 => 'http://keer.aua.net.pk/api1/getSpecificMedicineById',
+        // // to get medicine by name
+        // 0 => 'http://keer.aua.net.pk/api1/getSpecificMedicineByName',
+
         1 => 'http://keer.aua.net.pk/mediDetails2'
         );
+
         $response=$this->multiRequest($array);
         // get size of $response
         $responseSize = sizeof($response);
         // loop for json decoding
-        for($i=0; $i<$responseSize-1; $i++)
-        $searchedProduct[] = json_decode($response[$i]);
+        for($i=0; $i<$responseSize; $i++)
+        $searchedProducts[] = json_decode($response[$i]);
         // converting to collection to match output result with findPharmacies method
-        $searchedProducts[] = collect($searchedProduct);
+        // $searchedProducts[] = collect($searchedProduct);
         // dd($searchedProduct);
         return view('siteView.searchResultPage', compact('searchedProducts'));
 }
