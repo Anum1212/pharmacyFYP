@@ -1,56 +1,11 @@
-
-
- @extends('layouts.customerDashboard')
+@extends( Auth::check()  ?  'layouts.customerDashboard' : 'layouts.pharmacistDashboard' )
+{{-- @extends('layouts.customerDashboard') --}}
   @section('head')
    <link rel="stylesheet" href="{{asset('css/alertify.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/default.css')}}">
+  <link rel="stylesheet" href="{{asset('css/chat.css')}}">
   <script src="{{asset('js/alertify.min.js')}}"></script>
    <script src="https://js.pusher.com/4.2/pusher.min.js"></script>
- <style>
- {
-  box-sizing: border-box;
-}
-.container {
-  width: 400px;
-  margin: 0 auto;
-  border: solid 1px #ccc;
-  border-radius: 5px;
-  overflow: hidden;
-}
-.chat-container {
-  height: 400px;
-  overflow: auto;
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
-  direction: rtl;
-}
-.chat-container .message {
-  border-bottom: solid 1px #ccc;
-  padding: 20px;
-  -webkit-transform: rotate(180deg);
-          transform: rotate(180deg);
-  direction: ltr;
-}
-.chat-container .message .avatar {
-  float: left;
-  margin-right: 5px;
-}
-.chat-container .message .datetime {
-  float: right;
-  color: #999;
-}
-.send-message-form input {
-  width: 100%;
-  border: none;
-  font-size: 16px;
-  padding: 10px;
-}
-.send-message-form button {
-  display: none;
-}
-label {
-    margin-top: 3%;}
-</style>
 <script>
   	// $.noConflict();
 		$.ajaxSetup({
@@ -66,7 +21,7 @@ label {
 //onsole.log(decodeURIComponent(reciever));
 var messages=$('#text').val();
   var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
- $('.chat-container').prepend('<div class="message"><h4 ><span><i class="fa fa-comments-o"style="font-size:24px;color:green"></i></span> &nbsp Name <b>Me</b></h4><div class="datetime" id="datetime">'+time+'</div><p>'+$('#text').val()+'</p></div>');
+ $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
  queryString=getUrlVars();
         
         if(!queryString['name'])
@@ -129,8 +84,8 @@ var messages=$('#text').val();
           var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').prepend('<div class="message"><h4 ><span><i class="fa fa-comments-o"style="font-size:24px;color:green"></i></span> &nbsp Name <b>'+message[2]+'</b></h4><div class="datetime" id="datetime">'+time+'</div><p>'+message[1]+'</p></div>');
-       }
+     $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     }
        @endif
    }else if(message[3]=='pharmicist'){
        @if(isset(Auth::guard('pharmacist')->user()->name))
@@ -143,7 +98,7 @@ var messages=$('#text').val();
     var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').prepend('<div class="message"><h4 ><span><i class="fa fa-comments-o"style="font-size:24px;color:green"></i></span> &nbsp Name <b>'+message[2]+'</b></h4><div class="datetime" id="datetime">'+time+'</div><p>'+message[1]+'</p></div>');
+     $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+message[1]+'</p></div></li>');
        } 
     @endif
 }
@@ -154,114 +109,89 @@ var messages=$('#text').val();
   </script>
 @endsection
 @section('body')
-<div class="form-group">
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Chat
+                <span class="pull-right clickable panel-toggle panel-button-tab-left">
+                    <em class="fa fa-toggle-up"></em>
+                </span>
+            </div>
+            <div class="panel-body">
+              <div class="row">
+  <div class="col-lg-12 text-center">
+    <label for="sel1">Select Name (select one):</label>
+    <select class="form-control" id="names" onchange="selectChat()">
+      <option value="">Select</option>
+      @foreach($data as $datas)
+      <option value="{{$datas->name}}">{{$datas->name}}</option>
+      @endforeach
+    </select>
+    <script>
+      function selectChat() {
+        window.location.href = "/getMessages?name=" + $('#names').val() + "";
+      }
 
-	 <div class="col-xs-4">
-	 {{-- 	@if(Auth::check()) --}}
-      <label for="sel1">Select Name  (select one):</label>
-    {{--   @else --}}
-      {{--  <label for="sel1">Select Users  (select one):</label> --}}
-      {{--  @endif --}}
-      <select class="form-control" id="names" onchange="selectChat()">
-<option value="">Select</option>
-      	 @foreach($data as $datas)
-        <option value="{{$datas->name}}" >{{$datas->name}}</option> 
-        {{-- <option>2</option>
-        <option>3</option>
-        <option>4</option> --}}
-         @endforeach 
-      </select>
-<script>
- // window.load=getUrl();
-	 function selectChat()
- {
- 	/*console.log($('#names').val());*/
- 	window.location.href="/getMessages?name="+$('#names').val()+"";
- }
- function getUrl()
-    {
-      
-        queryString=getUrlVars();
-        
-        if(!queryString['name'])
-        {
-            console.log(null);
-        }else{
-        var category=queryString['name'];
-        console.log(decodeURIComponent(category));
-       // var subject=queryString['subjects'].slice(0, -1);
-       /* $('#subjectName').val(subject);
-         $('#categoryName').val(category);*/
-         //alert($('#categoryName').val());
-}
-    }
-</script>
-      </div>
+      function getUrl() {
+
+        queryString = getUrlVars();
+
+        if (!queryString['name']) {
+          console.log(null);
+        } else {
+          var category = queryString['name'];
+          console.log(decodeURIComponent(category));
+        }
+      }
+    </script>
   </div>
-@if(isset($chat))
- <div class="container">
-  <div class="chat-container">
-   {{--  <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?1">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?2">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?1">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?2">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?1">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?2">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?1">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div>
-    <div class="message">
-      <img class="avatar" src="https://placeimg.com/50/50/people?2">
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div> --}}
-    {{-- <div class="message">
-  <h4><span><i class="fa fa-male" style="font-size:24px;color:green"></i></span> &nbsp Name <b>ali ikram </b></h4>
-      <div class="datetime">23/03/2016 20:40</div>
-      <p>A message text</p>
-    </div> --}} 
+<div class="gap"></div>
 
-    @foreach($chat as $chats)
-    <div class="message">
-    	<h4 ><span><i class="fa fa-comments-o	
-" style="font-size:24px;color:green"></i></span> &nbsp Name @if(Auth::check())<b id="name">{{$chats->senderName==Auth()->user()->name ? 'Me':$chats->senderName}}</b>@elseif(Auth::guard('pharmacist')->check())<b>{{$chats->senderName==Auth::guard('pharmacist')->user()->name ? 'Me':$chats->senderName}}@endif</b></h4>
-      <div class="datetime" id="datetime">{{-- 23/03/2016 20:40 --}}{{$chats->created_at}}</div>
-      <p> {{ $chats->message }}</p>
-    </div> 
-    @endforeach
+  @if(isset($chat))
+  <!--=========================================================-->
+  <!-- selected chat -->
+  <div class="col-lg-12">
+    <div class="chat-message">
+      <ul class="chat chat-container">
+        @foreach($chat as $chats)
+        <li class="left clearfix">
+          <div class="chat-body clearfix">
+            <div class="header">
+              <strong class="primary-font">@if(Auth::check())
+                <b id="name">{{$chats->senderName==Auth()->user()->name ? 'Me':$chats->senderName}}</b>
+                @elseif(Auth::guard('pharmacist')->check())
+                <b>{{$chats->senderName==Auth::guard('pharmacist')->user()->name ? 'Me':$chats->senderName}} @endif
+              </strong>
+              <small class="pull-right text-muted">
+                <i class="fa fa-clock-o"></i> {{ $chats->created_at }}</small>
+            </div>
+            <p>
+              {{ $chats->message }}
+            </p>
+          </div>
+        </li>
+        @endforeach
+      </ul>
+    </div>
   </div>
-  <form class="send-message-form">
-    <input type="text" placeholder="Your message" id="text">
-    <button type="submit" class="btn btn-primary" style="display:block !important">Send <i class="fa fa-comment"></i></button>
 
-  </form>
+  <div class="chat-box gap col-lg-12">
+      <form class="send-message-form">
+        <div class="input-group">
+          <input type="text" class="form-control border no-shadow no-rounded" placeholder="Type your message here" id="text">
+          <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary no-rounded">Send</button>
+          </span>
+          <!-- /input-group -->
+        </div>
+      </form>
+    </div>
 </div>
-@else
 @endif
+            </div>
+        </div>
+    </div>
+</div>
+<!--/.row-->
 @endsection

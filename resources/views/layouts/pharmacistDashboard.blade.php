@@ -9,7 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/dashboard/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/table.css') }}" rel="stylesheet"> @section('head') @show @section('style') @show
+    <link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+     @section('head') @show @section('style') @show
 
 
     <!--Custom Font-->
@@ -83,10 +85,9 @@
                     </li>
                 </ul>
             </li>
-            <li class="{{{ (Request::is('pharmacist/chatView') ? 'active' : '') }}}">
+            <li class="{{{ (Request::is('/chatView') ? 'active' : '') }}}">
                 <a href="/chatView">
-                    <em class="fa fa-shopping-cart
-            ">&nbsp;</em> Chat</a>
+                    <em class="fa fa-comments">&nbsp;</em> Chat</a>
             </li>
             <li class="{{{ (Request::is('pharmacist/contactUsForm') ? 'active' : '') }}}">
                 <a href="/pharmacist/contactUsForm">

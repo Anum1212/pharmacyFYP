@@ -7,41 +7,50 @@
     return view('search');});
     Route::get('/fetchMedicineName','findPharmaciesProducts@fetchMedicineName');
     Route::post('searchAskMed','findPharmaciesProducts@searchAskMed');
-    Route::get('/chatView','testController@chat');
-    Route::get('getMessages','testController@getMessages');
-    Route::get('storeChatData','testController@storeChatData');
-    Route::get('storeSearhData','testController@storeSearhData');
- Route::get('displayMostSearchMedicines','testController@displayMostSearchMedicines');
-
-
-// |---------------------------------- Cron Routes ----------------------------------|
-// changeStatus -> change order rating Status to 1 if diff b/w created_at and now > 12 hours
-    Route::get('/changeStatus', 'cronController@changeStatus');
-
-
     
-// |---------------------------------- General Site Navigation Routes ----------------------------------|
-//index --> return site home page
+    // moved to site navigation heading
+    // Route::get('/chatView','testController@chat');
+    // Route::get('getMessages','testController@getMessages');
+    // Route::get('storeChatData','testController@storeChatData');
+
+    Route::get('storeSearhData','testController@storeSearhData');
+    Route::get('displayMostSearchMedicines','testController@displayMostSearchMedicines');
+    
+    
+    // |---------------------------------- Cron Routes ----------------------------------|
+    // changeStatus -> change order rating Status to 1 if diff b/w created_at and now > 12 hours
+    Route::get('/changeStatus', 'cronController@changeStatus');
+    
+    
+    
+    // |---------------------------------- General Site Navigation Routes ----------------------------------|
+    //index --> return site home page
     Route::get('/index', 'siteViewController@index');
-//contactUs --> save message to database
+    //contactUs --> save message to database
     Route::post('/contactUs', 'messageController@contactUs');
-//detectPharmacy --> find pharmacies in the customer defined radius
+    //detectPharmacy --> find pharmacies in the customer defined radius
     Route::post('/detectPharmacy', 'findPharmaciesProducts@findPharmacies');
-//pharmacyDetails --> show the details of a pharmacy
+    //pharmacyDetails --> show the details of a pharmacy
     Route::get('/pharmacyDetails/{pharmacyId}/{productId?}', 'findPharmaciesProducts@pharmacyDetails');
-//update Pharmacy Rating
+    //update Pharmacy Rating
     Route::post('/ratePharmacy', 'HomeController@ratePharmacy');
-//mark Pharmacy Rating as later
+    //mark Pharmacy Rating as later
     Route::post('/ratePharmacyLater', 'HomeController@ratePharmacyLater');
-
-
-
-// |---------------------------------- Cart Managment Routes ----------------------------------|
-// addToCart --> add item to cart
+    // chatView --> go to chat page
+    Route::get('/chatView','chatController@chat');
+    // getMessages --> get chat message
+    Route::get('getMessages','chatController@getMessages');
+    // storeChatData --> Store Chat Data
+    Route::get('storeChatData','chatController@storeChatData');
+    
+    
+    
+    // |---------------------------------- Cart Managment Routes ----------------------------------|
+    // addToCart --> add item to cart
     Route::get('/addToCart/{productId}/{productSource}', 'cartController@addToCart');
-// removeFromCart --> remove item from cart
+    // removeFromCart --> remove item from cart
     Route:: get('/removeFromCart/{product}', 'cartController@remove');
-// viewCart --> view items present in the cart
+    // viewCart --> view items present in the cart
     Route:: get('/viewCart', 'cartController@view');
 // updateCart --> update cart item quantity
     Route:: post('/updateCart', 'cartController@update');

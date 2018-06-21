@@ -44,7 +44,7 @@
         <div class="profile-sidebar">
             <div class="profile-usertitle">
                 <div class="profile-usertitle-name">
-                    {{-- {{{ ucwords(trans(Auth::user()->name)) }}} --}}
+                    {{{ ucwords(trans(Auth::user()->name)) }}}
                 </div>
             </div>
             <div class="clear"></div>
@@ -72,7 +72,7 @@
             </li>
             <li class="{{{ (Request::is('chatView') ? 'active' : '') }}}">
                 <a href="/chatView">
-                    <em class="fa fa-shopping-cart">&nbsp;</em> Chat</a>
+                    <em class="fa fa-comments">&nbsp;</em> Chat</a>
             </li>
             <li class="{{{ (Request::is('contactUsForm') ? 'active' : '') }}}">
                 <a href="contactUsForm">
