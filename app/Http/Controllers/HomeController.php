@@ -4,14 +4,18 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// --------------------------
-// 1) index --> goto customer dashboard
-// 2) viewAllOrders --> view all customer orders
-// 3) viewSpecificOrder --> view details of specific order
-// 4) contactUsForm --> goto admin contact form
-// 5) editAccountDetailsForm --> goto edit customer details form
-// 6) editAccountDetails --> save customer detail changes (incomplete need to add password change code)
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) resendVerificationEmail
+// 3) index
+// 4) viewAllOrders
+// 5) viewSpecificOrder
+// 6) contactUsForm
+// 7) editAccountDetailsForm
+// 8) editAccountDetails
+// 9) ratePharmacy
+// 10) ratePharmacyLater
 
 
 
@@ -30,13 +34,14 @@ use App\Order;
 use App\Orderitem;
 use App\Rating;
 
+
+
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
+
+
+
+     //  |---------------------------------- 1) __construct ----------------------------------|
     public function __construct(Request $request)
     {
         $this->request = $request;
@@ -45,15 +50,9 @@ class HomeController extends Controller
         $this->middleware('rateOrder');
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
 
 
-
-    //  |---------------------------------- resendVerificationEmail ----------------------------------|
+    //  |---------------------------------- 2) resendVerificationEmail ----------------------------------|
     public function resendVerificationEmail($id)
     {
         $user = User::whereId($id)->first();
@@ -63,7 +62,7 @@ class HomeController extends Controller
 
 
 
-    //  |---------------------------------- index ----------------------------------|
+    //  |---------------------------------- 3) index ----------------------------------|
     public function index()
     {
         $pharmacyRatings = $this->request->get('pharmacyRatings');
@@ -73,7 +72,7 @@ class HomeController extends Controller
 
 
 
-    //  |---------------------------------- viewAllOrders ----------------------------------|
+    //  |---------------------------------- 4) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
         $pharmacyRatings = $this->request->get('pharmacyRatings');
@@ -85,7 +84,7 @@ class HomeController extends Controller
 
 
 
-    //  |---------------------------------- viewSpecificOrder ----------------------------------|
+    //  |---------------------------------- 5) viewSpecificOrder ----------------------------------|
     public function viewSpecificOrder($orderId)
     {
         $productDetails =[];
@@ -94,36 +93,39 @@ class HomeController extends Controller
         $order = Order::whereId($orderId)->first();
         // check if $order is empty
         // if $order not empty
-        if(!empty($order)){
+        if (!empty($order)) {
             // check if $orderId belongs to the logged in user (to prevent unauthorized access by other users)
-        if($order->userId == Auth::user()->id){
-        // if everything is satisfied fetch order details
-        $orderDetails = Orderitem::where('orderId', $orderId)->get();
-        // check if $orderDetails is empty
-        if(count($orderDetails)>0){
-            // if $orderDetails is not empty fetch remaining details n return view
-        foreach ($orderDetails as $orderDetail) {
-            $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
-            $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
+            if ($order->userId == Auth::user()->id) {
+                // if everything is satisfied fetch order details
+                $orderDetails = Orderitem::where('orderId', $orderId)->get();
+                // check if $orderDetails is empty
+                if (count($orderDetails)>0) {
+                    // if $orderDetails is not empty fetch remaining details n return view
+                    foreach ($orderDetails as $orderDetail) {
+                        $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
+                        $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
+                    }
+                    return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
+                }
+                // if $orderDetails is empty return with error
+                else {
+                    return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+                }
+            }
+            // if $orderId does not belong to logged in user return with error
+            else {
+                return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+            }
         }
-        return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
+        // if $orderId not found return with error
+        else {
+            return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+        }
     }
-    // if $orderDetails is empty return with error
-    else
-    return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
-}   
-// if $orderId does not belong to logged in user return with error
-    else
-        return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
-    }
-    // if $orderId not found return with error
-        else
-        return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
-}
 
 
 
-    // |---------------------------------- contactUsForm ----------------------------------|
+    // |---------------------------------- 6) contactUsForm ----------------------------------|
     public function contactUsForm()
     {
         $pharmacyRatings = $this->request->get('pharmacyRatings');
@@ -133,7 +135,7 @@ class HomeController extends Controller
 
 
 
-    //  |---------------------------------- editAccountDetailsForm ----------------------------------|
+    //  |---------------------------------- 7) editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
         $pharmacyRatings = $this->request->get('pharmacyRatings');
@@ -144,7 +146,7 @@ class HomeController extends Controller
 
 
 
-    //  |---------------------------------- editAccountDetails ----------------------------------|
+    //  |---------------------------------- 8) editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
         $address = $req->address.' '.$req->society.' '.$req->city;
@@ -169,20 +171,20 @@ class HomeController extends Controller
 
 
 
-    // |---------------------------------- ratePharmacy ----------------------------------|
+    // |---------------------------------- 9) ratePharmacy ----------------------------------|
     public function ratePharmacy(Request $req)
     {
         $currentRatings = [];
         $newCustomerRatings = [];
         $loopRange = count($req->pharmacyId);
-        
-        for($i=0; $i<$loopRange; $i++){
+
+        for ($i=0; $i<$loopRange; $i++) {
             $currentRatings[] = Rating::where('pharmacyId', $req->pharmacyId[$i])->first();
             $newCustomerRatings[] = $req->rating[$i];
         }
-        
+
         $i = 0;
-        foreach($currentRatings as $currentRating){
+        foreach ($currentRatings as $currentRating) {
             // to convert the average back to total points
             $totalRating = $currentRating->rating*$currentRating->noOfUserThatRated;
             //adding 1 to old noOfUserThatRated to get new noOfUserThatRated
@@ -197,10 +199,10 @@ class HomeController extends Controller
         $order->ratingStatus = '2';
         $order->update();
     }
-    
-    
-    
-    // |---------------------------------- ratePharmacyLater ----------------------------------|
+
+
+
+    // |---------------------------------- 10) ratePharmacyLater ----------------------------------|
     public function ratePharmacyLater()
     {
         $orderId = $this->request->get('orderId');

@@ -4,10 +4,10 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
-// 1) index --> display all pharmacy ratings
-// 2) ratePharmacy --> save rating
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) changeStatus
 
 
 
@@ -22,8 +22,14 @@ use App\Orderitem;
 use App\Pharmacist;
 use App\Pharmacistproduct;
 
+
+
 class cronController extends Controller
 {
+
+
+
+  // |---------------------------------- 1) __construct ----------------------------------|
     public function __construct()
     {
         // $this->middleware('auth');
@@ -31,15 +37,15 @@ class cronController extends Controller
 
 
 
-    // |---------------------------------- changeStatus ----------------------------------|
+    // |---------------------------------- 2) changeStatus ----------------------------------|
     public function changeStatus()
     {
         $ratingStatus = Order::where([
             ['ratingStatus','0'],
             ['created_at', '<', Carbon::now()->subHours(12)->toDateTimeString()]])->get();
-            foreach($ratingStatus as $changeRatingStatus){
+        foreach ($ratingStatus as $changeRatingStatus) {
             $changeRatingStatus->ratingStatus = '1';
             $changeRatingStatus->update();
-            }
+        }
     }
 }

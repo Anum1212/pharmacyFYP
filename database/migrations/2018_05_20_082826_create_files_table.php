@@ -19,6 +19,9 @@ class CreateFilesTable extends Migration
             $table->string('filename');
             $table->string('title');
             $table->string('description');
+            // possible file status
+            // 0 -> file download disabled
+            // 1 -> file download enabled
             $table->integer('status')->default('1');
         });
     }

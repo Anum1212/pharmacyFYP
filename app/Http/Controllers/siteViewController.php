@@ -4,8 +4,8 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
+// Methods Present
+// ------------------
 // index --> return main index page
 
 

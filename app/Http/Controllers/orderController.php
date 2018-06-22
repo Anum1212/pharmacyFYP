@@ -4,10 +4,13 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
-// 1) checkout --> save order to database, call generateInvoice function to send order confirmation email, n show receipt
-// 2) generateInvoice --> function to send order confirmation email, n show receipt
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) prescriptionUploadForm
+// 3) prescriptionUpload
+// 4) checkout
+// 5) generateInvoice
 
 
 
@@ -30,12 +33,14 @@ use Mail;
 use App\Mail\invoice;
 use App\Mail\customerOrder;
 
+
+
 class orderController extends Controller
 {
 
 
 
-    // |---------------------------------- construct ----------------------------------|
+    // |---------------------------------- 1) construct ----------------------------------|
     public function __construct()
     {
         $this->middleware('auth');
@@ -49,7 +54,7 @@ class orderController extends Controller
 
 
 
-    // |---------------------------------- prescriptionUploadForm ----------------------------------|
+    // |---------------------------------- 2) prescriptionUploadForm ----------------------------------|
     public function prescriptionUploadForm()
     {
         // possible prescriptionNeeded status (default = 0)
@@ -71,7 +76,7 @@ class orderController extends Controller
 
 
 
-    // |---------------------------------- (checkout with) prescriptionUpload ----------------------------------|
+    // |---------------------------------- 3) (checkout with) prescriptionUpload ----------------------------------|
     public function prescriptionUpload(Request $req)
     {
         $userId = Auth::user()->id;
@@ -107,7 +112,7 @@ class orderController extends Controller
         // Explode file name from dot(.)
         $ext = explode('.', basename($_FILES['file']['name'][$i]));
         // Store extensions in the variable.
-        $file_extension = end($ext); 
+        $file_extension = end($ext);
         // Increment the number of uploaded images according to the files in array.
         $j = $j + 1;
      // Approx. 10000kb (10Mb) files can be uploaded.
@@ -117,9 +122,9 @@ class orderController extends Controller
         $prescription->orderId = $lastInsertId;
         $prescription->fileName = $req->file[$i]->hashName();
         $prescription->save();
-} 
+}
 //   If File Size And File Type Was Incorrect.
-    else { 
+    else {
         return redirect::back()->with('error', 'Invalid file Size or Type');
 }
         }
@@ -132,7 +137,7 @@ class orderController extends Controller
 
 
 
-    // |---------------------------------- checkout ----------------------------------|
+    // |---------------------------------- 4) checkout ----------------------------------|
     public function checkout()
     {
         $userId = Auth::user()->id;
@@ -166,7 +171,7 @@ class orderController extends Controller
 
 
 
-    // |---------------------------------- generateInvoice ----------------------------------|
+    // |---------------------------------- 5) generateInvoice ----------------------------------|
     public function generateInvoice($lastInsertId)
     {
         $product=[];
@@ -180,19 +185,19 @@ class orderController extends Controller
             $allPharmacistId[] = $orderItem->pharmacistId;
             $product[] = Pharmacistproduct::whereId($productId)->first();
         }
-        
+
         // to remove duplicates
         $pharmacistId = array_unique($allPharmacistId);
                 // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
         // index => value
         // 0     =>   1
-        // 2     =>   3 
-        // 7     =>   9 
+        // 2     =>   3
+        // 7     =>   9
         // to fix this we use array_values()
         // which will give the result
         // index => value
         // 0     =>   1
-        // 1     =>   3 
+        // 1     =>   3
         // 2     =>   9
         $arrangedPharmacistId = array_values($pharmacistId);
 

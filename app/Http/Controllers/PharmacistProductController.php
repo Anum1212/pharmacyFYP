@@ -4,14 +4,15 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
-// 1) viewProducts --> display the pharmacist its pharmacy products
-// 2) addProductForm --> display add product form
-// 3) addProduct --> save product
-// 4) editProductForm --> display edit product form
-// 5) editProduct --> save changes
-// 6) deleteProduct --> delete product
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) viewProducts --> display the pharmacist its pharmacy products
+// 3) addProductForm --> display add product form
+// 4) addProduct --> save product
+// 5) editProductForm --> display edit product form
+// 6) editProduct --> save changes
+// 7) deleteProduct --> product doesn't get deleted instead it simply gets disabled
 
 
 
@@ -23,8 +24,14 @@ use App\Pharmacist;
 use App\Pharmacistproduct;
 use Auth;
 
+
+
 class PharmacistProductController extends Controller
 {
+
+
+
+  // |---------------------------------- 1) __construct ----------------------------------|
     public function __construct()
     {
         $this->middleware('auth:pharmacist');
@@ -32,8 +39,7 @@ class PharmacistProductController extends Controller
 
 
 
-    // |---------------------------------- viewProducts ----------------------------------|
-
+    // |---------------------------------- 2) viewProducts ----------------------------------|
     public function viewProducts()
     {
         $totalProducts = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->count();
@@ -43,8 +49,7 @@ class PharmacistProductController extends Controller
 
 
 
-    // |---------------------------------- addProductForm ----------------------------------|
-
+    // |---------------------------------- 3) addProductForm ----------------------------------|
     public function addProductForm()
     {
         return view('pharmacist.productManagment.addProduct');
@@ -52,7 +57,7 @@ class PharmacistProductController extends Controller
 
 
 
-    // |---------------------------------- addProduct ----------------------------------|
+    // |---------------------------------- 4) addProduct ----------------------------------|
     public function addProduct(Request $req)
     {
         $newProduct = new Pharmacistproduct;
@@ -75,8 +80,7 @@ class PharmacistProductController extends Controller
 
 
 
-    // |---------------------------------- editProductForm ----------------------------------|
-
+    // |---------------------------------- 5) editProductForm ----------------------------------|
     public function editProductForm($productId)
     {
         // get logged in pharamcist details
@@ -85,14 +89,15 @@ class PharmacistProductController extends Controller
                 ['id', '=', $productId],
                 ['pharmacistId', '=', $userData->id],
              ])->first();
-        if(!empty($product))
-        return view('pharmacist.productManagment.editProduct', compact('product'));
-    else
-    return redirect()->action('PharmacistProductController@viewProducts')->with('error', 'product# '.$productId.' not found');
+        if (!empty($product)) {
+            return view('pharmacist.productManagment.editProduct', compact('product'));
+        } else {
+            return redirect()->action('PharmacistProductController@viewProducts')->with('error', 'product# '.$productId.' not found');
+        }
     }
 
 
-    // |---------------------------------- editProduct ----------------------------------|
+    // |---------------------------------- 6) editProduct ----------------------------------|
     public function editProduct(Request $req, $productId)
     {
         $product = Pharmacistproduct::find($productId);
@@ -112,8 +117,7 @@ class PharmacistProductController extends Controller
 
 
 
-    // |---------------------------------- deleteProduct ----------------------------------|
-
+    // |---------------------------------- 7) deleteProduct ----------------------------------|
     public function deleteProduct($productId)
     {
         $deleteRecord = Pharmacistproduct::find($productId);

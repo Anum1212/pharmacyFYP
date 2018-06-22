@@ -1,28 +1,32 @@
 <?php
 
+
+
 // |---------------------------------- Test Routes (for testing purposes) ----------------------------------|
     Route::get('/test', 'testController@index');
     Route::get('/', 'testController@allRoutes');
     Route::get('/search', function (/*Geocoder $geocoder*/) {
-    return view('search');});
-    Route::get('/fetchMedicineName','findPharmaciesProducts@fetchMedicineName');
-    Route::post('searchAskMed','findPharmaciesProducts@searchAskMed');
-    
+        return view('search');
+    });
+    Route::get('/fetchMedicineName', 'findPharmaciesProducts@fetchMedicineName');
+    Route::post('searchAskMed', 'findPharmaciesProducts@searchAskMed');
+
     // moved to site navigation heading
     // Route::get('/chatView','testController@chat');
     // Route::get('getMessages','testController@getMessages');
     // Route::get('storeChatData','testController@storeChatData');
 
-    Route::get('storeSearhData','testController@storeSearhData');
-    Route::get('displayMostSearchMedicines','testController@displayMostSearchMedicines');
-    
-    
+    Route::get('storeSearhData', 'testController@storeSearhData');
+    Route::get('displayMostSearchMedicines', 'testController@displayMostSearchMedicines');
+
+
+
     // |---------------------------------- Cron Routes ----------------------------------|
     // changeStatus -> change order rating Status to 1 if diff b/w created_at and now > 12 hours
     Route::get('/changeStatus', 'cronController@changeStatus');
-    
-    
-    
+
+
+
     // |---------------------------------- General Site Navigation Routes ----------------------------------|
     //index --> return site home page
     Route::get('/index', 'siteViewController@index');
@@ -37,14 +41,14 @@
     //mark Pharmacy Rating as later
     Route::post('/ratePharmacyLater', 'HomeController@ratePharmacyLater');
     // chatView --> go to chat page
-    Route::get('/chatView','chatController@chat');
+    Route::get('/chatView', 'chatController@chat');
     // getMessages --> get chat message
-    Route::get('getMessages','chatController@getMessages');
+    Route::get('getMessages', 'chatController@getMessages');
     // storeChatData --> Store Chat Data
-    Route::get('storeChatData','chatController@storeChatData');
-    
-    
-    
+    Route::get('storeChatData', 'chatController@storeChatData');
+
+
+
     // |---------------------------------- Cart Managment Routes ----------------------------------|
     // addToCart --> add item to cart
     Route::get('/addToCart/{productId}/{productSource}', 'cartController@addToCart');
@@ -90,130 +94,130 @@
 // |---------------------------------- Admin Routes ----------------------------------|
 //admin route for our multi-auth system
     Route::prefix('admin')->group(function () {
-//dashboard --> admin dashboard
-    Route::get('/dashboard', 'AdminController@index')->name('admin.dashboard');
-//login --> admin login
-    Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
-    Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
-//logout --> admin logut
-    Route::post('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
-//password reset --> admin password reset
-    Route::post('/password/email', 'Auth\AdminForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
-    Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
-    Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
-    Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
-// viewAllOrders --> view all orders
-    Route::get('/viewAllOrders', 'AdminController@viewAllOrders');
-// viewSpecificOrder --> view specific order
-    Route::get('/viewSpecificOrder/{orderId}', 'AdminController@viewSpecificOrder');
-//viewPharmacySpecificOrder --> view details of a specific order
-    Route::get('/viewPharmacySpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'AdminController@viewPharmacySpecificOrder');
-// searchOrder --> search for a order
-    Route::get('/searchOrder', 'AdminController@searchOrder');
-// viewAllCustomers --> view all customers
-    Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
-// viewSpecificCustomer --> view specific customer details
-    Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
-// searchCustomer --> search for a customer [build if needed]
-    // Route::get('/searchCustomer', 'AdminController@searchCustomer');
-// blockCustomer --> block a Customer
-    Route::get('/blockCustomer/{customerId}', 'AdminController@blockCustomer');
-// unblockCustomer --> unblock a Customer
-    Route::get('/unBlockCustomer/{customerId}', 'AdminController@unBlockCustomer');
-// viewAllPharmacies --> view all pharmacies
-    Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
-// pharmacyDetails --> view specific pharmacy details
-    Route::get('/pharmacyDetails/{pharmacyId}', 'AdminController@pharmacyDetails');
-// searchPharmacy --> search for a Pharmacy [build if needed]
-    // Route::get('/searchPharmacy', 'AdminController@searchPharmacy');
-// blockPharmacy --> block a pharmacy
-    Route::get('/blockPharmacy/{pharmacyId}', 'AdminController@blockPharmacy');
-// unblockPharmacy --> unblock a pharmacy
-    Route::get('/unBlockPharmacy/{pharmacyId}', 'AdminController@unBlockPharmacy');
-// viewAllMessages --> view all messages
-    Route::get('/viewAllMessages', 'messageController@viewAllMessages');
-// viewSpecificMessage --> view details of a specific message
-    Route::get('/viewMessage/{messageId}', 'messageController@viewMessage');
-// viewAllMessagesOfSpecificSender --> view all messages sent by a specific sender
-    Route::get('/viewAllMessagesOfSpecificSender/{messageId}', 'messageController@viewAllMessagesOfSpecificSender');
-// replyMessage --> reply to received message
-    Route::post('/replyMessage/{messageId}', 'messageController@replyMessage');
-// markAsUnreadMessage --> mark a message as unread
-    Route::put('/markAsUnreadMessage/{messageId}', 'messageController@markAsUnreadMessage');
-// markAsReadMessage --> mark a message as read
-    Route::put('/markAsReadMessage/{messageId}', 'messageController@markAsReadMessage');
-// deleteMessage --> delete a message
-    Route::delete('/deleteMessage/{messageId}', 'messageController@deleteMessage');
-// searchSender --> search for a message sender
-    Route::get('/searchSender', 'messageController@searchSender');
-// viewAllFiles --> view all files
-    Route::get('/viewAllFiles', 'AdminController@viewAllFiles');
-// uploadFileForm --> go to upload file form
-    Route::get('/uploadFileForm', 'AdminController@uploadFileForm');
-// uploadFile --> save uploaded file
-    Route::post('/uploadFile', 'AdminController@uploadFile');
-// editFileForm --> go to edit file form
-    Route::get('/editFileForm/{fileId}', 'AdminController@editFileForm');
-// editFile --> save file edit changes
-    Route::post('/editFile/{fileId}', 'AdminController@editFile');
-// enableFile --> enable file download
-    Route::put('/enableFile/{fileId}', 'AdminController@enableFile');
-// disableFile --> disable file download
-    Route::put('/disableFile/{fileId}', 'AdminController@disableFile');
-// deleteFile --> delete uploaded file
-    Route::delete('/deleteFile/{fileId}', 'AdminController@deleteFile');
-// searchFile --> search for uploaded file
-    Route::get('/searchFile', 'AdminController@searchFile');
-});
+        //dashboard --> admin dashboard
+        Route::get('/dashboard', 'AdminController@index')->name('admin.dashboard');
+        //login --> admin login
+        Route::get('/login', 'Auth\AdminLoginController@showLoginForm')->name('admin.login');
+        Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
+        //logout --> admin logut
+        Route::post('/logout', 'Auth\AdminLoginController@logout')->name('admin.logout');
+        //password reset --> admin password reset
+        Route::post('/password/email', 'Auth\AdminForgotPasswordController@sendResetLinkEmail')->name('admin.password.email');
+        Route::get('/password/reset', 'Auth\AdminForgotPasswordController@showLinkRequestForm')->name('admin.password.request');
+        Route::post('/password/reset', 'Auth\AdminResetPasswordController@reset');
+        Route::get('/password/reset/{token}', 'Auth\AdminResetPasswordController@showResetForm')->name('admin.password.reset');
+        // viewAllOrders --> view all orders
+        Route::get('/viewAllOrders', 'AdminController@viewAllOrders');
+        // viewSpecificOrder --> view specific order
+        Route::get('/viewSpecificOrder/{orderId}', 'AdminController@viewSpecificOrder');
+        //viewPharmacySpecificOrder --> view details of a specific order
+        Route::get('/viewPharmacySpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'AdminController@viewPharmacySpecificOrder');
+        // searchOrder --> search for a order
+        Route::get('/searchOrder', 'AdminController@searchOrder');
+        // viewAllCustomers --> view all customers
+        Route::get('/viewAllCustomers', 'AdminController@viewAllCustomers');
+        // viewSpecificCustomer --> view specific customer details
+        Route::get('/viewSpecificCustomer/{customerId}', 'AdminController@viewSpecificCustomer');
+        // searchCustomer --> search for a customer [build if needed]
+        // Route::get('/searchCustomer', 'AdminController@searchCustomer');
+        // blockCustomer --> block a Customer
+        Route::get('/blockCustomer/{customerId}', 'AdminController@blockCustomer');
+        // unblockCustomer --> unblock a Customer
+        Route::get('/unBlockCustomer/{customerId}', 'AdminController@unBlockCustomer');
+        // viewAllPharmacies --> view all pharmacies
+        Route::get('/viewAllPharmacies', 'AdminController@viewAllPharmacies');
+        // pharmacyDetails --> view specific pharmacy details
+        Route::get('/pharmacyDetails/{pharmacyId}', 'AdminController@pharmacyDetails');
+        // searchPharmacy --> search for a Pharmacy [build if needed]
+        // Route::get('/searchPharmacy', 'AdminController@searchPharmacy');
+        // blockPharmacy --> block a pharmacy
+        Route::get('/blockPharmacy/{pharmacyId}', 'AdminController@blockPharmacy');
+        // unblockPharmacy --> unblock a pharmacy
+        Route::get('/unBlockPharmacy/{pharmacyId}', 'AdminController@unBlockPharmacy');
+        // viewAllMessages --> view all messages
+        Route::get('/viewAllMessages', 'messageController@viewAllMessages');
+        // viewSpecificMessage --> view details of a specific message
+        Route::get('/viewMessage/{messageId}', 'messageController@viewMessage');
+        // viewAllMessagesOfSpecificSender --> view all messages sent by a specific sender
+        Route::get('/viewAllMessagesOfSpecificSender/{messageId}', 'messageController@viewAllMessagesOfSpecificSender');
+        // replyMessage --> reply to received message
+        Route::post('/replyMessage/{messageId}', 'messageController@replyMessage');
+        // markAsUnreadMessage --> mark a message as unread
+        Route::put('/markAsUnreadMessage/{messageId}', 'messageController@markAsUnreadMessage');
+        // markAsReadMessage --> mark a message as read
+        Route::put('/markAsReadMessage/{messageId}', 'messageController@markAsReadMessage');
+        // deleteMessage --> delete a message
+        Route::delete('/deleteMessage/{messageId}', 'messageController@deleteMessage');
+        // searchSender --> search for a message sender
+        Route::get('/searchSender', 'messageController@searchSender');
+        // viewAllFiles --> view all files
+        Route::get('/viewAllFiles', 'AdminController@viewAllFiles');
+        // uploadFileForm --> go to upload file form
+        Route::get('/uploadFileForm', 'AdminController@uploadFileForm');
+        // uploadFile --> save uploaded file
+        Route::post('/uploadFile', 'AdminController@uploadFile');
+        // editFileForm --> go to edit file form
+        Route::get('/editFileForm/{fileId}', 'AdminController@editFileForm');
+        // editFile --> save file edit changes
+        Route::post('/editFile/{fileId}', 'AdminController@editFile');
+        // enableFile --> enable file download
+        Route::put('/enableFile/{fileId}', 'AdminController@enableFile');
+        // disableFile --> disable file download
+        Route::put('/disableFile/{fileId}', 'AdminController@disableFile');
+        // deleteFile --> delete uploaded file
+        Route::delete('/deleteFile/{fileId}', 'AdminController@deleteFile');
+        // searchFile --> search for uploaded file
+        Route::get('/searchFile', 'AdminController@searchFile');
+    });
 
 
 
 // |---------------------------------- Pharmacy Routes ----------------------------------|
     Route::prefix('pharmacist')->group(function () {
-//dashboard --> goto pharmacist dashboard
-    Route::get('/dashboard', 'PharmacistController@index')->name('pharmacist.dashboard');
-//login --> pharmacist login
-    Route::get('/login', 'Auth\PharmacistLoginController@showLoginForm')->name('pharmacist.login');
-    Route::post('/login', 'Auth\PharmacistLoginController@login')->name('pharmacist.login.submit');
-//register --> pharmacist register
-    Route::get('/register', 'Auth\PharmacistRegisterController@create')->name('pharmacist.register');
-    Route::post('/register', 'Auth\PharmacistRegisterController@store')->name('pharmacist.register.store');
-// resendVerificationEmail
-    Route::get('/resendVerificationEmail/{id}', 'PharmacistController@resendVerificationEmail');
-//logout --> pharmacist logout
-    Route::post('/logout', 'Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
-//password reset  --> pharmacist password reset
-    Route::post('/password/email', 'Auth\PharmacistForgotPasswordController@sendResetLinkEmail')->name('pharmacist.password.email');
-    Route::get('/password/reset', 'Auth\PharmacistForgotPasswordController@showLinkRequestForm')->name('pharmacist.password.request');
-    Route::post('/password/reset', 'Auth\PharmacistResetPasswordController@reset');
-    Route::get('/password/reset/{token}', 'Auth\PharmacistResetPasswordController@showResetForm')->name('pharmacist.password.reset');
-//editAccountDetailsForm --> goto pharmacist edit details form
-    Route::get('/editAccountDetailsForm', 'PharmacistController@editAccountDetailsForm');
-//editAccountDetails --> save pharmacist edit form changes
-    Route::post('/editAccountDetails', 'PharmacistController@editAccountDetails');
-//savePharmacyApi(trash arham will make new one)
-// Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
-//storeProductsInTable --> pharamacist decides to use website database to store products
-    Route::get('/storeProductsInTable', 'PharmacistController@storeProductsInTable');
-//contactUsForm --> goto contact admin form
-    Route::get('/contactUsForm', 'PharmacistController@contactUsForm');
-//viewProducts --> view products the pharamacist has uploaded to website
-    Route::get('/viewProducts', 'PharmacistProductController@viewProducts');
-//addProductForm --> goto add products form page
-    Route::get('/addProduct', 'PharmacistProductController@addProductForm');
-//addProduct --> add products to website database
-    Route::post('/addProduct', 'PharmacistProductController@addProduct');
-//editProductForm --> goto edit products form page
-    Route::get('/editProduct/{productId}', 'PharmacistProductController@editProductForm');
-//editProduct --> save changes made to a product
-    Route::put('/editProduct/{productId}', 'PharmacistProductController@editProduct');
-//deleteProduct --> delete a product
-    Route::delete('/deleteProduct/{productId}', 'PharmacistProductController@deleteProduct');
-//viewAllOrders --> view all orders the pharmamcy has received
-    Route::get('/viewAllOrders', 'PharmacistController@viewAllOrders');
-//viewSpecificOrder --> view details of a specific order
-    Route::get('/viewSpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'PharmacistController@viewSpecificOrder');
-    // sendEmailToPharmacist --> Send registration verification email to pharmacist
+        //dashboard --> goto pharmacist dashboard
+        Route::get('/dashboard', 'PharmacistController@index')->name('pharmacist.dashboard');
+        //login --> pharmacist login
+        Route::get('/login', 'Auth\PharmacistLoginController@showLoginForm')->name('pharmacist.login');
+        Route::post('/login', 'Auth\PharmacistLoginController@login')->name('pharmacist.login.submit');
+        //register --> pharmacist register
+        Route::get('/register', 'Auth\PharmacistRegisterController@create')->name('pharmacist.register');
+        Route::post('/register', 'Auth\PharmacistRegisterController@store')->name('pharmacist.register.store');
+        // resendVerificationEmail
+        Route::get('/resendVerificationEmail/{id}', 'PharmacistController@resendVerificationEmail');
+        //logout --> pharmacist logout
+        Route::post('/logout', 'Auth\PharmacistLoginController@logout')->name('pharmacist.logout');
+        //password reset  --> pharmacist password reset
+        Route::post('/password/email', 'Auth\PharmacistForgotPasswordController@sendResetLinkEmail')->name('pharmacist.password.email');
+        Route::get('/password/reset', 'Auth\PharmacistForgotPasswordController@showLinkRequestForm')->name('pharmacist.password.request');
+        Route::post('/password/reset', 'Auth\PharmacistResetPasswordController@reset');
+        Route::get('/password/reset/{token}', 'Auth\PharmacistResetPasswordController@showResetForm')->name('pharmacist.password.reset');
+        //editAccountDetailsForm --> goto pharmacist edit details form
+        Route::get('/editAccountDetailsForm', 'PharmacistController@editAccountDetailsForm');
+        //editAccountDetails --> save pharmacist edit form changes
+        Route::post('/editAccountDetails', 'PharmacistController@editAccountDetails');
+        //savePharmacyApi(trash arham will make new one)
+        // Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
+        //storeProductsInTable --> pharamacist decides to use website database to store products
+        Route::get('/storeProductsInTable', 'PharmacistController@storeProductsInTable');
+        //contactUsForm --> goto contact admin form
+        Route::get('/contactUsForm', 'PharmacistController@contactUsForm');
+        //viewProducts --> view products the pharamacist has uploaded to website
+        Route::get('/viewProducts', 'PharmacistProductController@viewProducts');
+        //addProductForm --> goto add products form page
+        Route::get('/addProduct', 'PharmacistProductController@addProductForm');
+        //addProduct --> add products to website database
+        Route::post('/addProduct', 'PharmacistProductController@addProduct');
+        //editProductForm --> goto edit products form page
+        Route::get('/editProduct/{productId}', 'PharmacistProductController@editProductForm');
+        //editProduct --> save changes made to a product
+        Route::put('/editProduct/{productId}', 'PharmacistProductController@editProduct');
+        //deleteProduct --> delete a product
+        Route::delete('/deleteProduct/{productId}', 'PharmacistProductController@deleteProduct');
+        //viewAllOrders --> view all orders the pharmamcy has received
+        Route::get('/viewAllOrders', 'PharmacistController@viewAllOrders');
+        //viewSpecificOrder --> view details of a specific order
+        Route::get('/viewSpecificOrder/{orderId}/{customerId}/{pharmacyId}', 'PharmacistController@viewSpecificOrder');
+        // sendEmailToPharmacist --> Send registration verification email to pharmacist
         Route::get('/verifyPharmacistRegistration/{email}/{verificationToken}', 'Auth\PharmacistRegisterController@verifyPharmacistRegistration')->name('verifyPharmacistRegistration');
     });
 
@@ -225,16 +229,7 @@
 
 
 
-
-
-
-
-
-
-
-
-
 // *************** ROLE MANAGEMENT ROUTES(trash) ***************
-Route::get('/roles', function () {
-    return view('welcomeTrash'); // *** change page name in future ***
-});
+// Route::get('/roles', function () {
+//     return view('welcomeTrash'); // *** change page name in future ***
+// });

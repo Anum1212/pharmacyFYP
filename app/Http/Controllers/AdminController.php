@@ -1,9 +1,50 @@
 <?php
 
+
+
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) index
+// 3) viewAllOrders
+// 4) viewSpecificOrder
+// 5) viewPharmacySpecificOrder
+// 6) searchOrder
+// 7) viewAllCustomers
+// 8) viewSpecificCustomer
+// 9) blockCustomer
+// 10) unBlockCustomer
+// 11) viewAllPharmacies
+// 12) pharmacyDetails
+// 13) blockPharmacy
+// 14) unBlockPharmacy
+// 15) viewAllFiles
+// 16) uploadFileForm
+// 17) uploadFile
+// 18) editFileForm
+// 19) editFile
+// 20) enableFile
+// 21) disableFile
+// 22) deleteFile
+// 23) searchFile
+
+
+
+// possible customer status
+// 0 -> banned
+// 1 -> not banned (default)
+
+// possible pharmacy status
+// 0 -> banned
+// 1 -> not banned (default)
+
+// possible uploaded file status
+// 0 -> file download disabled
+// 1 -> file download enabled (default)
+
+
 
 namespace App\Http\Controllers;
 
@@ -18,20 +59,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 
+
+
 class AdminController extends Controller
 {
 
-// |---------------------------------- index ----------------------------------|
-    public function index()
-    {
-        $medicines=DB::table('mostsearch')->select('name',DB::raw('count(name) as total'))->whereMonth('created_at','=', date('m'))->groupBy('name')->orderBy('total','DESC')->take(10)->get();
-        //dd($medicines);
-  return view('admin.adminDashboard',compact('medicines'));     
-    }
 
 
-
-    // |---------------------------------- contactUs ----------------------------------|
+    // |---------------------------------- 1) __construct ----------------------------------|
     public function __construct()
     {
         $this->middleware('auth:admin');
@@ -39,7 +74,17 @@ class AdminController extends Controller
 
 
 
-    // |---------------------------------- viewAllOrders ----------------------------------|
+    // |---------------------------------- 2) index ----------------------------------|
+    public function index()
+    {
+        $medicines=DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
+        //dd($medicines);
+        return view('admin.adminDashboard', compact('medicines'));
+    }
+
+
+
+    // |---------------------------------- 3) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
         $customers = [];
@@ -71,63 +116,64 @@ class AdminController extends Controller
 
 
 
-    //  |---------------------------------- viewSpecificOrder ----------------------------------|
+    //  |---------------------------------- 4) viewSpecificOrder ----------------------------------|
     public function viewSpecificOrder($orderId)
     {
         $order = Order::whereId($orderId)->first();
-        if(!empty($order)) {
-        $customerDetails = User::whereId($order->userId)->first();
+        if (!empty($order)) {
+            $customerDetails = User::whereId($order->userId)->first();
 
-        $productDetails = [];
-        $pharmacyDetails = [];
-        $orderDetails = Orderitem::where('orderId', $orderId)->get();
+            $productDetails = [];
+            $pharmacyDetails = [];
+            $orderDetails = Orderitem::where('orderId', $orderId)->get();
 
-        foreach ($orderDetails as $orderDetail) {
-            $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
-            $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
+            foreach ($orderDetails as $orderDetail) {
+                $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
+                $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
+            }
+            return view('admin.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'customerDetails'));
+        } else {
+            return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
         }
-        return view('admin.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'customerDetails'));
     }
-    else
-    return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
-}
 
 
 
-    //  |---------------------------------- viewPharmacySpecificOrder ----------------------------------|
+    //  |---------------------------------- 5) viewPharmacySpecificOrder ----------------------------------|
     public function viewPharmacySpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails = [];
         $order = Order::whereId($orderId)->first();
-        if(!empty($order)){
-
-        $orderDetails = Orderitem::where([
+        if (!empty($order)) {
+            $orderDetails = Orderitem::where([
             ['orderId', $orderId],
             ['pharmacistId', $pharmacyId],
         ])->get();
 
-        $customerDetails = User::whereId($customerId)->first();
-        foreach ($orderDetails as $orderDetail) {
-            $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
+            $customerDetails = User::whereId($customerId)->first();
+            foreach ($orderDetails as $orderDetail) {
+                $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
+            }
+
+            return view('admin.orders.pharmacySpecificOrder', compact('order', 'orderDetails', 'productDetails', 'customerDetails'));
+        } else {
+            return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
         }
-
-        // dd($orderDetails, $productDetails);
-        return view('admin.orders.pharmacySpecificOrder', compact('order', 'orderDetails', 'productDetails', 'customerDetails'));
     }
-    else
-    return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
-}
 
 
 
-    //  |---------------------------------- searchOrder ----------------------------------|
+    //  |---------------------------------- 6) searchOrder ----------------------------------|
     public function searchOrder(Request $req)
     {
         $totalSearchResults = File::where('id', 'LIKE', '%' . $req->search . '%')->count();
         $searchResults = File::where('id', 'LIKE', '%' . $req->search . '%')->paginate(30);
         return view('admin.orders.searchResult', compact('totalSearchResults', 'searchResults'));
     }
-    // |---------------------------------- viewAllCustomers ----------------------------------|
+
+
+
+    // |---------------------------------- 7) viewAllCustomers ----------------------------------|
     public function viewAllCustomers()
     {
         $totalUsers = User::count();
@@ -135,45 +181,53 @@ class AdminController extends Controller
         return view('admin.users.viewAllCustomers', compact('users', 'totalUsers'));
     }
 
-    // |---------------------------------- viewSpecificCustomer ----------------------------------|
+
+
+    // |---------------------------------- 8) viewSpecificCustomer ----------------------------------|
     public function viewSpecificCustomer($customerId)
     {
         $customer = User::find($customerId);
-        if(!empty($customer)){
-        $orders = Order::where('userId', $customerId)->paginate(30);
-        return view('admin.users.customerDetails', compact('customer', 'orders'));
+        if (!empty($customer)) {
+            $orders = Order::where('userId', $customerId)->paginate(30);
+            return view('admin.users.customerDetails', compact('customer', 'orders'));
+        } else {
+            return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+        }
     }
-    else
-    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
-}
 
-    //  |---------------------------------- blockCustomer ----------------------------------|
+
+
+    //  |---------------------------------- 9) blockCustomer ----------------------------------|
     public function blockCustomer($customerId)
     {
         $customer = User::find($customerId);
-        if(!empty($customer)){
-        $customer->status = '0';
-        $customer->save();
-        return redirect('/admin/viewAllCustomers')->with('message', 'Block successful');
+        if (!empty($customer)) {
+            $customer->status = '0';
+            $customer->save();
+            return redirect('/admin/viewAllCustomers')->with('message', 'Block successful');
+        } else {
+            return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+        }
     }
-    else
-    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
-}
 
-    //  |---------------------------------- unBlockCustomer ----------------------------------|
+
+
+    //  |---------------------------------- 10) unBlockCustomer ----------------------------------|
     public function unBlockCustomer($customerId)
     {
         $customer = User::find($customerId);
-        if(!empty($customer)){
-        $customer->status = '1';
-        $customer->save();
-        return redirect('/admin/viewAllCustomers')->with('message', 'UnBlock successful');
-    }
-    else
-    return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+        if (!empty($customer)) {
+            $customer->status = '1';
+            $customer->save();
+            return redirect('/admin/viewAllCustomers')->with('message', 'UnBlock successful');
+        } else {
+            return redirect()->action('AdminController@viewAllCustomers')->with('error', 'No such customer found');
+        }
     }
 
-    // |---------------------------------- viewAllPharmacies ----------------------------------|
+
+
+    // |---------------------------------- 11) viewAllPharmacies ----------------------------------|
     public function viewAllPharmacies()
     {
         $totalUsers = Pharmacist::count();
@@ -181,7 +235,9 @@ class AdminController extends Controller
         return view('admin.users.viewAllPharmacies', compact('users', 'totalUsers'));
     }
 
-    //  |---------------------------------- pharmacyDetails ----------------------------------|
+
+
+    //  |---------------------------------- 12) pharmacyDetails ----------------------------------|
     public function pharmacyDetails($pharmacyId)
     {
         $pharmacy = Pharmacist::whereId($pharmacyId)->first();
@@ -236,7 +292,9 @@ class AdminController extends Controller
         return view('admin.users.pharmacyDetails', compact('pharmacy', 'orders', 'customers'));
     }
 
-    //  |---------------------------------- blockPharmacy ----------------------------------|
+
+
+    //  |---------------------------------- 13) blockPharmacy ----------------------------------|
     public function blockPharmacy($pharmacyId)
     {
         $pharmacy = Pharmacist::find($pharmacyId);
@@ -246,7 +304,9 @@ class AdminController extends Controller
         return redirect('/admin/viewAllPharmacies')->with('message', 'Block successful');
     }
 
-    //  |---------------------------------- unBlockPharmacy ----------------------------------|
+
+
+    //  |---------------------------------- 14) unBlockPharmacy ----------------------------------|
     public function unBlockPharmacy($pharmacyId)
     {
         $pharmacy = Pharmacist::find($pharmacyId);
@@ -256,7 +316,9 @@ class AdminController extends Controller
         return redirect('/admin/viewAllPharmacies')->with('message', 'UnBlock successful');
     }
 
-    //  |---------------------------------- viewAllFiles ----------------------------------|
+
+
+    //  |---------------------------------- 15) viewAllFiles ----------------------------------|
     public function viewAllFiles()
     {
         $totalEnabledFiles = File::where('status', 1)->count();
@@ -266,13 +328,17 @@ class AdminController extends Controller
         return view('admin.file.viewAllFiles', compact('totalEnabledFiles', 'enabledFiles', 'totaldisabledFiles', 'disabledFiles'));
     }
 
-    //  |---------------------------------- uploadFileForm ----------------------------------|
+
+
+    //  |---------------------------------- 16) uploadFileForm ----------------------------------|
     public function uploadFileForm()
     {
         return view('admin.file.uploadFile');
     }
 
-    //  |---------------------------------- uploadFile ----------------------------------|
+
+
+    //  |---------------------------------- 17) uploadFile ----------------------------------|
     public function uploadFile(Request $req)
     {
         if ($req->file('uploadFile')) {
@@ -288,14 +354,18 @@ class AdminController extends Controller
         }
     }
 
-    //  |---------------------------------- editFileForm ----------------------------------|
+
+
+    //  |---------------------------------- 18) editFileForm ----------------------------------|
     public function editFileForm($fileId)
     {
         $file = File::find($fileId);
         return view('admin.file.editFile', compact('file'));
     }
 
-    //  |---------------------------------- editFile ----------------------------------|
+
+
+    //  |---------------------------------- 19) editFile ----------------------------------|
     public function editFile(Request $req, $fileId)
     {
         $saveFormData = File::find($fileId);
@@ -315,7 +385,9 @@ class AdminController extends Controller
         return redirect()->action('AdminController@viewAllFiles')->with('message', 'Edit successful');
     }
 
-    //  |---------------------------------- enableFile ----------------------------------|
+
+
+    //  |---------------------------------- 20) enableFile ----------------------------------|
     public function enableFile($fileId)
     {
         $file = File::find($fileId);
@@ -324,7 +396,9 @@ class AdminController extends Controller
         return redirect()->action('AdminController@viewAllFiles')->with('message', 'File enable successful');
     }
 
-    //  |---------------------------------- disableFile ----------------------------------|
+
+
+    //  |---------------------------------- 21) disableFile ----------------------------------|
     public function disableFile($fileId)
     {
         $file = File::find($fileId);
@@ -333,7 +407,9 @@ class AdminController extends Controller
         return redirect()->action('AdminController@viewAllFiles')->with('message', 'File disable successful');
     }
 
-    //  |---------------------------------- deleteFile ----------------------------------|
+
+
+    //  |---------------------------------- 22) deleteFile ----------------------------------|
     public function deleteFile($fileId)
     {
         $file = File::find($fileId);
@@ -345,12 +421,13 @@ class AdminController extends Controller
         return redirect()->action('AdminController@viewAllFiles')->with('message', 'File delete successful');
     }
 
-    //  |---------------------------------- searchFile ----------------------------------|
+
+
+    //  |---------------------------------- 23) searchFile ----------------------------------|
     public function searchFile(Request $req)
     {
         $totalSearchResults = File::where('title', 'LIKE', '%' . $req->search . '%')->count();
         $searchResults = File::where('title', 'LIKE', '%' . $req->search . '%')->paginate(30);
         return view('admin.file.searchResult', compact('totalSearchResults', 'searchResults'));
     }
-
 }

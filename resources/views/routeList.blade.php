@@ -18,6 +18,9 @@ version) --}}
         <div class="container">
             <ul>
                 <li>
+                    <a href="/search" target="_blank">Search Page (arham)</a>
+                </li>
+                <li>
                     <a href="/index" target="_blank">Search Page</a>
                 </li>
                 <li>
@@ -37,9 +40,6 @@ version) --}}
                 </li>
                 <li>
                     <a href="/contactUsForm" target="_blank">Contact Admin</a>
-                </li>
-                <li>
-                    <a href="/ratePharmacy" target="_blank">Rate Pharmacy</a>
                 </li>
                 <li>
                     <a href="http://localhost/phpmyadmin/" target="_blank">PhpMyAdmin</a>

@@ -4,12 +4,15 @@
 
 // controller Details
 // ------------------
-// methods and their details
-// ---------------------------
-// 1) addToCart --> add product to cart
-// 2) remove --> remove product from cart
-// 3) view --> go to cart page
-// 4) update --> update quantity of cart item
+// Methods Present
+// ------------------
+// 1) __construct
+// 2) addToCart --> add product to cart
+// 3) remove --> remove product from cart
+// 4) view --> go to cart page
+// 5) update --> update quantity of cart item
+// 6) __destruct
+
 
 
 namespace App\Http\Controllers;
@@ -21,12 +24,14 @@ use App\Pharmacistproduct;
 use Cart;
 use Auth;
 
+
+
 class cartController extends Controller
 {
 
 
 
-  // |---------------------------------- construct ----------------------------------|
+  // |---------------------------------- 1) construct ----------------------------------|
     public function __construct()
     {
         $this->middleware('auth');
@@ -40,26 +45,24 @@ class cartController extends Controller
 
 
 
-    // |---------------------------------- addToCart ----------------------------------|
+    // |---------------------------------- 2) addToCart ----------------------------------|
     public function addToCart($productId, $productSource)
     {
-        if($productSource == 1)
-        {
+        if ($productSource == 1) {
             $productDetails = Pharmacistproduct::whereId($productId)->first();
-        $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
+            $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
         }
 
-        if($productSource == 2)
-        {
+        if ($productSource == 2) {
             echo 'under development';
         }
-        
+
         return redirect('/viewCart'); // change in future
     }
 
 
 
-    // |---------------------------------- remove ----------------------------------|
+    // |---------------------------------- 3) remove ----------------------------------|
     public function remove($rowId)
     {
         Cart::remove($rowId);
@@ -68,7 +71,7 @@ class cartController extends Controller
 
 
 
-    // |---------------------------------- view ----------------------------------|
+    // |---------------------------------- 4) view ----------------------------------|
     public function view()
     {
         return view('siteView.cart');
@@ -76,7 +79,7 @@ class cartController extends Controller
 
 
 
-    // |---------------------------------- update ----------------------------------|
+    // |---------------------------------- 5) update ----------------------------------|
     public function update(Request $req)
     {
         $i=0;
@@ -89,7 +92,8 @@ class cartController extends Controller
     }
 
 
-    // |---------------------------------- destruct ----------------------------------|
+
+    // |---------------------------------- 6) destruct ----------------------------------|
     public function __destruct()
     {
         Cart::instance('shopping')->store(Auth::id());
