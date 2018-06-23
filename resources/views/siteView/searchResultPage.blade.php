@@ -1,6 +1,6 @@
 @extends('layouts.siteView') @section('body')
 <div class="wrapper searchResultPageWrapper">
-@foreach($searchedProducts as $searchedProduct) @foreach($searchedProduct as $product)
+@foreach($searchedProductsMergeCollection as $product)
 <div class="col-sm-6 col-lg-2">
         <div class="thumbnail">
                 @if($product->type=='1')
@@ -83,4 +83,4 @@
 </div>
 </div>
 
-@endforeach @endforeach @endsection
+@endforeach @endsection

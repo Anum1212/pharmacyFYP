@@ -17,6 +17,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Bodunde\ GoogleGeocoder\ Geocoder;
 use DB;
 use Auth;
@@ -46,17 +47,41 @@ class findPharmaciesProducts extends Controller
 
         // query to fetch pharmacies within the specified distance
         $nearByPharmacies = DB::select(DB::raw('SELECT *, ( 3959 * acos( cos( radians('.$latitude.') ) * cos( radians( latitude ) ) * cos( radians( longitude ) - radians('.$longitude.') ) + sin( radians('.$latitude.') ) * sin( radians(latitude) ) ) ) AS distance FROM pharmacists HAVING distance < '.$distance.' ORDER BY distance'));
-
+        
+        // if no pharmacies found nearby redirect with message
+        if(empty($nearByPharmacies))
+        return redirect()->back()->with('error', 'oops no pharmacies in the defined radius');
+        
+        // if pharmacies found nearby then find the searched product in them
+        if(!empty($nearByPharmacies)){
         // get details of those nearby pharmacies to see if the pharmacistProuct table has the searched medicine
         foreach ($nearByPharmacies as $nearByPharmacy) {
             $searchedProducts[] = Pharmacistproduct::where([
       ['pharmacistId', '=', $nearByPharmacy->id],
       ['name', 'LIKE', '%'.$req->medicineSearched.'%'],
       ['status', '=', '1']
-      ])->paginate('30');
+      ])->get();
         }
-        // dd($searchedProducts);
-        return view('siteView.searchResultPage', compact('searchedProducts', 'nearByPharmacies'));
+
+// ********** critical step **********
+// $searchedProducts is an array of collections
+// in the code below we combine the collections into 1 collection
+// benefits 
+// 1) easy to detect if no product found  
+// 2) easy to use
+
+$searchedProductsMergeCollection = new Collection();
+foreach($searchedProducts as $collection) {
+    foreach($collection as $item)
+    {
+        $searchedProductsMergeCollection->push($item);
+    }
+}
+if($searchedProductsMergeCollection->isEmpty())
+        return redirect('/index')->with('error', 'Oops product not found in the defined radius.<ul><li>Try to increase the radius</li><li>or click the following link to get notified when product is available near you</li></ul>');
+        // dd($searchedProductsMergeCollection);
+        return view('siteView.searchResultPage', compact('searchedProductsMergeCollection', 'nearByPharmacies'));
+    }
     }
 
 

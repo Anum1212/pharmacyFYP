@@ -23,14 +23,15 @@
   <![endif]-->
 </head>
 <body>
-	@include('includes.error') @include('includes.message')
-        	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
+	<nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
 		<div class="container-fluid">
 			<div class="navbar-header">
 				<a class="navbar-brand" href="#"><span>Lumino</span>Admin</a>
-            </div>
+			</div>
 		</div><!-- /.container-fluid -->
-    </nav>
+	</nav>
+	<div class="gap"></div>
+	@include('includes.error') @include('includes.message')
     
 		@section('body') @show
   
