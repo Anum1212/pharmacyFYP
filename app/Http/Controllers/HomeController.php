@@ -16,6 +16,7 @@
 // 8) editAccountDetails
 // 9) ratePharmacy
 // 10) ratePharmacyLater
+// 11) setAvailabilityNotification
 
 
 
@@ -33,8 +34,7 @@ use App\Pharmacistproduct;
 use App\Order;
 use App\Orderitem;
 use App\Rating;
-
-
+use App\Reminder;
 
 class HomeController extends Controller
 {
@@ -210,5 +210,21 @@ class HomeController extends Controller
         $changeStatusToLater->ratingStatus = '3';
         $changeStatusToLater->update();
         return redirect()->back();
+    }
+
+
+
+    // |---------------------------------- 11) setAvailabilityNotification ----------------------------------|
+    public function setAvailabilityNotification($medicineName, $latitude, $longitude)
+    {
+        $reminder = new Reminder;
+        $reminder->customerId = Auth::user()->id;
+        $reminder->customerName = Auth::user()->name;
+        $reminder->customerEmail = Auth::user()->email;
+        $reminder->productName = $medicineName;
+        $reminder->longitude = $latitude;
+        $reminder->latitude = $longitude;
+        $reminder->save();
+        return redirect()->back()->with('message', 'An email will be sent to you when your product is available');
     }
 }

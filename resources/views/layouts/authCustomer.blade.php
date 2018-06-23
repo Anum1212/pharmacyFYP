@@ -89,7 +89,7 @@
         </div>
         <!-- /.container-fluid -->
     </nav>
-
+    
     @include('includes.error') @include('includes.message') @section('body') @show
 
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/jquery.js') }}"></script>

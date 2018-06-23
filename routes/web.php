@@ -4,7 +4,7 @@
 
 // |---------------------------------- Test Routes (for testing purposes) ----------------------------------|
     Route::get('/test', 'testController@index');
-    Route::get('/', 'testController@allRoutes');
+    Route::get('/p', 'testController@allRoutes');
     Route::get('/search', function (/*Geocoder $geocoder*/) {
         return view('search');
     });
@@ -29,7 +29,7 @@
 
     // |---------------------------------- General Site Navigation Routes ----------------------------------|
     //index --> return site home page
-    Route::get('/index', 'siteViewController@index');
+    Route::get('/', 'siteViewController@index');
     //contactUs --> save message to database
     Route::post('/contactUs', 'messageController@contactUs');
     //detectPharmacy --> find pharmacies in the customer defined radius
@@ -88,6 +88,8 @@
     Route::get('/viewSpecificOrder/{orderId}', 'HomeController@viewSpecificOrder');
 // verifyCustomerRegistration --> verify Customer Registration
     Route::get('verifyCustomerRegistration/{email}/{verificationToken}', 'Auth\RegisterController@verifyCustomerRegistration')->name('verifyCustomerRegistration');
+// verifyCustomerRegistration --> verify Customer Registration
+    Route::get('setAvailabilityNotification/{medicineName}/{latitude}/{longitude}', 'HomeController@setAvailabilityNotification');
 
 
 
