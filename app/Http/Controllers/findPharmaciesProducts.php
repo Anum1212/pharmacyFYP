@@ -6,11 +6,12 @@
 // ------------------
 // Methods Present
 // ------------------
-// 1) findPharmacies
-// 2) fetchMedicineName
-// 3) searchAskMed
-// 4) multiRequest
-// 5) pharmacyDetails
+// 1) medicineDetails
+// 2) findPharmacies
+// 3) fetchMedicineName
+// 4) searchAskMed
+// 5) multiRequest
+// 6) pharmacyDetails
 
 
 
@@ -18,6 +19,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Curl;
 use Bodunde\ GoogleGeocoder\ Geocoder;
 use DB;
 use Auth;
@@ -33,7 +35,54 @@ class findPharmaciesProducts extends Controller
 
 
 
-//  |---------------------------------- findPharmacies ----------------------------------|
+//  |---------------------------------- 1) medicineDetails ----------------------------------|
+
+function medicineDetails(Request $request)
+{
+    $data="zyrtec";
+        $strengthAndFroms = Curl::to('https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search')->withData(array( 'terms' => $data,'ef' => 'STRENGTHS_AND_FORMS' ))->get();
+        $data = json_decode($strengthAndFroms);
+        //dd($data[2]->STRENGTHS_AND_FORMS);
+        $strengthAndFroms=array(
+  'name' => $data[1],
+  'detail' => $data[2]->STRENGTHS_AND_FORMS
+);
+        $details=$strengthAndFroms['detail'];
+        // dd($details[0]);
+        $names=$data[1];
+        $details=$data[2]->STRENGTHS_AND_FORMS;
+        // dd(sizeof($strengthAndFroms['name']));
+        $size=sizeof($strengthAndFroms);
+
+
+
+
+        $data="aspirin";
+        $medicineName=DB::table('medicine_names')->select('genericName')->where('id', $request->id)->get();
+        //dd($medicineName);
+        $sideEffects = Curl::to('https://api.fda.gov/drug/label.json')->withData(array( 'search' => /*$medicineName[0]->genericName*/ $data ))->get();
+        $sideEffects=json_decode($sideEffects);
+
+        if (!isset($sideEffects->results[0]->precautions[0])  and !isset($sideEffects->results[0]->warnings[0])) {
+            session()->flash('error', 'medicine info not available');
+            return view('arham.searchPage')->withError("medicine info not available");
+        } else {
+            return view('siteView.medicineDetails', compact('sideEffects', 'strengthAndFroms'))->with('size', sizeof($strengthAndFroms['name']))->with('mediName', $data);
+        }
+
+
+
+
+
+
+
+
+
+}
+
+
+
+//  |---------------------------------- 2) findPharmacies ----------------------------------|
     // find pharmacies within the specified distance
     public function findPharmacies(Request $req)
     {
@@ -86,7 +135,7 @@ class findPharmaciesProducts extends Controller
 
 
 
-    //  |---------------------------------- fetchMedicineName ----------------------------------|
+    //  |---------------------------------- 3) fetchMedicineName ----------------------------------|
     public function fetchMedicineName(Request $request)
     {
         $data=DB::table('medicine_names')->where('brandName', 'like', '%' . $_GET['search'].'%')->take(3)->get();
@@ -95,7 +144,7 @@ class findPharmaciesProducts extends Controller
 
 
 
-    //  |---------------------------------- searchAskMed ----------------------------------|
+    //  |---------------------------------- 4) searchAskMed ----------------------------------|
     public function searchAskMed(Request $request)
     {
         $array=array(
@@ -131,7 +180,7 @@ class findPharmaciesProducts extends Controller
 
 
 
-    //  |---------------------------------- multiRequest ----------------------------------|
+    //  |---------------------------------- 5) multiRequest ----------------------------------|
     public function multiRequest($data, $options = array())
     {
         // array of curl handles
@@ -187,7 +236,7 @@ class findPharmaciesProducts extends Controller
 
 
 
-    //  |---------------------------------- pharmacyDetails ----------------------------------|
+    //  |---------------------------------- 6) pharmacyDetails ----------------------------------|
     public function pharmacyDetails($pharmacyId, $productId = null) //$productId for displaying the product that the user selected for viewing medicine details
     {
         $pharmacy = Pharmacist::whereId($pharmacyId)->first();

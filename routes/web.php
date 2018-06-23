@@ -18,6 +18,8 @@
 
     Route::get('storeSearhData', 'testController@storeSearhData');
     Route::get('displayMostSearchMedicines', 'testController@displayMostSearchMedicines');
+    Route::get('medicneDetails', 'arhamController@medicneDetails');
+    Route::get('getMedicineInformations', 'arhamController@getMedicineInformations');
 
 
 
@@ -46,6 +48,8 @@
     Route::get('getMessages', 'chatController@getMessages');
     // storeChatData --> Store Chat Data
     Route::get('storeChatData', 'chatController@storeChatData');
+    // Show Medicine Details --> Store Chat Data
+    Route::get('medicineDetails', 'findPharmaciesProducts@medicineDetails');
 
 
 
