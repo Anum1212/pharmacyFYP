@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Input;
 use App\File;
+use Curl;
 use Auth;
 use App\User;
 use App\Pharmacist;
@@ -204,15 +205,20 @@ class orderController extends Controller
         for ($i=0; $i<count($arrangedPharmacistId); $i++) {
             $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
         }
+
+        // // send mail to customer
         // Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
 
+        // // send mail to pharmacist(s)
         // foreach($pharmacistId as $pharmacist){
         // Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
         // }
+
+        // send sms to customer
+        $response = Curl::to('http://sendpk.com/api/sms.php')
+                        ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=> floatval($customerDetails->contact),'message'=>'Thank You for your order. Regards WebsiteNameHere'])
+                        ->post();
+        // return view
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }
 }
-//API FOR SMS
-/*$response = Curl::to('http://sendpk.com/api/sms.php')
-                ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=>923134983849,'message'=>'Hey'])
-                ->post();*/

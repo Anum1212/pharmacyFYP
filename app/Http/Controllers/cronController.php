@@ -40,6 +40,7 @@ class cronController extends Controller
     // |---------------------------------- 2) changeStatus ----------------------------------|
     public function changeStatus()
     {
+        // get all orders where time since order is more than 12 hours
         $ratingStatus = Order::where([
             ['ratingStatus','0'],
             ['created_at', '<', Carbon::now()->subHours(12)->toDateTimeString()]])->get();

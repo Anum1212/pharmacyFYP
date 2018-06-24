@@ -26,6 +26,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Carbon\carbon;
 use Auth;
 use Curl;
 use Geocode;
@@ -66,7 +67,7 @@ class PharmacistController extends Controller
     public function index()
     {
         // get logged in pharamcist details
-        $userData=Auth::user()->whereId(Auth::user()->id)->first();
+        $userData = Auth::user()->whereId(Auth::user()->id)->first();
 
         // if dataSource is 0 it means pharamcist hasnt provided an api or choose manual data entry
         // hence take pharamcist to page where they either enter api or decide to enter data manually
@@ -76,8 +77,45 @@ class PharmacistController extends Controller
         // if dataSource is NOT 0 it means user has provided an api or chose manual data entry
           // hence take pharamcist to dashboard
         } else {
-            $medicines=DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
-            return view('pharmacist.pharmacistDashboard', compact('userData', 'medicines'));
+
+            $allOrderId = [];
+            $newOrders = [];
+            $orders = [];
+
+            $pharmacistId = Auth::user()->id;
+            $orderItems = Orderitem::where('pharmacistId', $pharmacistId)->orderBy('id', 'desc')->get();
+            foreach ($orderItems as $orderItem) {
+                $allOrderId[] = $orderItem->orderId;
+            }
+        // to remove duplicates
+            $orderId = array_unique($allOrderId);
+
+        // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
+        // index => value
+        // 0     =>   1
+        // 2     =>   3
+        // 7     =>   9
+        // to fix this we use array_values()
+        // which will give the result
+        // index => value
+        // 0     =>   1
+        // 1     =>   3
+        // 2     =>   9
+            $arrangedOrderId = array_values($orderId);
+
+            // count total orders in database
+            $totalOrders = count($arrangedOrderId);
+
+        // count all orders where time since order is less than 24 hours
+        for($i=0; $i<$totalOrders; $i++)
+            $newOrders[] = Order::where([
+                ['created_at', '>=', Carbon::now()->subDays(1)]
+            ])->first();
+
+            $newOrders = count($newOrders);
+            $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacistId], ['status', 1]])->count();
+            $medicines = DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
+            return view('pharmacist.pharmacistDashboard', compact('userData', 'medicines', 'newOrders', 'totalOrders', 'totalProducts'));
         }
     }
 
@@ -102,7 +140,7 @@ class PharmacistController extends Controller
     {
         $this->validate($req, [
             'dbAPI' => 'required|',
-            ]);
+        ]);
 
 
         // *************************** use this api for testing purposes (if no own api)***************************
@@ -116,17 +154,17 @@ class PharmacistController extends Controller
         $medicine = $req->medicine;
         $medNotFound = '0';
 
-        for ($i=0;$i<count($medicine); $i++) {
+        for ($i = 0; $i < count($medicine); $i++) {
             $response[$i] = Curl::to($req->dbAPI)
                 // written according to clin api response
                 // arham will make changes from here according to project api response structure
-                ->withData(['terms' => $medicine[$i]], ['maxList'=>'1'], ['q'=>'df'])
+                ->withData(['terms' => $medicine[$i]], ['maxList' => '1'], ['q' => 'df'])
                 ->asJson()
                 ->get();
 
             // counting how many medicine tests failed
             if ($response[$i][0] == '0') {
-                $medNotFound = $medNotFound+1;
+                $medNotFound = $medNotFound + 1;
             }
         }
 
@@ -153,10 +191,10 @@ class PharmacistController extends Controller
     //  |---------------------------------- 6) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
-        $allOrderId=[];
-        $allCustomerId=[];
-        $customer=[];
-        $orders=[];
+        $allOrderId = [];
+        $allCustomerId = [];
+        $customer = [];
+        $orders = [];
         $pharmacistId = Auth::user()->id;
 
         $orderItems = Orderitem::where('pharmacistId', $pharmacistId)->orderBy('id', 'desc')->get();
@@ -179,7 +217,7 @@ class PharmacistController extends Controller
         // 2     =>   9
         $arrangedOrderId = array_values($orderId);
 
-        for ($i=0; $i<count($arrangedOrderId); $i++) {
+        for ($i = 0; $i < count($arrangedOrderId); $i++) {
             $orders[$i] = Order::whereId($arrangedOrderId[$i])->first();
         }
         foreach ($orders as $order) {
@@ -202,7 +240,7 @@ class PharmacistController extends Controller
         // 2     =>   9
         $arrangedCustomerId = array_values($customerId);
 
-        for ($i=0; $i<count($arrangedCustomerId); $i++) {
+        for ($i = 0; $i < count($arrangedCustomerId); $i++) {
             $customers[$i] = User::whereId($arrangedCustomerId[$i])->first();
         }
         return view('pharmacist.orders.allOrders', compact('orders', 'customers'));
@@ -213,30 +251,30 @@ class PharmacistController extends Controller
     //  |---------------------------------- 7) viewSpecificOrder ----------------------------------|
     public function viewSpecificOrder($orderId, $customerId, $pharmacyId)
     {
-        $productDetails =[];
+        $productDetails = [];
         $order = Order::whereId($orderId)->first();
         if (!empty($order)) {
             $orderDetails = Orderitem::where([
-            ['orderId', $orderId],
-            ['pharmacistId', $pharmacyId]
+                ['orderId', $orderId],
+                ['pharmacistId', $pharmacyId]
             ])->get();
 
-            $customerDetails =  User::whereId($customerId)->first();
+            $customerDetails = User::whereId($customerId)->first();
 
             // error if product gets deleted. Solution??
             foreach ($orderDetails as $orderDetail) {
                 echo $orderDetail->productId;
-                $productDetails[]=Pharmacistproduct::whereId($orderDetail->productId)->first();
+                $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
             }
 
-            if ($order->prescription==1) {
+            if ($order->prescription == 1) {
                 $prescriptions = Prescription::where('orderId', $orderId)->get();
                 return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails', 'order', 'prescriptions'));
             } else {
                 return view('pharmacist.orders.specificOrder', compact('orderDetails', 'productDetails', 'customerDetails', 'order'));
             }
         } else {
-            return redirect()->action('PharmacistController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+            return redirect()->action('PharmacistController@viewAllOrders')->with('error', 'Order# ' . $orderId . ' not found');
         }
     }
 
@@ -255,8 +293,8 @@ class PharmacistController extends Controller
     public function editAccountDetails(Request $req)
     {
         $pharmacyDetails = Pharmacist::find(Auth::user()->id);
-        $address = $req->address.' '.$req->society.' '.$req->city;
-        $savedAddress = $pharmacyDetails->address.' '.$pharmacyDetails->society.' '.$pharmacyDetails->city;
+        $address = $req->address . ' ' . $req->society . ' ' . $req->city;
+        $savedAddress = $pharmacyDetails->address . ' ' . $pharmacyDetails->society . ' ' . $pharmacyDetails->city;
 
         // check if user changed address if db saved address = form address then no need to call latlong function
         if ($savedAddress === $address) {
@@ -278,7 +316,7 @@ class PharmacistController extends Controller
             $addressToLatLng = Geocode::make()->address($address);
 
             // check if geocode fun was successful if not save other form details n return back to form with error message
-            if ($addressToLatLng ==false) {
+            if ($addressToLatLng == false) {
                 $pharmacyDetails->name = $req->name;
                 $pharmacyDetails->email = $req->email;
                 $pharmacyDetails->contact = $req->contact;

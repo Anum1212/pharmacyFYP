@@ -24,6 +24,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Carbon\carbon;
 use Auth;
 use Geocode;
 use Mail;
@@ -65,9 +66,20 @@ class HomeController extends Controller
     //  |---------------------------------- 3) index ----------------------------------|
     public function index()
     {
+        // to show rating pop up if rating not done
         $pharmacyRatings = $this->request->get('pharmacyRatings');
         $orderId = $this->request->get('orderId');
-        return view('customer.customerDashboard', compact('pharmacyRatings', 'orderId'));
+
+        // count all orders where time since order is less than 24 hours
+        $newOrders = Order::where([
+            ['userId', Auth::user()->id],
+            ['created_at', '>=', Carbon::now()->subDays(1)]
+        ])->count();
+
+        // count total orders in database
+        $totalOrders = Order::where('userId', Auth::user()->id)->count();
+
+        return view('customer.customerDashboard', compact('pharmacyRatings', 'orderId', 'newOrders', 'totalOrders'));
     }
 
 
@@ -75,6 +87,7 @@ class HomeController extends Controller
     //  |---------------------------------- 4) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
+        // to show rating pop up if rating not done
         $pharmacyRatings = $this->request->get('pharmacyRatings');
         $orderId = $this->request->get('orderId');
         $totalOrders = Order::where('userId', Auth::user()->id)->count();
@@ -128,6 +141,7 @@ class HomeController extends Controller
     // |---------------------------------- 6) contactUsForm ----------------------------------|
     public function contactUsForm()
     {
+        // to show rating pop up if rating not done
         $pharmacyRatings = $this->request->get('pharmacyRatings');
         $orderId = $this->request->get('orderId');
         return view('customer.messageToAdminForm', compact('pharmacyRatings', 'orderId'));
@@ -138,6 +152,7 @@ class HomeController extends Controller
     //  |---------------------------------- 7) editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
+        // to show rating pop up if rating not done
         $pharmacyRatings = $this->request->get('pharmacyRatings');
         $orderId = $this->request->get('orderId');
         $customerDetails = User::whereId(Auth::user()->id)->first();

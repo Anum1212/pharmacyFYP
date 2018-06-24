@@ -50,6 +50,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use App\File;
+use Carbon\carbon;
 use App\Order;
 use App\Orderitem;
 use App\Pharmacist;
@@ -77,9 +78,20 @@ class AdminController extends Controller
     // |---------------------------------- 2) index ----------------------------------|
     public function index()
     {
+        // count all orders where time since order is less than 24 hours
+        $newOrders = Order::where([
+            ['created_at', '>=', Carbon::now()->subDays(1)]
+        ])->count();
+
+        // count total orders in database
+        $totalOrders = Order::count();
+
+        $totalCustomers = User::where('verificationStatus', 1)->count();
+        $totalPharmacist = Pharmacist::where('verificationStatus', 1)->count();
+
+        // most searched medicine
         $medicines=DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
-        //dd($medicines);
-        return view('admin.adminDashboard', compact('medicines'));
+        return view('admin.adminDashboard', compact('medicines', 'newOrders', 'totalOrders', 'totalCustomers', 'totalPharmacist'));
     }
 
 
