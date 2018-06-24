@@ -216,7 +216,7 @@ class orderController extends Controller
 
         // send sms to customer
         $response = Curl::to('http://sendpk.com/api/sms.php')
-                        ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=> floatval($customerDetails->contact),'message'=>'Thank You for your order. Regards WebsiteNameHere'])
+                        ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=>floatval($customerDetails->contact),'message'=>'Thank You for your order. Regards WebsiteNameHere'])
                         ->post();
         // return view
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
