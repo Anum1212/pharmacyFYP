@@ -12,6 +12,7 @@
 			headers: { 'X-CSRF-Token' : $('meta[name=_token]').attr('content') }
 		});
   	$(function () {
+      $('.chat-message').scrollTop(5000000);
   $('form').on('submit', function (event) {
   //	console.log($('form').serializeArray());
   	//var reciever=$('#otherPersonName').val();
@@ -21,7 +22,8 @@
 //onsole.log(decodeURIComponent(reciever));
 var messages=$('#text').val();
   var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
- $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
+ $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
+ $('.chat-message').scrollTop(5000000);
  queryString=getUrlVars();
         
         if(!queryString['name'])
@@ -84,7 +86,8 @@ var messages=$('#text').val();
           var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-message').scrollTop(5000000);
      }
        @endif
    }else if(message[3]=='pharmicist'){
@@ -98,7 +101,8 @@ var messages=$('#text').val();
     var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').prepend('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-message').scrollTop(5000000);
        } 
     @endif
 }

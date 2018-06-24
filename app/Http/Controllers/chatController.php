@@ -47,10 +47,10 @@ class chatController extends Controller
     public function getMessages(Request $request)
     {
         if (Auth::check()) {
-            $chat=DB::table('chat_records')->where('pharmicistName', $request->name)->where('userName', Auth::user()->name)->orderBy('created_at', 'DESC')->get();
+            $chat=DB::table('chat_records')->where('pharmicistName', $request->name)->where('userName', Auth::user()->name)->orderBy('created_at', 'ASC')->get();
             $data=DB::table('pharmacists')->get();
         } elseif (Auth::guard('pharmacist')->check()) {
-            $chat=DB::table('chat_records')->where('pharmicistName', Auth::guard('pharmacist')->user()->name)->where('userName', $request->name)->orderBy('created_at', 'DESC')->get();
+            $chat=DB::table('chat_records')->where('pharmicistName', Auth::guard('pharmacist')->user()->name)->where('userName', $request->name)->orderBy('created_at', 'ASC')->get();
             $data=DB::table('users')->get();
         }
         return view('chatView', compact('data', 'chat'));
