@@ -13,6 +13,12 @@
 
 
 /* -------------------------- Search Result Page --------------------------*/
+.searchResultHeading{
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 55px;
+    color: rgb(5, 86, 148);
+}
 
 .thumbnail {
     margin-bottom: 55px;

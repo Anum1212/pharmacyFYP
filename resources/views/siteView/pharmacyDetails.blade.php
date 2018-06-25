@@ -4,11 +4,15 @@
 @endsection
 
 @section('body')
-<div class="wrapper">
-    <div class="row">
 
-<div class="col-lg-10 col-lg-offset-1 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 col-xs-12">
-<div class="panel panel-default">
+
+
+
+
+<div class="wrapper container">
+<div class="row">
+
+    <div class="panel panel-default">
 <div class="panel-heading">
 
     <table>
@@ -34,124 +38,179 @@
     <div id="map">
     </div>
 </div><!-- /panel-body -->
-
+</div><!-- /panel -->
+        <div class="gap col-lg-12 col-md-12 col-sm-12 col-xs-12">
+              
+        </div>
 @if(!empty($selectedProduct))
 <div class="selectedProduct col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <div class="card col-md-4">
+            <div class="thumbnail">
                 @if($selectedProduct->type=='1')
                 <!-- 1 = Tablet -->
-                <img src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($selectedProduct->type=='2')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($selectedProduct->type=='2')
                 <!-- 2 = Capsule -->
-                <img src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($selectedProduct->type=='3')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($selectedProduct->type=='3')
                 <!-- 3 = Syrup -->
-                <img src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($selectedProduct->type=='4')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($selectedProduct->type=='4')
                 <!-- 4 = Inhaler -->
-                <img src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($selectedProduct->type=='5')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($selectedProduct->type=='5')
                 <!-- 5 = Drops -->
-                <img src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($selectedProduct->type=='6')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($selectedProduct->type=='6')
                 <!-- 6 = Injection -->
-                <img src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($selectedProduct->type=='7')
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($selectedProduct->type=='7')
                 <!-- 7 = Cream -->
-                <img src={{ asset( 'storage/myAssets/cream.png') }}> @endif
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/cream.png') }}> @endif
+                <div class="caption text-center">
+                        <div class="row">
+                                <div class="col-lg-12">
+                                        <h3>{{$selectedProduct->name}}</h3>
+                                </div>
+                        </div>
+                        @if($selectedProduct->type=='1')
+                        <!-- 1 = Tablet -->
+                        <p class="title">Type: Tablet</p>
+                        @elseif($selectedProduct->type=='2')
+                        <!-- 2 = Capsule -->
+                        <p class="title">Type: Capsule </p>
+                        @elseif($selectedProduct->type=='3')
+                        <!-- 3 = Syrup -->
+                        <p class="title">Type: Syrup</p>
+                        @elseif($selectedProduct->type=='4')
+                        <!-- 4 = Inhaler -->
+                        <p class="title">Type: Inhaler</p>
+                        @elseif($selectedProduct->type=='5')
+                        <!-- 5 = Drops -->
+                        <p class="title">Type: Drops</p>
+                        @elseif($selectedProduct->type=='6')
+                        <!-- 6 = Injection -->
+                        <p class="title">Type: Injection</p>
+                        @elseif($selectedProduct->type=='7')
+                        <!-- 7 = Cream -->
+                        <p class="title">Type: Cream</p>
+                        @endif @if($selectedProduct->type=='1' || $selectedProduct->type=='2' || $selectedProduct->type=='7')
+                        <!-- 1 = Tablet -->
+                        <p class="title">Dosage: {{$selectedProduct->dosage}} mg</p>
+                        @else
+                        <p class="title">Dosage: {{$selectedProduct->dosage}} ml</p>
+                        @endif 
+                        {{-- @foreach($nearByPharmacies as $nearByPharmacy) @if($selectedProduct->pharmacistId == $nearByPharmacy->id)
+                        <p class="title">Sold By:
+                                <a href="/pharmacyDetails/{{$nearByPharmacy->id}}/{{$selectedProduct->id}}">{{$nearByPharmacy->pharmacyName}} </a>
+                        </p>
+                        @endif
+                        @endforeach
+                        --}}
+                         @if($selectedProduct->prescription=='1')
+                        <!-- 0 = prescription not required -->
+                        <!-- 1 = prescription required -->
+                        <p class="title">
+                                <span style="color:red"> Prescription Required </span>
+                        </p>
+                        @endif
+                        <div class="row">
 
-                <h3>{{$selectedProduct->name}}</h3>
-                <p>Price: {{$selectedProduct->price}}</p>
-                @if($selectedProduct->type=='1')
-                <!-- 1 = Tablet -->
-                <p class="title">Type: Tablet</p>
-                @elseif($selectedProduct->type=='2')
-                <!-- 2 = Capsule -->
-                <p class="title">Type: Capsule </p>
-                @elseif($selectedProduct->type=='3')
-                <!-- 3 = Syrup -->
-                <p class="title">Type: Syrup</p>
-                @elseif($selectedProduct->type=='4')
-                <!-- 4 = Inhaler -->
-                <p class="title">Type: Inhaler</p>
-                @elseif($selectedProduct->type=='5')
-                <!-- 5 = Drops -->
-                <p class="title">Type: Drops</p>
-                @elseif($selectedProduct->type=='6')
-                <!-- 6 = Injection -->
-                <p class="title">Type: Injection</p>
-                @elseif($selectedProduct->type=='7')
-                <!-- 7 = Cream -->
-                <p class="title">Type: Cream</p>
-                @endif @if($selectedProduct->type=='1' || $selectedProduct->type=='2' || $selectedProduct->type=='7')
-                <!-- 1 = Tablet -->
-                <p class="title">Dosage: {{$selectedProduct->dosage}} mg</p>
-                @else
-                <p class="title">Dosage: {{$selectedProduct->dosage}} ml</p>
-                @endif
+                                <div class="col-lg-12 price">
+                                        <h3>
+                                                <label>{{$selectedProduct->price}} Rs</label>
+                                        </h3>
+                                </div>
+                                <div class="col-lg-12">
+                                <a href="/addToCart/{{$selectedProduct->id}}/{{$selectedProduct->selectedProductSource}}" class="btn btn-success btn-product" style="width: 100%">
+                                                <i class="fa fa-cart-plus"></i> Add to cart</a>
 
-                <a href="/addToCart/{{$selectedProduct->id}}">
-                        <i class="fas fa-cart-plus"></i> Add to cart</a>
+                                </div>
+                        </div>
+                </div>
         </div>
 </div>
 @endif
 
-<div class="allProducts col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        @foreach($pharmacyProducts as $pharmacyProduct)
-        <div class="card col-md-4">
-                @if($pharmacyProduct->type=='1')
-                <!-- 1 = Tablet -->
-                <img src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($pharmacyProduct->type=='2')
-                <!-- 2 = Capsule -->
-                <img src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($pharmacyProduct->type=='3')
-                <!-- 3 = Syrup -->
-                <img src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($pharmacyProduct->type=='4')
-                <!-- 4 = Inhaler -->
-                <img src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($pharmacyProduct->type=='5')
-                <!-- 5 = Drops -->
-                <img src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($pharmacyProduct->type=='6')
-                <!-- 6 = Injection -->
-                <img src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($pharmacyProduct->type=='7')
-                <!-- 7 = Cream -->
-                <img src={{ asset( 'storage/myAssets/cream.png') }}> @endif
-
-                <h3>{{$pharmacyProduct->name}}</h3>
-                <p>Price: {{$pharmacyProduct->price}}</p>
-                @if($pharmacyProduct->type=='1')
-                <!-- 1 = Tablet -->
-                <p class="title">Type: Tablet</p>
-                @elseif($pharmacyProduct->type=='2')
-                <!-- 2 = Capsule -->
-                <p class="title">Type: Capsule </p>
-                @elseif($pharmacyProduct->type=='3')
-                <!-- 3 = Syrup -->
-                <p class="title">Type: Syrup</p>
-                @elseif($pharmacyProduct->type=='4')
-                <!-- 4 = Inhaler -->
-                <p class="title">Type: Inhaler</p>
-                @elseif($pharmacyProduct->type=='5')
-                <!-- 5 = Drops -->
-                <p class="title">Type: Drops</p>
-                @elseif($pharmacyProduct->type=='6')
-                <!-- 6 = Injection -->
-                <p class="title">Type: Injection</p>
-                @elseif($pharmacyProduct->type=='7')
-                <!-- 7 = Cream -->
-                <p class="title">Type: Cream</p>
-                @endif @if($pharmacyProduct->type=='1' || $pharmacyProduct->type=='2' || $pharmacyProduct->type=='7')
-                <!-- 1 = Tablet -->
-                <p class="title">Dosage: {{$pharmacyProduct->dosage}} mg</p>
-                @else
-                <p class="title">Dosage: {{$pharmacyProduct->dosage}} ml</p>
-                @endif
-
-                <a href="/addToCart/{{$pharmacyProduct->id}}">
-                        <i class="fas fa-cart-plus"></i> Add to cart</a>
+        <div class="searchResultHeading col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                All Products
         </div>
 
-        @endforeach
+@foreach($pharmacyProducts as $product)
+<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
+        <div class="thumbnail">
+                @if($product->type=='1')
+                <!-- 1 = Tablet -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($product->type=='2')
+                <!-- 2 = Capsule -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($product->type=='3')
+                <!-- 3 = Syrup -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($product->type=='4')
+                <!-- 4 = Inhaler -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($product->type=='5')
+                <!-- 5 = Drops -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($product->type=='6')
+                <!-- 6 = Injection -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($product->type=='7')
+                <!-- 7 = Cream -->
+                <img class="img-responsive" src={{ asset( 'storage/myAssets/cream.png') }}> @endif
+                <div class="caption text-center">
+                        <div class="row">
+                                <div class="col-lg-12">
+                                        <h3>{{$product->name}}</h3>
+                                </div>
+                        </div>
+                        @if($product->type=='1')
+                        <!-- 1 = Tablet -->
+                        <p class="title">Type: Tablet</p>
+                        @elseif($product->type=='2')
+                        <!-- 2 = Capsule -->
+                        <p class="title">Type: Capsule </p>
+                        @elseif($product->type=='3')
+                        <!-- 3 = Syrup -->
+                        <p class="title">Type: Syrup</p>
+                        @elseif($product->type=='4')
+                        <!-- 4 = Inhaler -->
+                        <p class="title">Type: Inhaler</p>
+                        @elseif($product->type=='5')
+                        <!-- 5 = Drops -->
+                        <p class="title">Type: Drops</p>
+                        @elseif($product->type=='6')
+                        <!-- 6 = Injection -->
+                        <p class="title">Type: Injection</p>
+                        @elseif($product->type=='7')
+                        <!-- 7 = Cream -->
+                        <p class="title">Type: Cream</p>
+                        @endif @if($product->type=='1' || $product->type=='2' || $product->type=='7')
+                        <!-- 1 = Tablet -->
+                        <p class="title">Dosage: {{$product->dosage}} mg</p>
+                        @else
+                        <p class="title">Dosage: {{$product->dosage}} ml</p>
+                        @endif 
+                        {{-- @foreach($nearByPharmacies as $nearByPharmacy) @if($product->pharmacistId == $nearByPharmacy->id)
+                        <p class="title">Sold By:
+                                <a href="/pharmacyDetails/{{$nearByPharmacy->id}}/{{$product->id}}">{{$nearByPharmacy->pharmacyName}} </a>
+                        </p>
+                        @endif
+                        @endforeach
+                        --}}
+                         @if($product->prescription=='1')
+                        <!-- 0 = prescription not required -->
+                        <!-- 1 = prescription required -->
+                        <p class="title">
+                                <span style="color:red"> Prescription Required </span>
+                        </p>
+                        @endif
+                        <div class="row">
 
-        {{ $pharmacyProducts->links() }}
+                                <div class="col-lg-12 price">
+                                        <h3>
+                                                <label>{{$product->price}} Rs</label>
+                                        </h3>
+                                </div>
+                                <div class="col-lg-12">
+                                <a href="/addToCart/{{$product->id}}/{{$product->productSource}}" class="btn btn-success btn-product" style="width: 100%">
+                                                <i class="fa fa-cart-plus"></i> Add to cart</a>
+
+                                </div>
+                        </div>
+                </div>
+        </div>
 </div>
-
-
-
-</div>
-</div>
+@endforeach
 </div>
 </div>
 

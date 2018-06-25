@@ -34,7 +34,7 @@ function showPosition(position) {
 function addressToCoOrdinates() {
     var geocoder = new google.maps.Geocoder();
     var address = jQuery('#address').val();
-
+    $('#formatedAddress').val($('#address').val());
     geocoder.geocode({
         'address': address
     }, function (results, status) {

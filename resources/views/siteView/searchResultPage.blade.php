@@ -12,6 +12,12 @@
 
 <div class="wrapper container">
 <div class="row">
+        <div class="searchResultHeading col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                Search 
+                @if(session()->has('medicineSearched')) 
+                {{ session('medicineSearched') }}
+                 @endif
+        </div>
 @foreach($searchedProductsMergeCollection as $product)
 <div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
         <div class="thumbnail">
