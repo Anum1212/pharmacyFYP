@@ -19,6 +19,7 @@ class CreatePharmacistproductsTable extends Migration
             $table->string('pharmacistId');
             $table->string('pharmacistName');
             $table->string('name');
+            $table->string('dosage');
             // possible types of medicine
             // 1 -> tablet
             // 2 -> capsule
@@ -27,7 +28,6 @@ class CreatePharmacistproductsTable extends Migration
             // 5 -> drops
             // 6 -> injection
             // 7 -> cream
-            $table->string('dosage');
             $table->integer('type');
             // possible prescription status
             // 0 -> not required
