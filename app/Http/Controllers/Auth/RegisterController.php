@@ -56,7 +56,7 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
-            'contact'       =>      'required|digits:11',
+            'contact'       =>      'required|digits:10',
             'address'       =>      'required',
             'society'       =>      'required',
             'city'          =>      'required',
@@ -80,7 +80,7 @@ class RegisterController extends Controller
             $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'contact' => $data['contact'],
+            'contact' => '92'.$data['contact'],
             'address' => $data['address'],
             'society' => $data['society'],
             'city' => $data['city'],
@@ -91,11 +91,13 @@ class RegisterController extends Controller
             // by default verificationStatus and status is set to 0 and 1 respectively
             // see create_users_table migration for more info
         ]);
-
+        
             $thisUser = User::findOrFail($user->id);
             $this->sendEmail($thisUser);
             return $user;
-        }
+        } 
+        else
+            return redirect()->back()->with('error', 'Opps something went wrong.');
     }
 
     // overriding register function found in D:\Projects\Pharmacy\vendor\laravel\framework\src\Illuminate\Foundation\Auth\RegistersUsers

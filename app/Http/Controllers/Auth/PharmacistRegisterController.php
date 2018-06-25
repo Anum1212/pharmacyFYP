@@ -51,12 +51,11 @@ class PharmacistRegisterController extends Controller
         $this->validate($req, [
         'name'          =>      'required|string|max:255',
         'email'         =>      'required|string|email|max:255|unique:pharmacists',
-        'contact'       =>      'required|digits:11',
+        'contact'       =>      'required|digits:10',
         'pharmacyName'  =>      'required',
         'address'       =>      'required',
         'society'       =>      'required',
         'city'          =>      'required',
-        'freeDeliveryPurchase' => 'required|numeric',
         'password'      =>      'required|string|min:6|confirmed'
 
       ]);
@@ -69,14 +68,13 @@ class PharmacistRegisterController extends Controller
             $pharmacists = new Pharmacist;
             $pharmacists->name = $req->name;
             $pharmacists->email = $req->email;
-            $pharmacists->contact = $req->contact;
+            $pharmacists->contact = '92'.$req->contact;
             $pharmacists->pharmacyName = $req->pharmacyName;
             $pharmacists->address = $req->address;
             $pharmacists->society = $req->society;
             $pharmacists->city = $req->city;
             $pharmacists->latitude = $latitude;
             $pharmacists->longitude = $longitude;
-            $pharmacists->freeDeliveryPurchase = $req->freeDeliveryPurchase;
             $pharmacists->password=bcrypt($req->password);
             $pharmacists->verificationToken=Str::random(40);
             // by default
@@ -92,6 +90,8 @@ class PharmacistRegisterController extends Controller
 
             return redirect()->route('pharmacist.login')->with('message', 'A confirmation email has been sent');
         }
+        else
+        return redirect()->back()->with('error', 'Opps something went wrong.');
     }
 
     // to send email

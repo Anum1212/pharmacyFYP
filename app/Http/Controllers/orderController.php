@@ -162,7 +162,8 @@ class orderController extends Controller
                 $orderItem->quantity = $item->qty;
                 $orderItem->save();
             }
-
+            
+            // Commented for test purposes Uncomment in actual Production and remove me
             // Cart::destroy();
             return $this->generateInvoice($lastInsertId);
         } else {
@@ -206,18 +207,29 @@ class orderController extends Controller
             $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
         }
 
-        // // send mail to customer
-        // Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
+        // send mail to customer
+        Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
 
-        // // send mail to pharmacist(s)
-        // foreach($pharmacistId as $pharmacist){
-        // Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
-        // }
+        // send mail to pharmacist(s)
+        foreach($pharmacistId as $pharmacist){
+        Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
+        }
 
         // send sms to customer
-        $response = Curl::to('http://sendpk.com/api/sms.php')
-                        ->withData(['username'=>923224482641, 'password'=>5821, 'sender'=>'1','mobile'=>floatval($customerDetails->contact),'message'=>'Thank You for your order. Regards WebsiteNameHere'])
-                        ->post();
+        $username = '923208778084';///Your  Username 
+        $password='3195';///Your SECRET Password 
+        $sender='ABC';///Your Masking 
+        $mobile= $customerDetails->contact; ///add comma to send multiple sms like 92301,92310,92321 
+        $message='Your Order# '.$lastInsertId.' has been received. Your Total Order Cost is Rs ' .$order->cost;///Your Message 
+        $post = "sender=".urlencode($sender)."&mobile=".urlencode($mobile)."&message=".urlencode($message)."&format=json"; 
+        $url = "http://sendpk.com/api/sms.php?username=".$username."&password=". $password.""; 
+        $ch = curl_init(); $timeout = 0; // set to zero for no timeout 
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)'); 
+        curl_setopt($ch, CURLOPT_URL,$url); curl_setopt($ch, CURLOPT_POST, 1); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+
         // return view
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }

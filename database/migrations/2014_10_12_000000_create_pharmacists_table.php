@@ -34,7 +34,6 @@ class CreatePharmacistsTable extends Migration
             $table->string('city');
             $table->float('longitude', 10, 6);
             $table->float('latitude', 10, 6);
-            $table->string('freeDeliveryPurchase');
             // Possible data source type
                     // none->0
                     // website db->1
