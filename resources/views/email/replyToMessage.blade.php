@@ -18,15 +18,27 @@
   </style>
 </head>
 
-<body>
+<body style="text-align: center;">
   <div id="emailBody">
     <div id="header">
       <h1>Pharmacy</h1>
     </div>
     <div id="content">
-      <h4><b>Hi There!</b></h4>
+      <h4><b>Hi There!
+        <br>
+        Following is the admin's response to your message
+      </b></h4>
       <br/>
-      <p>{{$reply}}</p>
+      <b>Your Message</b>
+      <div id="senderMessage" style="background-color: #f9f9f9">
+        <p>{{$recipientData->message}}</p>
+      </div>
+      <br>
+      <b>Admin Reply</b>
+      <div id="adminMessage" style="background-color: #f9f9f9">
+        <p>{{$reply}}</p>
+      </div>
+  </div>
   </div>
 </body>
 

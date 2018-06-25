@@ -35,7 +35,7 @@
     //contactUs --> save message to database
     Route::post('/contactUs', 'messageController@contactUs');
     //detectPharmacy --> find pharmacies in the customer defined radius
-    Route::post('/detectPharmacy', 'findPharmaciesProducts@findPharmacies');
+    Route::get('/searchMedicine', 'findPharmaciesProducts@searchMedicine');
     //pharmacyDetails --> show the details of a pharmacy
     Route::get('/pharmacyDetails/{pharmacyId}/{productId?}', 'findPharmaciesProducts@pharmacyDetails');
     //update Pharmacy Rating

@@ -22,7 +22,7 @@
 	<script src="js/respond.min.js"></script>
   <![endif]-->
 
-      <style>
+    <style>
         body {
             overflow-x: hidden
         }
@@ -32,16 +32,18 @@
         }
     </style>
 
-    
+
 </head>
 
 <body>
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <span>Lumino</span>Admin</a>
-                <ul class="nav navbar-top-links navbar-right pull-right">
+                <ul class="nav navbar-top-links navbar-right">
+                    @section('searchBar')
+                    @show
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <em class="fa fa-user"></em>
@@ -85,7 +87,7 @@
                             <li>
                                 <div class="dropdown-messages-box">
                                     <div class="message-body">
-                                        <a href="#">
+                                        <a href="/viewCart">
                                             <strong>Cart</strong>
                                         </a>
                                     </div>

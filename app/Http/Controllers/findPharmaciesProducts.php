@@ -84,11 +84,17 @@ function medicineDetails(Request $request)
 
 //  |---------------------------------- 2) findPharmacies ----------------------------------|
     // find pharmacies within the specified distance
-    public function findPharmacies(Request $req)
+    public function searchMedicine(Request $req)
     {
         $latitude = $req->latitude;
         $longitude = $req->longitude;
+        $formatedAddress = $req->formatedAddress;
+        $medicineSearched = $req->medicineSearched;
+        $distance = $req->distance;
 
+        session(['latitude' => $latitude, 'longitude'=> $longitude, 'medicineSearched'=>$medicineSearched, 'formatedAddress'=>$formatedAddress, 'distance'=> $distance]);
+        // dd(session('formatedAddress'));
+        // Session::set('latitude', $latitude);
         // get distance from form and convert to kilometer
         $distance = $req->distance * 1.60934;
 
@@ -106,7 +112,7 @@ function medicineDetails(Request $request)
             foreach ($nearByPharmacies as $nearByPharmacy) {
                 $searchedProducts[] = Pharmacistproduct::where([
       ['pharmacistId', '=', $nearByPharmacy->id],
-      ['name', 'LIKE', '%'.$req->medicineSearched.'%'],
+      ['name', 'LIKE', '%'.$medicineSearched.'%'],
       ['status', '=', '1']
       ])->get();
             }
@@ -126,7 +132,7 @@ function medicineDetails(Request $request)
             }
             // if product not found return with error
             if ($searchedProductsMergeCollection->isEmpty()) {
-                return redirect('/')->with('error', "Oops product not found in the defined radius.<ul style='list-style:none'><li>Try to increase the radius</li><li>or <a href='setAvailabilityNotification/$req->medicineSearched/$latitude/$longitude'><b>Click here</b></a> to get notified when product is available near you</li></ul>");
+                return redirect('/')->with('error', "Oops product not found in the defined radius.<ul style='list-style:none'><li>Try to increase the radius</li><li>or <a href='setAvailabilityNotification/$medicineSearched/$latitude/$longitude'><b>Click here</b></a> to get notified when product is available near you</li></ul>");
             }
 
             return view('siteView.searchResultPage', compact('searchedProductsMergeCollection', 'nearByPharmacies'));

@@ -11,7 +11,7 @@
 @section('body')
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-default">
+        <div class="panel panel-default" style="min-height:88vh">
             <div class="panel-heading">
 				@if(Cart::count()==0)
 				No Items in Cart
@@ -78,15 +78,15 @@
 									</tr>
 
 									<tr>
-										{{-- <td colspan="2">
-											<a href="/" class="btn btn-warning btn-block">
+										<td colspan="2">
+											<a href="#" class="btn btn-warning btn-block" onclick="submitHiidenForm()">
 												<i class="fa fa-caret-left"></i> Continue Shopping</a>
-										</td> --}}
+										</td>
 										<td colspan="4">
 											<button type="submit" class="btn btn-info btn-block">
 												<i class="fa fa-refresh"></i> UpdateCart</button>
 										</td>
-										<td colspan="4">
+										<td colspan="2">
 											<a href="{{'/prescriptionUploadForm'}}" class="btn btn-success btn-block">Checkout
 												<i class="fa fa-caret-right"></i>
 											</a>
@@ -100,5 +100,30 @@
     </div>
 </div>
 <!--/.row-->
+
+<div style="display: none">
+                    <form class="hiddenForm" action="/detectPharmacy" method="get">
+                        <div class="form-group">
+                            <input id="medicineSearched" name="medicineSearched" type="text" class="form-control" placeholder="Medicine" @if(session()->has('medicineSearched')) value="{{ session('medicineSearched') }}" @endif required>
+                        </div>
+                        <div class="form-group">
+                            <input id="distance" name="distance" type="number" class="form-control" placeholder="Search Radius" @if(session()->has('distance')) value="{{ session('distance') }}" @else value="10" @endif required>
+                        </div>
+                        <button type="submit" class="btn btn-primary search">Search</button>
+                        <br>
+                        <br>
+                        <input type="text" name="formatedAddress" id="formatedAddress" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
+                        <input type="text" name="latitude" id="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif>
+                        <input type="text" name="longitude" id="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif>
+					</form>
+	</div>				
 @endif
+@endsection
+
+@section('script')
+	<script>
+		function submitHiidenForm(){
+			$('.hiddenForm').submit();
+		}
+	</script>
 @endsection

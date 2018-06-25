@@ -58,7 +58,7 @@ class messageController extends Controller
         $message->recipientEmail = '0'; // 0 = site admin
         $message->message = $req->message;
         $message->save();
-        return redirect('/')->with('message', 'Admin will soon get in contact with you.');
+        return redirect()->back()->with('message', 'Admin will soon get in contact with you.');
     }
 
 
@@ -98,6 +98,7 @@ class messageController extends Controller
     // |---------------------------------- 5) viewAllMessagesOfSpecificSender ----------------------------------|
     public function viewAllMessagesOfSpecificSender($messageId)
     {
+        $adminResponse = [];
         $recipientData = Message::find($messageId); // visitor Message
         if (!empty($recipientData)) {
             $visitorPrevMessages = Message::where('senderEmail', $recipientData->senderEmail)->get();

@@ -27,9 +27,9 @@
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">
+                <a class="navbar-brand" href="/">
                     <span>Lumino</span>Admin</a>
-                <ul class="nav navbar-top-links navbar-right pull-right">
+                <ul class="nav navbar-top-links navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
                             <em class="fa fa-user"></em>

@@ -1,7 +1,19 @@
 @extends('layouts.siteView') @section('body')
-<div class="wrapper searchResultPageWrapper">
+
+@include('includes.searchBar')
+
+@section('searchBar')
+                        <li class="dropdown">
+                        <a href="#" type="botton" style="color:white" onclick="showSearchDiv()">
+                            <em class="fa fa-search"></em>
+                        </a>
+                    </li>
+@endsection
+
+<div class="wrapper container">
+<div class="row">
 @foreach($searchedProductsMergeCollection as $product)
-<div class="col-sm-6 col-lg-2">
+<div class="col-lg-3 col-md-3 col-sm-4 col-xs-12">
         <div class="thumbnail">
                 @if($product->type=='1')
                 <!-- 1 = Tablet -->
@@ -81,6 +93,22 @@
                 </div>
         </div>
 </div>
+@endforeach
 </div>
+</div>
+ @endsection
+@section('script')
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb86GIW2pKc-uVB8LdJrP_YKsYj7LedUo">
+</script>
 
-@endforeach @endsection
+<script>
+    $(document).ready(function () {
+        $('.searchDiv').hide();
+    });
+
+    function showSearchDiv(){
+        $('.searchDiv').toggle();
+    }
+</script>
+<script type="text/javascript" src="{{ URL::asset('js/searchBar.js') }}"></script>
+@endsection

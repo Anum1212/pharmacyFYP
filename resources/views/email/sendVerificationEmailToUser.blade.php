@@ -35,13 +35,14 @@
   </style>
 </head>
 
-<body>
+<body style="text-align: center;">
   <div id="emailBody">
-    <div id="header">
+    <div id="header" style="background: #30A5FF;
+      color: white;">
       <h1>Pharmacy</h1>
     </div>
     <div id="content">
-      <h1>Confirm Your Email</h1>
+      <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">Confirm Your Email</h1>
       <b>Hi There!</b>
       <br />
       <p>
@@ -51,8 +52,8 @@
         <br>
       </p>
     </div>
-    <div id="button">
-      <h2><a href="{{route('verifyCustomerRegistration', [" email " => $user->email, "verificationToken
+    <div id="button" style="background-color: #30A5FF; border-radius: 5%; color: white;">
+      <h2><a style="color: white;" href="{{route('verifyCustomerRegistration', [" email " => $user->email, "verificationToken
         " => $user->verificationToken])}}">Click Here</a></h2>
     </div>
   </div>

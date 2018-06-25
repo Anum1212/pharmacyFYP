@@ -14,6 +14,14 @@
 
 /* -------------------------- Search Result Page --------------------------*/
 
+.thumbnail {
+    margin-bottom: 55px;
+    max-width: 240px;
+}
+.thumbnail h3 {
+    color: #30A5FF;
+}
+
 .thumbnail img{
     height: 150px;
     width: 150px;

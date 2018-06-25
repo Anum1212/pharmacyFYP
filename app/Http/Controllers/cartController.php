@@ -57,7 +57,7 @@ class cartController extends Controller
             echo 'under development';
         }
 
-        return redirect('/viewCart'); // change in future
+        return redirect()->back()->with('message', 'Item added to cart'); // change in future
     }
 
 
