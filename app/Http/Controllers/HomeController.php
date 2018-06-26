@@ -118,6 +118,7 @@ class HomeController extends Controller
                         $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
                         $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
                     }
+                    // dd($pharmacyDetails);
                     return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
                 }
                 // if $orderDetails is empty return with error
@@ -164,24 +165,26 @@ class HomeController extends Controller
     //  |---------------------------------- 8) editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
+        $customerDetails = User::find(Auth::user()->id);
+
         $address = $req->address.' '.$req->society.' '.$req->city;
         $addressToLatLng = Geocode::make()->address($address);
-
+        if($addressToLatLng){
         $latitude = $addressToLatLng->latitude();
         $longitude = $addressToLatLng->longitude();
-
-        $customerDetails = User::find(Auth::user()->id);
-        $customerDetails->name = $req->name;
-        $customerDetails->email = $req->email;
-        $customerDetails->contact = $req->contact;
         $customerDetails->address = $req->address;
         $customerDetails->society = $req->society;
         $customerDetails->city = $req->city;
         $customerDetails->longitude = $longitude;
         $customerDetails->latitude = $latitude;
+        }
+
+        $customerDetails->name = $req->name;
+        $customerDetails->email = $req->email;
+        $customerDetails->contact = $req->contact;
         $customerDetails->save();
 
-        return redirect('/dashboard')->with('message', 'Edit successful');
+        return redirect()->back()->with('message', 'Edit successful');
     }
 
 

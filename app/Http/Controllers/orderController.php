@@ -104,34 +104,20 @@ class orderController extends Controller
                 $orderItem->pharmacistId = $item->options->pharmacistId;
                 $orderItem->quantity = $item->qty;
                 $orderItem->save();
-            }
-    $j = 0;     // Variable for indexing uploaded image.
-        // Loop to get individual element from the array
-    for ($i = 0; $i < count($_FILES['file']['name']); $i++) {
-        // Extensions which are allowed.
-        $validextensions = array("jpeg", "jpg", "png");
-        // Explode file name from dot(.)
-        $ext = explode('.', basename($_FILES['file']['name'][$i]));
-        // Store extensions in the variable.
-        $file_extension = end($ext);
-        // Increment the number of uploaded images according to the files in array.
-        $j = $j + 1;
-     // Approx. 10000kb (10Mb) files can be uploaded.
-    if (($_FILES["file"]["size"][$i] < 1000000) && in_array($file_extension, $validextensions)) {
-        Storage::put('public/myAssets/prescriptions', $req->file[$i]);
-        $prescription = new Prescription;
-        $prescription->orderId = $lastInsertId;
-        $prescription->fileName = $req->file[$i]->hashName();
-        $prescription->save();
-}
-//   If File Size And File Type Was Incorrect.
-    else {
-        return redirect::back()->with('error', 'Invalid file Size or Type');
-}
         }
+
+            if ($req->file('imageFile')) {
+                Storage::put('public/myAssets/prescriptions', $req->imageFile);
+                $prescription = new Prescription;
+                $prescription->orderId = $lastInsertId;
+                $prescription->fileName = $req->imageFile->hashName();
+                $prescription->save();
+            }
+
             Cart::destroy();
             return $this->generateInvoice($lastInsertId);
-        } else {
+        }
+         else {
             return redirect('/')->with('message', 'Cart Empty');
         }
     }
@@ -163,8 +149,7 @@ class orderController extends Controller
                 $orderItem->save();
             }
             
-            // Commented for test purposes Uncomment in actual Production and remove me
-            // Cart::destroy();
+            Cart::destroy();
             return $this->generateInvoice($lastInsertId);
         } else {
             return redirect('/');

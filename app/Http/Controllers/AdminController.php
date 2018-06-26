@@ -143,7 +143,7 @@ class AdminController extends Controller
                 $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
                 $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
             }
-            return view('admin.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'customerDetails'));
+            return view('admin.orders.specificOrder', compact('orderId', 'pharmacyDetails', 'productDetails', 'orderDetails', 'customerDetails'));
         } else {
             return redirect()->action('AdminController@viewAllOrders')->with('error', 'order# '.$orderId.' not found');
         }

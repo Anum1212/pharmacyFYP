@@ -88,7 +88,7 @@ class cartController extends Controller
             Cart::update($itemRowId, $req->qty[$i]);
             $i++;
         }
-        return redirect('/viewCart');
+        return redirect('/viewCart')->with('message', 'cart updated');
     }
 
 

@@ -13,7 +13,7 @@
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        @foreach($orderDetails as $orderDetail) Order#{{$orderDetail->id}} @endforeach
+        Order#{{ $orderId }}
         <span class="pull-right clickable panel-toggle panel-button-tab-left">
           <em class="fa fa-toggle-up"></em>
         </span>
@@ -53,12 +53,10 @@
           </tr>
         </thead>
         <tbody>
-          <?php
-    $i=1;
-    ?>
+
             @foreach($orderDetails as $orderDetail)
             <tr>
-              <td data-label="#">{{$i}}</td>
+              <td data-label="#">{{ $loop->iteration }}</td>
               @foreach($productDetails as $productDetail) @if($productDetail->id == $orderDetail->productId)
               <td data-label="item">{{$productDetail->name}}</td>
               @if($productDetail->type=='1')
@@ -84,9 +82,7 @@
               <td data-label="type">Cream</td>
               @endif @endif @endforeach
             </tr>
-            <?php
-      $i++;
-      ?>
+
               @endforeach
         </tbody>
       </table>

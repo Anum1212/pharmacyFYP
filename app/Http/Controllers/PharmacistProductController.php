@@ -43,7 +43,7 @@ class PharmacistProductController extends Controller
     public function viewProducts()
     {
         $totalProducts = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->count();
-        $products = Pharmacistproduct::where('pharmacistId', Auth::user()->id)->paginate(30);
+        $products = Pharmacistproduct::where([['pharmacistId', Auth::user()->id], ['status', '1']])->paginate(30);
         return view('pharmacist.productManagment.viewProducts', compact('products', 'totalProducts'));
     }
 

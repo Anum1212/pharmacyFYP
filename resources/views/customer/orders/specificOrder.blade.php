@@ -22,13 +22,12 @@
             </tr>
           </thead>
           <tbody>
-            <?php
-    $i=1;
-    ?>
-              @foreach($orderDetails as $orderDetail)
+
+              @foreach($orderDetails as $orderDetail) {{-- loop 1 --}}
               <tr>
-                <td data-label="#">{{$i}}</td>
-                @foreach($productDetails as $productDetail) @if($productDetail->id == $orderDetail->id)
+                <td data-label="#">{{ $loop->iteration }}</td>
+                @foreach($productDetails as $productDetail) {{-- loop 2 --}}
+                @if($productDetail->id == $orderDetail->productId) {{-- product detail if 1 --}}
                 <td data-label="item">{{$productDetail->name}}</td>
                 @if($productDetail->type=='1')
                 <!-- 1 = Tablet -->
@@ -51,18 +50,19 @@
                 @elseif($productDetail->type=='7')
                 <!-- 7 = Cream -->
                 <td data-label="type">Cream</td>
-                @endif @endif @endforeach
+                @endif 
                 <td data-label="item">{{$orderDetail->quantity}}</td>
-                @foreach($pharmacyDetails as $pharmacyDetail) @if($productDetail->pharmacistId == $pharmacyDetail->id)
+                @foreach($pharmacyDetails as $pharmacyDetail) {{-- loop 3 --}}
+                @if($productDetail->pharmacistId == $pharmacyDetail->id) {{-- product detail if 2 --}}
                 <td data-label="item">
                   <a href="/pharmacyDetails/{{$pharmacyDetail->id}}">{{$pharmacyDetail->pharmacyName}}</a>
                 </td>
-                @endif @endforeach
+                @endif {{-- product detail if 2 end --}}
+                @endforeach {{-- loop 3 end --}}
+                @endif {{-- product deatil if 1 end --}}
+                @endforeach {{-- loop 2 end --}}
               </tr>
-              <?php
-      $i++;
-      ?>
-                @endforeach
+                @endforeach {{-- loop 1 end --}}
           </tbody>
         </table>
       </div>

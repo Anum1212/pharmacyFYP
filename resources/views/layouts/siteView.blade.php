@@ -104,7 +104,8 @@
         <!-- /.container-fluid -->
     </nav>
     <div class="gap"></div>
-    @include('includes.error') @include('includes.message') @section('body') @show @section('script') @show
+    @include('includes.error') @include('includes.message')
+     @section('body') @show @section('script') @show
 
 </body>
 
