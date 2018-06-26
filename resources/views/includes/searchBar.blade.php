@@ -31,9 +31,9 @@
                         <button type="submit" class="btn btn-primary search">Search</button>
                         <br>
                         <br>
-                        <input type="text" name="formatedAddress" id="formatedAddress" value="" style="display:none">
-                        <input type="text" name="latitude" id="lat" value="" style="display:none">
-                        <input type="text" name="longitude" id="lng" value="" style="display:none">
+                        <input type="text" name="formatedAddress" id="formatedAddress" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif style="display:none">
+                        <input type="text" name="latitude" id="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
+                        <input type="text" name="longitude" id="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
                     </form>
                 </div> {{-- medicineForm col --}}
             </div> {{-- medicineForm --}}
