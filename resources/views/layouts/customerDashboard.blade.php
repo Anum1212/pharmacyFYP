@@ -10,8 +10,8 @@
     <link href="{{ asset('css/dashboard/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      @section('head') @show @section('style') @show
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    @section('head') @show @section('style') @show
 
 
     <!--Custom Font-->
@@ -35,7 +35,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">
-                    <span>Lumino</span>Admin</a>
+                    <span>LifeLine</span>
+                    <em class="fa fa-heartbeat" style="color:#fff; font-size: 25px"></em>
+                </a>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -68,7 +70,11 @@
             </li>
             <li class="{{{ (Request::is('viewCart') ? 'active' : '') }}}">
                 <a href="/viewCart">
-                    <em class="fa fa-shopping-cart">&nbsp;</em> Cart</a>
+                    <em class="fa fa-shopping-cart">&nbsp;</em> Cart ({{ Cart::count() }})</a>
+            </li>
+            <li class="{{{ (Request::is('downloads') ? 'active' : '') }}}">
+                <a href="/downloads">
+                    <em class="fa fa-file">&nbsp;</em> Downloads</a>
             </li>
             <li class="{{{ (Request::is('chatView') ? 'active' : '') }}}">
                 <a href="/chatView">
@@ -106,21 +112,22 @@
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/custom.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/confirmDelete.js') }}"></script>
-@yield('script')
-{{-- trigger rating modal if customer rating is needed --}}
+    @yield('script') 
+    
+    
+    {{-- trigger rating modal if customer rating is needed --}} 
+    
     @if(!empty($pharmacyRatings))
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/siteView/rating.css') }}" rel="stylesheet">
-    
-    {{-- rating modal --}}
+    <link href="{{ asset('css/siteView/rating.css') }}" rel="stylesheet"> {{-- rating modal --}}
     <div id="ratingModal" class="modal fade" role="dialog">
         <div class="modal-dialog">
             <!-- Modal content-->
             <div class="modal-content">
                 <div class="modal-header">
                     <form action="/ratePharmacyLater" method="post">
-                            {{csrf_field()}}
-                    <button type="submit" class="close">&times;</button>
+                        {{csrf_field()}}
+                        <button type="submit" class="close">&times;</button>
                     </form>
                     <h4 class="modal-title">Rate Your Experience</h4>
                 </div>
@@ -173,11 +180,11 @@
                     </table>
                 </div>
             </div>
-            
+
         </div>
     </div>
-    
-    {{-- A script to show rating Modal if user rating is needed see rateOrder Middleware for more details --}} 
+
+    {{-- A script to show rating Modal if user rating is needed see rateOrder Middleware for more details --}}
     <script>
         $(function () {
             $('#ratingModal').modal('show');

@@ -1,178 +1,359 @@
-@extends('layouts.siteView') @section('style')
-<style>
-        @import url('https://fonts.googleapis.com/css?family=Markazi+Text|Roboto');
-        
-        .heading{
-                font-size: 4em;
-                color: #337AB7;
-                padding: 55px;
-                margin: auto;
-        }
+@extends('layouts.siteLayout') 
 
-        .StrengthAndForms{
-                text-transform:lowercase;
-                font-family: 'Roboto', sans-serif;
-        }
-        
-        .sideEffectsHeading{
-               font-size: 2.6em;
-               font-weight: bold;
-        }
-        .sideEffectsBody {
-                max-height: 400px;
-                overflow: auto;
-                word-spacing: 10px;
-                font-size: 1.6em;
-                font-family: 'Markazi Text', serif;
-        }
-        .gap{
-                margin-top: 45px
-        }
-</style>
-@endsection 
+@section('tabTitle', $product[0]->name .' Details')
 
+@section('head')
+<link href="{{ asset('css/siteView/rated.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{asset('css/table.css')}}"> @endsection @section('style') @endsection @section('body')
 
-@section('body')
-<div class="container">
-        <div class="row">
-                <div class="col-md-12 heading text-center">
-                Medicine Details
-                </div>
-                <div class="col-md-12">
-                        <div class="panel panel-primary">
-                                <div class="panel-heading text-center">
-                                        Medicine Strength and Forms
-                                </div>
-                                <div class="panel-body StrengthAndForms">
-                                        <table>
-                                                <thead>
-                                                        <tr>
-                                                                <th scope="col">#</th>
-                                                                <th scope="col">Type</th>
-                                                                <th scope="col">Form And Strenght</th>
-                                                        </tr>
-                                                </thead>
-                                                <tbody>
-                                                        @for ($i = 0; $i
-                                                        <$size; $i++) <tr>
-                                                                <td data-label="#">{{ $i+1 }}</td>
-                                                                <td data-label="Type">{{str_replace("(","",substr_replace($strengthAndFroms['name'][$i],"",-1))}}</td>
-                                                                <td data-label="FormAndStrenght">{{str_replace("(","",$strengthAndFroms['detail'][$i][0])}}</td>
-                                                                </tr>
-                                                                @endfor
-                                                </tbody>
-                                        </table>
+<!-- Product Detail -->
+<div class="container bgwhite p-t-35 p-b-80">
+        <div class="flex-w flex-sb">
+                <div class="w-size13 p-t-30 respon5">
+                        <div class="wrap-slick3 flex-sb flex-w">
+                                {{-- needed for adjustment --}}
+                                <div></div>
 
-                                </div>
-                        </div>
-                </div>
-                @if(isset($sideEffects->results[0]->purpose[0]))
-                <div class="col-md-12 row gap">
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Purpose Of Usage
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->purpose[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Indications to Use
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->indications_and_usage[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Be carefull To Use
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->when_using[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Warning
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->warnings[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Active Ingredients
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->active_ingredient[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Do not Use When
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->do_not_use[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        @else
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Adverse reactions
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->adverse_reactions[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Overdose Results
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->overdosage[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Nursing Mother Advice
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->nursing_mothers[0]}}
-                                        </div>
-                                </div>
-                        </div>
-                        <div class="col-md-12 gap">
-                                <div class="panel panel-primary">
-                                        <div class="panel-heading text-center sideEffectsHeading">
-                                                Dosage Advice
-                                        </div>
-                                        <div class="panel-body sideEffectsBody">
-                                                {{$sideEffects->results[0]->dosage_and_administration[0]}}
+                                <div class="slick3">
+                                        <div class="item-slick3">
+                                                <div class="wrap-pic-w">
+                                                        @if($product[0]->type=='1')
+                                                        <!-- 1 = Tablet -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($product[0]->type=='2')
+                                                        <!-- 2 = Capsule -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($product[0]->type=='3')
+                                                        <!-- 3 = Syrup -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($product[0]->type=='4')
+                                                        <!-- 4 = Inhaler -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($product[0]->type=='5')
+                                                        <!-- 5 = Drops -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($product[0]->type=='6')
+                                                        <!-- 6 = Injection -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($product[0]->type=='7')
+                                                        <!-- 7 = Cream -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/cream.png') }}> @elseif($product[0]->type=='8')
+                                                        <!-- 7 = Cream -->
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/others.png') }}> @endif
+
+                                                </div>
                                         </div>
                                 </div>
                         </div>
                 </div>
-                @endif
 
+                <div class="w-size14 p-t-30 respon5">
+                        <h4 class="product-detail-name m-text16 p-b-13">
+                                {{ $product[0]->name }}
+                                <br> {{ $product[0]->genericName }}
+                        </h4>
+
+                        <span class="m-text17">
+                                Rs {{ $product[0]->price }}
+                        </span>
+
+                        <p class="s-text8 p-t-10">
+                                @if($product[0]->type=='1')
+                                <!-- 1 = Tablet -->
+                                Type: Tablet {{$product[0]->tablets}} tbs @elseif($product[0]->type=='2')
+                                <!-- 2 = Capsule -->
+                                Type: Capsule {{$product[0]->tablets}} tbs @elseif($product[0]->type=='3')
+                                <!-- 3 = Syrup -->
+                                Type: Syrup @elseif($product[0]->type=='4')
+                                <!-- 4 = Inhaler -->
+                                Type: Inhaler @elseif($product[0]->type=='5')
+                                <!-- 5 = Drops -->
+                                Type: Drops @elseif($product[0]->type=='6')
+                                <!-- 6 = Injection -->
+                                Type: Injection @elseif($product[0]->type=='7')
+                                <!-- 7 = Cream -->
+                                Type: Cream 
+                                @elseif($product[0]->type=='8')
+                                <!-- 7 = Cream -->
+                                Type: Others 
+                                @endif
+                                <br> 
+                                @if($product[0]->type=='1' || $product[0]->type=='2' || $product[0]->type=='7')
+                                <!-- 1 = Tablet -->
+                                Dosage: {{$product[0]->dosage}} mg 
+                                @elseif($product[0]->type=='8') 
+                                Dosage/Weight:
+                                @else Dosage: {{ $product[0]->dosage }} ml @endif
+                                <br> 
+                                @if($product[0]->prescription=='1')
+                                <span style="color:red"> Prescription Required </span>
+                                @endif
+                                <br> Manufacturer:
+                                <span style="color:brown; font-weight:bold">{{ $product[0]->manufacturer }}</span>
+                                <br> Sold By:
+                                <a href="/pharmacyDetails/{{ $pharmacyDetails->id }}/{{ $product[0]->id }}">
+                                        <span style="color:brown; font-weight:bold">{{$pharmacyDetails->pharmacyName}} </span>
+                                </a>
+                                <fieldset class="rating">
+                                        <input disabled <?php if($pharmacyRating->rating=="5") echo 'checked="checked"'; ?> type="radio" id="star5" name="rating" value="5"
+                                        />
+                                        <label class="full" for="star5" title="Awesome - 5 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="4.5") echo 'checked="checked"'; ?> type="radio" id="star4half" name="rating"
+                                        value="4.5" />
+                                        <label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="4") echo 'checked="checked"'; ?> type="radio" id="star4" name="rating" value="4"
+                                        />
+                                        <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="3.5") echo 'checked="checked"'; ?> type="radio" id="star3half" name="rating"
+                                        value="3.5" />
+                                        <label class="half" for="star3half" title="Meh - 3.5 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="3") echo 'checked="checked"'; ?> type="radio" id="star3" name="rating" value="3"
+                                        />
+                                        <label class="full" for="star3" title="Meh - 3 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="2.5") echo 'checked="checked"'; ?> type="radio" id="star2half" name="rating"
+                                        value="2.5" />
+                                        <label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="2") echo 'checked="checked"'; ?> type="radio" id="star2" name="rating" value="2"
+                                        />
+                                        <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="1.5") echo 'checked="checked"'; ?> type="radio" id="star1half" name="rating"
+                                        value="1.5" />
+                                        <label class="half" for="star1half" title="Meh - 1.5 stars"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="1") echo 'checked="checked"'; ?> type="radio" id="star1" name="rating" value="1"
+                                        />
+                                        <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                                        <input disabled <?php if($pharmacyRating->rating=="0.5") echo 'checked="checked"'; ?> type="radio" id="starhalf" name="rating"
+                                        value="0.5" />
+                                        <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
+                                </fieldset>
+                                <br>
+                        </p>
+
+                        <div class="p-b-45">
+                                <span class="s-text8">Category: @if($product[0]->category=='1')
+                                        <!-- 1 = Medicine -->
+                                        Medicine @elseif($product[0]->category=='2')
+                                        <!-- 2 = Proteins and Suppliments -->
+                                        Proteins and Suppliments {{$product[0]->tablets}} tbs @elseif($product[0]->category=='3')
+                                        <!-- 3 = Baby and Mom  -->
+                                        Baby and Mom @elseif($product[0]->category=='4')
+                                        <!-- 4 = Beauty  -->
+                                        Beauty @elseif($product[0]->category=='5')
+                                        <!-- 5 = HouseHold -->
+                                        HouseHold @elseif($product[0]->category=='6')
+                                        <!-- 6 = Others -->
+                                        Others @endif </span>
+                        </div>
+
+                        <!-- Add to cart button  -->
+                        <div class="p-t-33 p-b-60">
+
+                                <div class="flex-r-m flex-w p-t-10">
+                                        <div class="w-size16 flex-m flex-w">
+
+                                                <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
+                                                        @if($product[0]->quantity == 0)
+                                                        <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" disabled>Out of stock</button>
+                                                        <!-- Button out of stock -->
+                                                        @else
+                                                        <!-- Button add to cart-->
+                                                        <a href="/addToCart/{{ $product[0]->productSource }}/{{ $product[0]->id }}/{{ $product[0]->pharmacistId }}" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">Add to cart</a>
+                                                        @endif
+                                                </div>
+                                        </div>
+                                </div>
+                        </div>
+
+                </div>
         </div>
-        <!--/.row-->
+
+
+        <!-- Medicine Strength and Forms -->
+        @if(isset($strengthAndFroms))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Medicine Strength and Forms
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <table>
+                                <thead>
+                                        <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Type</th>
+                                                <th scope="col">Form And Strenght</th>
+                                        </tr>
+                                </thead>
+                                <tbody>
+                                        @for ($i = 0; $i
+                                        <$size; $i++) <tr>
+                                                <td data-label="#">{{ $i+1 }}</td>
+                                                <td data-label="Type">{{str_replace("(","",substr_replace($strengthAndFroms['name'][$i],"",-1))}}</td>
+                                                <td data-label="FormAndStrenght">{{str_replace("(","",$strengthAndFroms['detail'][$i][0])}}</td>
+                                                </tr>
+                                                @endfor
+                                </tbody>
+                        </table>
+                </div>
+        </div>
+        @endif
+
+        <!-- Purpose Of Usage -->
+        @if(isset($sideEffects->results[0]->purpose[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Purpose Of Usage
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->purpose[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Indications to Use -->
+        @if(isset($sideEffects->results[0]->indications_and_usage[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Indications to Use
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->indications_and_usage[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Active Ingredients -->
+        @if(isset($sideEffects->results[0]->active_ingredient[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Active Ingredients
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->active_ingredient[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Be carefull To Use -->
+        @if(isset($sideEffects->results[0]->when_using[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Be carefull To Use
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->when_using[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Warning -->
+        @if(isset($sideEffects->results[0]->warnings[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Warning
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->warnings[0] }}
+                        </p>
+                </div>
+        </div>
+
+        @endif
+
+        <!-- Do not Use When -->
+        @if(isset($sideEffects->results[0]->do_not_use[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Do not Use When
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->do_not_use[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Dosage Advice -->
+        @if(isset($sideEffects->results[0]->dosage_and_administration[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Dosage Advice
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->dosage_and_administration[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Nursing Mother Advice -->
+        @if(isset($sideEffects->results[0]->nursing_mothers[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Nursing Mother Advice
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->nursing_mothers[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Adverse reactions -->
+        @if(isset($sideEffects->results[0]->adverse_reactions[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Adverse reactions
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->adverse_reactions[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
+        <!-- Overdose Results -->
+        @if(isset($sideEffects->results[0]->overdosage[0]))
+        <div class="wrap-dropdown-content bo6 p-t-15 p-b-14">
+                <h5 class="text-center js-toggle-dropdown-content flex-sb-m cs-pointer m-text19 color0-hov trans-0-4">
+                        Overdose Results
+                        <i class="down-mark fs-12 color1 fa fa-minus dis-none" aria-hidden="true"></i>
+                        <i class="up-mark fs-12 color1 fa fa-plus" aria-hidden="true"></i>
+                </h5>
+                <div class="dropdown-content dis-none p-t-15 p-b-23">
+                        <p class="s-text8">
+                                {{ $sideEffects->results[0]->overdosage[0] }}
+                        </p>
+                </div>
+        </div>
+        @endif
+
 </div>
-@endsection
+@endsection @section('script') @endsection

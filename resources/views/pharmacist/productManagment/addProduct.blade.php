@@ -14,6 +14,7 @@
         <form class="form-horizontal confirm" action="addProduct" method="POST">
           {{ csrf_field() }}
           <fieldset>
+            
             <!-- Product Name-->
             <div class="form-group">
               <label class="col-md-3 control-label" for="productName">Product Name</label>
@@ -22,14 +23,22 @@
               </div>
             </div>
 
-            <!-- Product Dosage-->
+            <!-- genericName-->
             <div class="form-group">
-              <label class="col-md-3 control-label" for="dosage">Dosage</label>
+              <label class="col-md-3 control-label" for="genericName">GenericName</label>
               <div class="col-md-9">
-                <input id="dosage" name="dosage" type="number" class="form-control" required>
+                <input id="genericName" name="genericName" type="text" class="form-control" required>
               </div>
             </div>
 
+            <!-- manufacturer-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="manufacturer">Manufacturer</label>
+              <div class="col-md-9">
+                <input id="manufacturer" name="manufacturer" type="text" class="form-control" required>
+              </div>
+            </div>
+            
             {{-- possible types of medicine 1) tablet 2) capsule 3) syrup 4) inhaler 5) drops 6) injection 7) cream --}}
             <!-- Product Dosage-->
             <div class="form-group">
@@ -44,7 +53,40 @@
                   <option value="5">Drops</option>
                   <option value="6">Injection</option>
                   <option value="7">Cream</option>
+                  <option value="8">Others</option>
                 </select>
+              </div>
+            </div>
+
+                          {{-- possible category 1) Medicine 2) Supplements 3) Baby and Mom 4) Beauty 5) HouseHold 6) Others --}}
+            <!-- Product Type-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="dosage">Product Category:</label>
+              <div class="col-md-9">
+                <select class="form-control" id="category" name="category" required>
+                  <option value="1">Medicine</option>
+                  <option value="2">Supplements</option>
+                  <option value="3">Baby and Mom</option>
+                  <option value="4">Beauty</option>
+                  <option value="5">HouseHold</option>
+                  <option value="6">Others</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- tablets-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="tablets">Tablets</label>
+              <div class="col-md-9">
+                <input id="tablets" name="tablets" type="number" class="form-control" placeholder="leave empty if not a tablet">
+              </div>
+            </div>
+
+            <!-- Product Dosage-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="dosage">Dosage/Weight</label>
+              <div class="col-md-9">
+                <input id="dosage" name="dosage" type="number" class="form-control" required>
               </div>
             </div>
 

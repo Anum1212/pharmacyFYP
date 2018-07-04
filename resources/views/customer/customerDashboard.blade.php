@@ -2,13 +2,6 @@
 
 @section('body')
 <div class="row">
-    {{-- Gap --}}
-  <div class="col-lg-12" style="margin-top:25px">
-  </div>
-  {{-- weather Widget --}}
-<div class="col-lg-12">
-  <iframe src="https://www.meteoblue.com/en/weather/widget/three?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=image"  frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%;height: 170px"></iframe><div></div>
-</div>
 {{-- Gap --}}
 <div class="col-lg-12" style="margin-top:25px">
           </div>

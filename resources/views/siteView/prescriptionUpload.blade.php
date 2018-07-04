@@ -11,9 +11,11 @@
 				</span>
 			</div>
 			<div class="panel-body">
-
-
-				<form enctype="multipart/form-data" action="prescriptionUpload" method="post">
+				Upload <span style="color:red">'jpg', 'jpeg', 'png', 'gif'</span> file only. <span style="color:red">size > 10Mb</span>
+				<br>
+				<br>
+				<br>
+				<form enctype="multipart/form-data" action="prescriptionUpload/{{ $deliveryDate }}" method="post">
 					{{csrf_field()}}
 
 					<div class="form-group">

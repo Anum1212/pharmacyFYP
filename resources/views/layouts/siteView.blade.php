@@ -40,7 +40,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
-                    <span>Lumino</span>Admin</a>
+                    <span>LifeLine</span> &nbsp; <i class="fa fa-heartbeat" style="color:#fff; font-size: 25px"></i></a>
                 <ul class="nav navbar-top-links navbar-right">
                     @section('searchBar')
                     @show

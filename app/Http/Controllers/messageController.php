@@ -33,6 +33,7 @@ use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Mail;
+use Cart;
 
 
 
@@ -42,9 +43,16 @@ class messageController extends Controller
 
 
   // |---------------------------------- 1) __construct ----------------------------------|
-    public function __construct()
+    public function __construct(Request $request)
     {
         $this->middleware('auth:admin')->except(['contactUs']);
+        $this->request = $request;
+        $this->middleware(function ($request, $next) {
+            Cart::instance('shopping');
+            Cart::restore(Auth::id());
+
+            return $next($request);
+        });
     }
 
 

@@ -9,9 +9,9 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link href="{{ asset('css/dashboard/datepicker3.css') }}" rel="stylesheet">
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/table.css') }}" rel="stylesheet"> 
+    <link href="{{ asset('css/table.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     @section('head') @show @section('style') @show
+    @section('head') @show @section('style') @show
 
 
     <!--Custom Font-->
@@ -34,7 +34,9 @@
                     <span class="icon-bar"></span>
                 </button>
                 <a class="navbar-brand" href="/">
-                    <span>Lumino</span>Admin</a>
+                    <span>LifeLine</span>
+                    <em class="fa fa-heartbeat" style="color:#fff; font-size: 25px"></em>
+                </a>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -65,6 +67,7 @@
                 <a href="/pharmacist/viewAllOrders">
                     <em class="fa fa-truck">&nbsp;</em> Orders</a>
             </li>
+            @if(Auth::guard('pharmacist')->user()->dataSource=='1')
             <li class="parent {{{ (Request::is('pharmacist/viewProducts') ? 'active' : '') }}} {{{ (Request::is('pharmacist/addProduct') ? 'active' : '') }}}">
                 <a data-toggle="collapse" href="#products">
                     <em class="fa fa-database">&nbsp;</em> Products
@@ -84,6 +87,11 @@
                         </a>
                     </li>
                 </ul>
+            </li>
+            @endif
+            <li class="{{{ (Request::is('downloads') ? 'active' : '') }}}">
+                <a href="/downloads">
+                    <em class="fa fa-file">&nbsp;</em> Downloads</a>
             </li>
             <li class="{{{ (Request::is('/chatView') ? 'active' : '') }}}">
                 <a href="/chatView">

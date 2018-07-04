@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 21, 2018 at 07:40 PM
+-- Generation Time: Jul 04, 2018 at 01:52 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.2.1
 
@@ -43,7 +43,7 @@ CREATE TABLE `admins` (
 --
 
 INSERT INTO `admins` (`id`, `name`, `email`, `password`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'anam', 'anamamer0@gmail.com', '$2y$10$y1gVoOSeyGbVn/95dA2TaOIMFESb08oL7UgzBdQcnhWpsgzO3LaUa', 'XKmfPGJDa4eIpkoiOTUuLhGAIP1I34hPcTzpOD9P3FuKs2vDdtZV3aF5wty0', '2018-05-28 11:44:22', '2018-05-28 11:44:22');
+(1, 'anam', 'anamamer0@gmail.com', '$2y$10$y1gVoOSeyGbVn/95dA2TaOIMFESb08oL7UgzBdQcnhWpsgzO3LaUa', 'Jy9jqw3Ko9LzxiEcSX9SYATtcx4nnRGlaFs9ChCJdounzNykzpht86xiH4K3', '2018-05-28 11:44:22', '2018-05-28 11:44:22');
 
 -- --------------------------------------------------------
 
@@ -195,7 +195,8 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (9, '2018_04_03_041059_create_orders_table', 1),
 (10, '2018_04_03_041151_create_orderitems_table', 1),
 (11, '2018_05_20_082826_create_files_table', 1),
-(12, '2018_05_21_155005_create_prescriptions_table', 1);
+(12, '2018_05_21_155005_create_prescriptions_table', 1),
+(13, '2018_06_23_102308_create_reminder_table', 2);
 
 -- --------------------------------------------------------
 
@@ -251,6 +252,7 @@ CREATE TABLE `orders` (
   `updated_at` timestamp NULL DEFAULT NULL,
   `userId` int(11) NOT NULL,
   `cost` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `deliverydate` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `status` int(11) NOT NULL DEFAULT '0',
   `prescription` int(11) NOT NULL DEFAULT '0',
   `ratingStatus` int(11) NOT NULL DEFAULT '0'
@@ -311,6 +313,10 @@ CREATE TABLE `pharmacistproducts` (
   `pharmacistId` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `pharmacistName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `genericName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category` varchar(9) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `manufacturer` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tablets` int(191) DEFAULT NULL,
   `dosage` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `type` int(11) NOT NULL,
   `prescription` int(11) NOT NULL,
@@ -324,13 +330,36 @@ CREATE TABLE `pharmacistproducts` (
 -- Dumping data for table `pharmacistproducts`
 --
 
-INSERT INTO `pharmacistproducts` (`id`, `created_at`, `updated_at`, `pharmacistId`, `pharmacistName`, `name`, `dosage`, `type`, `prescription`, `price`, `quantity`, `status`, `productSource`) VALUES
-(1, '2018-06-16 01:56:30', '2018-06-16 01:56:42', '1', 'Pharmacy 1', 'Pharmacy 1 Product 1', '1', 1, 0, '1', 1, 1, 1),
-(2, '2018-06-16 01:57:09', '2018-06-16 01:57:09', '1', 'Pharmacy 1', 'Pharmacy 1 Product 2', '1', 2, 0, '1', 1, 1, 1),
-(3, '2018-06-16 01:58:03', '2018-06-16 01:58:03', '3', 'Pharmacy 3', 'Pharmacy 3 Product 1', '3', 5, 0, '3', 3, 1, 1),
-(4, '2018-06-16 01:58:23', '2018-06-16 01:58:23', '3', 'Pharmacy 3', 'Pharmacy 3 Product 2', '3', 6, 0, '3', 3, 1, 1),
-(5, '2018-06-16 01:59:28', '2018-06-16 01:59:28', '2', 'Pharmacy 2', 'Pharmacy 2 Product 1', '2', 3, 0, '2', 2, 1, 1),
-(6, '2018-06-16 01:59:50', '2018-06-16 01:59:50', '2', 'Pharmacy 2', 'Pharmacy 2 Product 2', '2', 4, 0, '2', 2, 1, 1);
+INSERT INTO `pharmacistproducts` (`id`, `created_at`, `updated_at`, `pharmacistId`, `pharmacistName`, `name`, `genericName`, `category`, `manufacturer`, `tablets`, `dosage`, `type`, `prescription`, `price`, `quantity`, `status`, `productSource`) VALUES
+(1, '2018-06-26 22:43:27', '2018-07-04 10:25:06', '1', 'ishaq pharmacy', 'Amoxicillin', 'Amoxicillin', 'category1', 'AdamJee Pharmaceuticals', NULL, '10', 1, 0, '10', 18, 1, 1),
+(2, '2018-06-26 22:44:01', '2018-07-01 15:32:50', '1', 'ishaq pharmacy', 'Amoxicillin', 'generic name', 'category1', 'qdsfg', 0, '10', 5, 0, '10', 0, 1, 1),
+(3, '2018-06-26 22:44:59', '2018-07-01 15:29:53', '1', 'ishaq pharmacy', 'Amoxicillin', 'generic name', 'category1', 'ertrty', 0, '10', 3, 0, '10', 213, 0, 1),
+(4, '2018-06-26 22:43:27', '2018-07-04 05:13:46', '2', 'Health Mart', 'Amoxicillin', 'generic name', 'category1', 'yrtdg', 0, '20', 1, 0, '20', 997, 1, 1),
+(5, '2018-06-26 22:44:01', '2018-06-26 22:44:01', '2', 'Health Mart', 'Amoxicillin', 'generic name', 'category1', 'ebrs', 0, '20', 5, 0, '20', 452, 1, 1),
+(6, '2018-06-26 22:44:59', '2018-07-04 03:25:17', '2', 'Health Mart', 'Amoxicillin', 'generic name', 'category1', '2345', 0, '20', 3, 0, '20', 195, 1, 1),
+(7, '2018-06-26 22:48:03', '2018-07-01 15:29:50', '1', 'ishaq pharmacy', 'insulin', 'generic name', 'category1', 't45h', 0, '10', 6, 1, '10', 26, 1, 1),
+(8, '2018-06-26 22:48:03', '2018-06-26 22:48:03', '2', 'Health Mart', 'insulin', 'generic name', 'category1', 'rsdc', 0, '20', 6, 1, '20', 84, 1, 1),
+(9, '2018-07-01 15:45:58', '2018-07-01 15:45:58', '1', 'ishaq pharmacy', 'Panadol', 'Paracetamol', 'category1', 'AdamJee Pharmaceuticals', 100, '500', 1, 0, '100', 200, 1, 1),
+(10, '2018-07-01 15:47:33', '2018-07-01 15:47:33', '1', 'ishaq pharmacy', 'brufin', 'Ibuprofen', 'category1', 'AdamJee Pharmaceuticals', 200, '120', 1, 0, '89', 75, 1, 1),
+(11, '2018-07-01 15:49:09', '2018-07-01 15:49:09', '1', 'ishaq pharmacy', 'rigix', 'Chlorpheniramine-Phenylpropan', 'category1', 'AdamJee Pharmaceuticals', 200, '180', 1, 0, '97', 45, 1, 1),
+(12, '2018-07-01 15:52:57', '2018-07-01 15:52:57', '1', 'ishaq pharmacy', 'Meiji Fu', 'Meiji Fu', 'category3', 'Meiji Fu', NULL, '400', 8, 0, '600', 800, 1, 1),
+(13, '2018-07-01 15:54:25', '2018-07-01 15:54:25', '1', 'ishaq pharmacy', 'Farlin Baby Cart', 'Farlin Baby Cart', 'category3', 'Farlin', NULL, '800', 8, 0, '5000', 6, 1, 1),
+(14, '2018-07-01 15:55:07', '2018-07-01 15:55:07', '1', 'ishaq pharmacy', 'Green Tea Ultra', 'Green Tea', 'category2', 'Green Tea', NULL, '600', 8, 0, '2500', 46, 1, 1),
+(15, '2018-07-01 15:55:56', '2018-07-01 15:55:56', '1', 'ishaq pharmacy', 'Bio Alma Black Color', 'Bio Alma', 'category4', 'Bio Alma', NULL, '60', 8, 0, '120', 46, 1, 1),
+(16, '2018-07-01 15:56:42', '2018-07-01 15:56:57', '1', 'ishaq pharmacy', 'Fair n Lovely Men', 'Fair n Lovely', 'category4', 'Fair n Lovely', NULL, '60', 8, 0, '210', 246, 1, 1),
+(17, '2018-07-01 15:57:51', '2018-07-01 18:27:58', '1', 'ishaq pharmacy', 'Sensodyne Rapid Action', 'Sensodyne', 'category5', 'Sensodyne', NULL, '250', 8, 0, '130', 43, 1, 1),
+(18, '2018-07-01 15:58:30', '2018-07-01 15:58:30', '1', 'ishaq pharmacy', 'Medicam', 'Medicam', 'category4', 'Medicam', NULL, '180', 8, 0, '245', 65, 1, 1),
+(19, '2018-07-01 16:04:36', '2018-07-01 16:04:36', '1', 'ishaq pharmacy', 'Body Weight machine', 'Westpoint', 'category5', 'Westpoint', NULL, '600', 8, 0, '1200', 6, 1, 1),
+(20, '2018-07-01 16:06:33', '2018-07-01 16:06:33', '3', 'Servaid Pharmacy', 'brufen', 'Ibuprofen', 'category1', 'Ideal Pharmaceuticals Industries', NULL, '140', 3, 0, '65', 95, 1, 1),
+(21, '2018-07-01 16:09:05', '2018-07-01 16:09:05', '3', 'Servaid Pharmacy', 'Disprin', 'Aspirin', 'category1', 'Ideal Pharmaceuticals Industries', 200, '60', 1, 0, '210', 486, 1, 1),
+(22, '2018-07-01 16:12:10', '2018-07-01 16:12:10', '3', 'Servaid Pharmacy', 'Ponstan Forte', 'Mefenamic acid', 'category1', 'Ideal Pharmaceuticals Industries', 200, '500', 1, 0, '600', 65, 1, 1),
+(23, '2018-07-01 16:13:01', '2018-07-01 16:13:01', '3', 'Servaid Pharmacy', 'Farlin Soothing Gum soother', 'Farlin', 'category3', 'Farlin', NULL, '85', 8, 0, '220', 35, 1, 1),
+(24, '2018-07-01 16:14:21', '2018-07-01 16:14:21', '3', 'Servaid Pharmacy', 'Ultra Fish Oil', 'Ultra', 'category2', 'Ultra', NULL, '250', 8, 0, '2900', 15, 1, 1),
+(25, '2018-07-01 16:15:28', '2018-07-01 16:15:28', '3', 'Servaid Pharmacy', 'Nivea Cream', 'Nivea', 'category4', 'Nivea', NULL, '1000', 8, 0, '350', 49, 1, 1),
+(26, '2018-07-01 16:16:18', '2018-07-01 16:16:18', '3', 'Servaid Pharmacy', 'Clean And Clear Black Heads Scrub', 'Clean And Clear', 'category4', 'Clean And Clear', NULL, '120', 8, 0, '350', 67, 1, 1),
+(27, '2018-07-01 16:18:02', '2018-07-01 16:18:02', '3', 'Servaid Pharmacy', 'Colgate Sensitive Pro Relief', 'Colgate', 'category5', 'Colgate', NULL, '200', 8, 0, '250', 3, 1, 1),
+(28, '2018-07-01 16:21:44', '2018-07-01 16:21:44', '3', 'Servaid Pharmacy', 'Blood Glucose Test Machine', 'Westpoint', 'category6', 'Westpoint', 0, '650', 8, 0, '3500', 16, 1, 1),
+(30, '2018-06-26 22:44:59', '2018-06-26 22:44:59', '2', 'Health Mart', 'Cat', 'cat', 'category1', '2345', 0, '20', 3, 0, '20', 213, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -354,7 +383,6 @@ CREATE TABLE `pharmacists` (
   `city` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `longitude` double(10,6) NOT NULL,
   `latitude` double(10,6) NOT NULL,
-  `freeDeliveryPurchase` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `dataSource` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0',
   `dbAPI` varchar(191) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -365,10 +393,13 @@ CREATE TABLE `pharmacists` (
 -- Dumping data for table `pharmacists`
 --
 
-INSERT INTO `pharmacists` (`id`, `created_at`, `updated_at`, `verificationToken`, `verificationStatus`, `pharmacistStatus`, `name`, `email`, `contact`, `pharmacyName`, `address`, `society`, `city`, `longitude`, `latitude`, `freeDeliveryPurchase`, `dataSource`, `dbAPI`, `password`, `remember_token`) VALUES
-(1, '2018-06-16 01:41:25', '2018-06-16 01:55:38', NULL, 1, 1, 'Pharmacy 1', 'anamamer0@gmail.com', '11111111111', 'Pharmacy 1', '59 K1', 'valencia town', 'lahore', 74.257217, 31.393272, '55', '1', NULL, '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', 'pwWxFCo7bfdeuU67uE0CP6vI85YpO2YWw9ATxCeumTkxuJ8aMJzdF5mgLlg9'),
-(2, '2018-06-16 01:43:50', '2018-06-16 01:58:53', NULL, 1, 1, 'Pharmacy 2', 'anumamir010@gmail.com', '22222222222', 'Pharmacy 2', '59 K1', 'wapda town', 'lahore', 74.257217, 31.393272, '55', '1', NULL, '$2y$10$TQpW6g1mwIbHIl53X/EeKeOp5i5/GP8jnKucRboDaBdAXHmb.yOxG', 'pTNT4wkvv2UdLwbpoC7WXmv6u17Hfk7JLCULk3v2k72Oh4Qy4uqRz0tW8ThL'),
-(3, '2018-06-16 01:52:02', '2018-06-16 01:57:40', NULL, 1, 1, 'Pharmacy 3', 'anamamer010@gmail.com', '33333333333', 'Pharmacy 3', '50 A', 'johar town', 'lahore', 74.263872, 31.430885, '55', '2', NULL, '$2y$10$BsNnOeDNBmu4N1AKr44MkeaT5ZHw8xMG6hH8pzq1Wl1Lg.doPfLEm', 'RbZqeXkOIIxyM5DExO9GN12w5G3aSqHjS4tsex6I1zyqlo0eCn55ijR78Z30');
+INSERT INTO `pharmacists` (`id`, `created_at`, `updated_at`, `verificationToken`, `verificationStatus`, `pharmacistStatus`, `name`, `email`, `contact`, `pharmacyName`, `address`, `society`, `city`, `longitude`, `latitude`, `dataSource`, `dbAPI`, `password`, `remember_token`) VALUES
+(1, '2018-06-16 01:41:25', '2018-06-26 22:42:37', NULL, 1, 1, 'Adil Rehman', 'anamamer0@gmail.com', '11111111111', 'ishaq pharmacy', '59 K1', 'valencia town', 'lahore', 74.256716, 31.402508, '1', NULL, '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL),
+(2, '2018-06-16 01:43:50', '2018-06-16 01:58:53', NULL, 1, 1, 'Abdul Saqib', 'test01@gmail.com', '22222222222', 'Health Mart', '59 K1', 'wapda town', 'lahore', 74.315836, 31.465340, '1', NULL, '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL),
+(3, '2018-06-16 01:52:02', '2018-06-16 01:57:40', NULL, 1, 1, 'Rashid Alam', 'test02@gmail.com', '33333333333', 'Servaid Pharmacy', '50 A', 'johar town', 'lahore', 74.320073, 31.500571, '1', NULL, '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL),
+(4, '2018-07-03 01:02:33', '2018-07-03 02:51:19', NULL, 1, 1, 'Fazal ul Din', 'test03@gmail.com', '926666666666', 'Fazal Dins Pharmacy', '59 K1', 'Valenica Town', 'Lahore', 74.256081, 31.404513, '2', 'http://keer.aua.net.pk/api1/getMedicine/', '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL),
+(5, '2018-07-03 01:02:33', '2018-07-03 02:51:19', NULL, 1, 1, 'Hashim', 'test04@gmail.com', '926666666666', 'Sehat', '59 K1', 'Valenica Town', 'Lahore', 74.256081, 31.404513, '2', 'http://keer.aua.net.pk/api2/getMedicine/', '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL),
+(6, '2018-07-03 01:02:33', '2018-07-03 02:51:19', NULL, 1, 1, 'xampp', 'xampp@gmail.com', '926666666666', 'xampp', '59 K1', 'Valenica Town', 'Lahore', 74.256081, 31.404513, '3', '', '$2y$10$JrXFdHMvIZbDHhM8FrBYfOZduIpyv4dTEHdA7JQlGkHTUYnS/5zGe', NULL);
 
 -- --------------------------------------------------------
 
@@ -405,9 +436,30 @@ CREATE TABLE `ratings` (
 --
 
 INSERT INTO `ratings` (`id`, `created_at`, `updated_at`, `pharmacyId`, `pharmacyName`, `rating`, `noOfUserThatRated`) VALUES
-(1, '2018-06-16 01:41:43', '2018-06-18 00:29:03', 1, 'Pharmacy 1', 0.0, 0),
+(1, '2018-06-16 01:41:43', '2018-06-18 00:29:03', 1, 'Pharmacy 1', 3.5, 1),
 (2, '2018-06-16 01:50:26', '2018-06-18 00:29:03', 2, 'Pharmacy 2', 0.0, 0),
-(3, '2018-06-16 01:55:19', '2018-06-18 00:29:03', 3, 'Pharmacy 3', 0.0, 0);
+(3, '2018-06-16 01:55:19', '2018-06-18 00:29:03', 3, 'Pharmacy 3', 2.5, 1),
+(4, '2018-07-03 01:03:04', '2018-07-03 01:03:04', 4, 'Fazal Dins Pharmacy', 0.0, 0),
+(5, '2018-07-03 01:03:04', '2018-07-03 01:03:04', 5, 'sehat', 0.0, 0),
+(6, '2018-07-03 01:03:04', '2018-07-03 01:03:04', 5, 'xampp', 0.0, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reminders`
+--
+
+CREATE TABLE `reminders` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  `customerId` int(11) NOT NULL,
+  `customerName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customerEmail` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `productName` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `longitude` double(10,6) NOT NULL,
+  `latitude` double(10,6) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -438,7 +490,7 @@ CREATE TABLE `users` (
   `status` int(11) NOT NULL DEFAULT '1',
   `name` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `email` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contact` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contact` varchar(15) COLLATE utf8mb4_unicode_ci NOT NULL,
   `address` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `society` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `city` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -453,7 +505,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `created_at`, `updated_at`, `verificationToken`, `verificationStatus`, `status`, `name`, `email`, `contact`, `address`, `society`, `city`, `longitude`, `latitude`, `password`, `remember_token`) VALUES
-(1, '2018-05-23 15:59:47', '2018-06-12 06:18:35', NULL, 1, 1, 'Anum Am', 'anamamer0@gmail.com', '66666666666', '59 k1', 'wapda town', 'lahore', 74.257217, 31.393272, '$2y$10$GlPthKyRGtkzycUUWFq16uvE4BYJR2C9Af8uzKMr1YYaAuovYDNkC', 'tKbXg0dscjSNXnAYzPBcdvKbSVsA76ua8lTiG2SKqZONVErQVZ3aj3yn7TYX');
+(1, '2018-05-23 15:59:47', '2018-06-26 05:28:54', NULL, 1, 1, 'Anum Amir', 'anamamer0@gmail.com', '923208778084', '59 k1', 'wapda town', 'lahore', 74.257217, 31.393272, '$2y$10$GlPthKyRGtkzycUUWFq16uvE4BYJR2C9Af8uzKMr1YYaAuovYDNkC', 'hs6GtDJyUju0ZotRWqqrmcpUDm4E9NXSZiiVgBppQ99nleoGJ7ET8Dpn9cAb');
 
 --
 -- Indexes for dumped tables
@@ -559,6 +611,12 @@ ALTER TABLE `ratings`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `reminders`
+--
+ALTER TABLE `reminders`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `shoppingcart`
 --
 ALTER TABLE `shoppingcart`
@@ -615,7 +673,7 @@ ALTER TABLE `messages`
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `mostsearch`
@@ -645,13 +703,13 @@ ALTER TABLE `paths`
 -- AUTO_INCREMENT for table `pharmacistproducts`
 --
 ALTER TABLE `pharmacistproducts`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `pharmacists`
 --
 ALTER TABLE `pharmacists`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `prescriptions`
@@ -663,7 +721,13 @@ ALTER TABLE `prescriptions`
 -- AUTO_INCREMENT for table `ratings`
 --
 ALTER TABLE `ratings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `reminders`
+--
+ALTER TABLE `reminders`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`

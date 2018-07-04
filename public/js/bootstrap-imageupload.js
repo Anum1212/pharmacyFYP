@@ -45,7 +45,7 @@ if (typeof jQuery === 'undefined') {
         allowedFormats: [ 'jpg', 'jpeg', 'png', 'gif' ],
         maxWidth: 200,
         maxHeight: 200,
-        maxFileSizeKb: 8048
+        maxFileSizeKb: 10000
     };
 
     // -----------------------------------------------------------------------------

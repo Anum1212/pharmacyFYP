@@ -1,13 +1,12 @@
     <div class="container searchDiv">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6 colxs-12">
+        <div class="row align-items-center justify-content-center">
+            <div class="col-12 col-md-7 align-self-center">
                     <div id="imaginary_container">
                         <div class="input-group stylish-input-group">
-                            <input type="text" class="form-control" id="address" placeholder="Enter an Address" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
+                            <input type="text" class="form-control" id="address" placeholder="Enter Location" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
                             <span class="detectLocationAddon input-group-addon">
                                 <button type="button" onclick="getLocation()" class="detectLocation">
-                                    <span class="fa fa-bullseye"></span>
+                                    <span class="fa fa-bullseye" style="color: red;"></span>
                                 </button>
                             </span>
                             <span class="input-group-addon">
@@ -17,10 +16,8 @@
                             </span>
                         </div>
                     </div>
-                </div>
             </div>
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 medicineForm">
-                <div class="col-lg-offset-3 col-md-offset-3 col-sm-offset-3 col-lg-6 col-md-6 col-sm-6 col-xs-12">
+            <div class="col-12 col-md-7 align-self-center medicineForm">
                     <form class="form-horizontal" action="/searchMedicine" method="get">
                         <div class="form-group">
                             <input id="medicineSearched" name="medicineSearched" type="text" class="form-control" placeholder="Medicine" @if(session()->has('medicineSearched')) value="{{ session('medicineSearched') }}" @endif required>
@@ -32,10 +29,9 @@
                         <br>
                         <br>
                         <input type="text" name="formatedAddress" id="formatedAddress" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif style="display:none">
-                        <input type="text" name="latitude" id="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
-                        <input type="text" name="longitude" id="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
+                        <input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
+                        <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
                     </form>
-                </div> {{-- medicineForm col --}}
             </div> {{-- medicineForm --}}
         </div> {{-- row --}}
     </div> {{-- Container --}}

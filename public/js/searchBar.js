@@ -1,19 +1,19 @@
 function getLocation() {
     var interval = setInterval(function () {
-        if ($('#lat').val() == "")
+        if ($('.lat').val() == "")
             alert('Hmmm Detection is taking too long. Try enterning the location manually');
         clearInterval(interval);
     }, 10000);
     if (navigator.geolocation) {
         var x = navigator.geolocation.getCurrentPosition(showPosition);
     } else {
-        x.innerHTML = "Geolocation is not supported by this browser.";
+         alert("Geolocation is not supported by this browser.");
     }
 }
 
 function showPosition(position) {
-    $('#lat').val(position.coords.latitude);
-    $('#lng').val(position.coords.longitude);
+    $('.lat').val(position.coords.latitude);
+    $('.lng').val(position.coords.longitude);
 
     var latlng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     var geocoder = new google.maps.Geocoder;
@@ -25,7 +25,7 @@ function showPosition(position) {
             $('#formatedAddress').val(results[0].formatted_address);
         }
     });
-    if ($('#lat').val() != "") {
+    if ($('.lat').val() != "") {
         $('.medicineForm').show();
     }
 }

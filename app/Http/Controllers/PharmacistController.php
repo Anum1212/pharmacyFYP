@@ -13,9 +13,10 @@
 // 5) savePharmacyApi (arham)??
 // 6) viewAllOrders
 // 7) viewSpecificOrder
-// 8) editAccountDetailsForm
-// 9) editAccountDetails
-// 10) contactUsForm
+// 8) changeOrderStatus
+// 9) editAccountDetailsForm
+// 10) editAccountDetails
+// 11) contactUsForm
 
 
 
@@ -23,6 +24,7 @@ namespace App\Http\Controllers;
 
 use DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -67,11 +69,11 @@ class PharmacistController extends Controller
     public function index()
     {
         // get logged in pharamcist details
-        $userData = Auth::user()->whereId(Auth::user()->id)->first();
+        $pharmacyDetails = Auth::user()->whereId(Auth::user()->id)->first();
 
         // if dataSource is 0 it means pharamcist hasnt provided an api or choose manual data entry
         // hence take pharamcist to page where they either enter api or decide to enter data manually
-        if ($userData->dataSource == '0') {
+        if ($pharmacyDetails->dataSource == '0') {
             return view('pharmacist.pharmacyDetailsForm');
 
         // if dataSource is NOT 0 it means user has provided an api or chose manual data entry
@@ -81,9 +83,42 @@ class PharmacistController extends Controller
             $allOrderId = [];
             $newOrders = [];
             $orders = [];
+            
+            // if data source is website
+            if ($pharmacyDetails->dataSource == '1') {
+                $stockAlert = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['quantity', '<', '25']])->get();
+                $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['status', 1]])->count();
+            }
 
-            $pharmacistId = Auth::user()->id;
-            $orderItems = Orderitem::where('pharmacistId', $pharmacistId)->orderBy('id', 'desc')->get();
+            // if data source is api
+            if ($pharmacyDetails->dataSource == '2') {
+                $stockAlert = [];
+                $pharmacyApi = rtrim($pharmacyDetails->dbAPI, '/');
+                $responseFromApi = Curl::to($pharmacyApi)->asJson()->get();
+                    // responseFromApi is an array of collections of collection
+                    // the code below converts it into collection of collcections
+                $pharmacyProducts = new Collection();
+                foreach ($responseFromApi as $collection) {
+                    foreach ($collection as $item) {
+                        $pharmacyProducts->push($item);
+                    }
+                }
+                $totalProducts = count($pharmacyProducts);
+                foreach ($pharmacyProducts as $pharmacyProduct)
+                    if ($pharmacyProduct->quantity < '25')
+                    $stockAlert[] = $pharmacyProduct;
+
+                $stockAlert = collect($stockAlert);
+            }
+
+            // if data source is website
+            if ($pharmacyDetails->dataSource == '3') {
+                dd("arham write your code here pharmacistController index method");
+                // $stockAlert = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['quantity', '<', '25']])->get();
+                // $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['status', 1]])->count();
+            }
+
+            $orderItems = Orderitem::where('pharmacistId', $pharmacyDetails->id)->orderBy('id', 'desc')->get();
             foreach ($orderItems as $orderItem) {
                 $allOrderId[] = $orderItem->orderId;
             }
@@ -107,15 +142,14 @@ class PharmacistController extends Controller
             $totalOrders = count($arrangedOrderId);
 
         // count all orders where time since order is less than 24 hours
-        for($i=0; $i<$totalOrders; $i++)
-            $newOrders[] = Order::where([
+            for ($i = 0; $i < $totalOrders; $i++)
+                $newOrders[] = Order::where([
                 ['created_at', '>=', Carbon::now()->subDays(1)]
             ])->first();
 
             $newOrders = count($newOrders);
-            $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacistId], ['status', 1]])->count();
             $medicines = DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
-            return view('pharmacist.pharmacistDashboard', compact('userData', 'medicines', 'newOrders', 'totalOrders', 'totalProducts'));
+            return view('pharmacist.pharmacistDashboard', compact('pharmacyDetails', 'medicines', 'newOrders', 'totalOrders', 'totalProducts', 'stockAlert'));
         }
     }
 
@@ -127,7 +161,7 @@ class PharmacistController extends Controller
     public function storeProductsInTable()
     {
         $saveRecord = Pharmacist::find(Auth::user()->id);
-        $saveRecord->dataSource = '2';
+        $saveRecord->dataSource = '1';
         $saveRecord->save();
         return redirect()->action('PharmacistController@index')->with('message', 'You can now add products to our databse');
     }
@@ -135,52 +169,27 @@ class PharmacistController extends Controller
 
 
     // |---------------------------------- 5) savePharmacyApi ----------------------------------|
-    // ---------------------------------- ARHAM PART ----------------------------------
     public function savePharmacyApi(Request $req)
     {
         $this->validate($req, [
             'dbAPI' => 'required|',
+            'medicine' => 'required|',
         ]);
 
 
-        // *************************** use this api for testing purposes (if no own api)***************************
-        // in actual program pharmacist api will be tested
-        // $clinAPI = 'https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search';
-        // random medicine name for testing
-        // Aceon
-        // Cambia
-        // CALAN
-
+        $dbApi = $req->dbAPI;
+        $dbApi = rtrim($dbApi, '/') . '/';
         $medicine = $req->medicine;
+        $testApi = $dbApi . $medicine;
         $medNotFound = '0';
+        $testApiResponse = Curl::to($testApi)->asJson()->get();
 
-        for ($i = 0; $i < count($medicine); $i++) {
-            $response[$i] = Curl::to($req->dbAPI)
-                // written according to clin api response
-                // arham will make changes from here according to project api response structure
-                ->withData(['terms' => $medicine[$i]], ['maxList' => '1'], ['q' => 'df'])
-                ->asJson()
-                ->get();
-
-            // counting how many medicine tests failed
-            if ($response[$i][0] == '0') {
-                $medNotFound = $medNotFound + 1;
-            }
-        }
-
-        // if 2/3 medicine test fails api test fails and pharamicst is shown error
-        if ($medNotFound >= '2') {
+        if ($testApiResponse == '0' || $testApiResponse == null) {
             return redirect::back()->with('error', 'Api verifivcation failed');
-        }
-
-        // if no error, api test passes and api is saved to pharmacists table
-        else {
+        } else {
             $saveRecord = Pharmacist::find(Auth::user()->id);
-
-            //dataSource 1 means pharmacist provided api
-            $saveRecord->dataSource = '1';
-
-            $saveRecord->dbAPI = $req->dbAPI;
+            $saveRecord->dataSource = '2';
+            $saveRecord->dbAPI = $dbApi;
             $saveRecord->save();
             return redirect()->action('PharmacistController@index')->with('message', 'Record Saved');
         }
@@ -248,7 +257,27 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 7) viewSpecificOrder ----------------------------------|
+    //  |---------------------------------- 7) changeOrderStatus ----------------------------------|
+    public function changeOrderStatus($orderId, $status)
+    {
+        // possible status types
+        // 0 -> order received
+        // 1 -> order dispatched
+        // 2 -> order cancelled
+
+        $orderDetails = Order::whereId($orderId)->first();
+        $orderDetails->status = $status;
+        $orderDetails->save();
+
+        $customerDetails = User::whereId($orderDetails->userId)->first();
+
+        return redirect('/pharmacist/viewAllOrders')->with('message', 'Order Status Changed');
+
+    }
+
+
+
+    //  |---------------------------------- 8) changeOrderStatus ----------------------------------|
     public function viewSpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails = [];
@@ -280,7 +309,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 8) editAccountDetailsForm ----------------------------------|
+    //  |---------------------------------- 9) editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
         $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
@@ -289,7 +318,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 9) editAccountDetails ----------------------------------|
+    //  |---------------------------------- 10) editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
         $pharmacyDetails = Pharmacist::find(Auth::user()->id);
@@ -305,7 +334,6 @@ class PharmacistController extends Controller
             $pharmacyDetails->address = $req->address;
             $pharmacyDetails->society = $req->society;
             $pharmacyDetails->city = $req->city;
-            // $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
             $pharmacyDetails->save();
 
             return redirect('/pharmacist/dashboard')->with('message', 'Edit successful');
@@ -337,7 +365,6 @@ class PharmacistController extends Controller
                 $pharmacyDetails->city = $req->city;
                 $pharmacyDetails->longitude = $longitude;
                 $pharmacyDetails->latitude = $latitude;
-                // // $pharmacyDetails->freeDeliveryPurchase = $req->freeDeliveryPurchase;
                 $pharmacyDetails->save();
 
                 return redirect('/pharmacist/dashboard')->with('message', 'Edit successful');
@@ -347,7 +374,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 10) contactUsForm ----------------------------------|
+    //  |---------------------------------- 11) contactUsForm ----------------------------------|
     public function contactUsForm()
     {
         return view('pharmacist.messageToAdminForm');

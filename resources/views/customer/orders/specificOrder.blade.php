@@ -5,7 +5,9 @@
   <div class="col-md-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        @foreach($orderDetails as $orderDetail) Order# {{$orderDetail->id}} @endforeach
+        Order# {{$order->id}}
+        <span style="font-size: 11px;">
+          {{$order->created_at->format('d/m/Y')}}</span>
         <span class="pull-right clickable panel-toggle panel-button-tab-left">
           <em class="fa fa-toggle-up"></em>
         </span>
@@ -53,7 +55,7 @@
                 @endif 
                 <td data-label="item">{{$orderDetail->quantity}}</td>
                 @foreach($pharmacyDetails as $pharmacyDetail) {{-- loop 3 --}}
-                @if($productDetail->pharmacistId == $pharmacyDetail->id) {{-- product detail if 2 --}}
+                @if($orderDetail->pharmacistId == $pharmacyDetail->id) {{-- product detail if 2 --}}
                 <td data-label="item">
                   <a href="/pharmacyDetails/{{$pharmacyDetail->id}}">{{$pharmacyDetail->pharmacyName}}</a>
                 </td>

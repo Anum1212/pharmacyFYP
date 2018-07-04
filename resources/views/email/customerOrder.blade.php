@@ -10,7 +10,7 @@
   <style>
 
     #header {
-      background: #30A5FF;
+      background: #D41B29;
       color: white;
       text-align: center;
     }
@@ -229,7 +229,7 @@
 
 <body>
   <div id="emailBody">
-    <div id="header" style="background: #30A5FF;color: white;text-align: center;">
+    <div id="header" style="background: #D41B29;color: white;text-align: center;">
       <h1>Pharmacy</h1>
     </div>
     <div class="inv-container" style="font-family: 'Lato', sans-serif;margin: 20px auto;max-width: 650px;">
@@ -281,6 +281,9 @@
               @elseif($product[$i]->type=='7')
                 <!-- 7 = Cream -->
             <td class="left" style="padding: 5px;">Cream</td>
+              @elseif($product[$i]->type=='8')
+                <!-- 7 = Cream -->
+            <td class="left" style="padding: 5px;">Others</td>
                 @endif
                 <td class="u-right" style="padding: 5px;text-align: right;">{{$product[$i]->price}}</td>
                 <td class="u-mid" style="padding: 5px;text-align: center;">{{$orderItems[$i]->quantity}}</td>

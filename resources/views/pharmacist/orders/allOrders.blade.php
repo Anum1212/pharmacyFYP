@@ -33,7 +33,7 @@
                 @foreach($customers as $customer) @if($customer->id == $order->userId)
                 <td data-label="Customer">{{$customer->name}}</td>
                 <td data-label="Cost">{{$order->cost}}</td>
-                <td data-label="Order Date">{{$order->created_at}}</td>
+                <td data-label="Order Date">{{$order->created_at->format('d/m/Y')}}</td>
                 <td data-label="View">
                   <a href="viewSpecificOrder/{{$order->id}}/{{$customer->id}}/{{Auth::user()->id}}">
                     <i class="fa fa-search" aria-hidden="true"></i>

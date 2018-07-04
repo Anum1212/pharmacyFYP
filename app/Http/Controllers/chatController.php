@@ -19,11 +19,26 @@ use Illuminate\Http\Request;
 use DB;
 use Auth;
 use Pusher\Pusher;
+use Cart;
 
 
 
 class chatController extends Controller
 {
+
+
+     //  |---------------------------------- 1) __construct ----------------------------------|
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+        $this->middleware(function ($request, $next) {
+            Cart::instance('shopping');
+            Cart::restore(Auth::id());
+
+            return $next($request);
+        });
+    }
+
 
 
   // |---------------------------------- 1) chat ----------------------------------|

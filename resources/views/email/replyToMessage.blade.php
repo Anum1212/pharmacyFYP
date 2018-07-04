@@ -11,8 +11,12 @@
     }
 
     #header {
-      background: #30A5FF;
+      background: #D41B29;
       color: white;
+    }
+
+    #senderMessage, #adminMessage{
+      background-color: #f9f9f9;
     }
 
   </style>
@@ -20,7 +24,7 @@
 
 <body style="text-align: center;">
   <div id="emailBody">
-    <div id="header">
+    <div id="header" style="background: #D41B29; color: white;">
       <h1>Pharmacy</h1>
     </div>
     <div id="content">

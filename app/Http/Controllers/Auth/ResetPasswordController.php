@@ -16,7 +16,7 @@ class ResetPasswordController extends Controller
     | and uses a simple trait to include this behavior. You're free to
     | explore this trait and override any methods you wish to tweak.
     |
-    */
+     */
 
     use ResetsPasswords;
 
@@ -35,22 +35,5 @@ class ResetPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
-    }
-
-
-    // overriding password reset function to prevent autologin after password reset.
-    // user taken to login page instead where when user login system can check user verification status
-    protected function resetPassword($user, $password)
-    {
-        $user->password = Hash::make($password);
-
-        $user->setRememberToken(Str::random(60));
-
-        $user->save();
-
-        event(new PasswordReset($user));
-
-        // removing this line removes autologin
-    // $this->guard()->login($user);
     }
 }

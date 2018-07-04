@@ -1,6 +1,12 @@
 @extends( Auth::check()  ?  'layouts.customerDashboard' : 'layouts.pharmacistDashboard' )
 {{-- @extends('layouts.customerDashboard') --}}
   @section('head')
+  <style>
+    .panel-body{
+      width: 70%; 
+      margin: auto
+    }
+  </style>
    <link rel="stylesheet" href="{{asset('css/alertify.min.css')}}">
   <link rel="stylesheet" href="{{asset('css/default.css')}}">
   <link rel="stylesheet" href="{{asset('css/chat.css')}}">
@@ -22,7 +28,12 @@
 //onsole.log(decodeURIComponent(reciever));
 var messages=$('#text').val();
   var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
- $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
+  @if(Auth::guard('web')->check())
+ $('.chat-container').append('<li class="left clearfix"><span class="chat-img pull-left"><img src={{ asset( "storage/myAssets/customer.png") }} alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
+ @endif
+  @if(Auth::guard('pharmacist')->check())
+ $('.chat-container').append('<li class="left clearfix"><span class="chat-img pull-left"><img src={{ asset( "storage/myAssets/pharmacist.png") }} alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">Me</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+$('#text').val()+'</p></div></li>');
+ @endif
  $('.chat-message').scrollTop(5000000);
  queryString=getUrlVars();
         
@@ -86,7 +97,7 @@ var messages=$('#text').val();
           var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-container').append('<li class="left clearfix"><span class="chat-img pull-left"><img src={{ asset( "storage/myAssets/pharmacist.png") }} alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+time+'</small></div><p>'+message[1]+'</p></div></li>');
      $('.chat-message').scrollTop(5000000);
      }
        @endif
@@ -101,7 +112,7 @@ var messages=$('#text').val();
     var d = new Date();
     //mera logic
     var time=d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-     $('.chat-container').append('<li class="left clearfix"><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+message[1]+'</p></div></li>');
+     $('.chat-container').append('<li class="left clearfix"><span class="chat-img pull-left"><img src={{ asset( "storage/myAssets/customer.png") }} alt="User Avatar" class="img-circle" /></span><div class="chat-body clearfix"><div class="header"><strong class="primary-font">'+message[2]+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+time+'</small></div><p>'+message[1]+'</p></div></li>');
      $('.chat-message').scrollTop(5000000);
        } 
     @endif
@@ -160,6 +171,28 @@ var messages=$('#text').val();
       <ul class="chat chat-container">
         @foreach($chat as $chats)
         <li class="left clearfix">
+          <span class="chat-img pull-left">
+
+
+
+            @if(Auth::check())
+                @if($chats->senderName==Auth::guard('web')->user()->name)
+                <img src={{ asset( 'storage/myAssets/customer.png') }} alt="User Avatar" class="img-circle img-responsive" /></span>
+                @else
+                <img src={{ asset( 'storage/myAssets/pharmacist.png') }} alt="User Avatar" class="img-circle img-responsive" /></span>
+                @endif
+                
+                @elseif(Auth::guard('pharmacist')->check())
+                @if($chats->senderName==Auth::guard('pharmacist')->user()->name)
+                <img src={{ asset( 'storage/myAssets/pharmacist.png') }} alt="User Avatar" class="img-circle img-responsive" /></span>
+                @else
+                <img src={{ asset( 'storage/myAssets/customer.png') }} alt="User Avatar" class="img-circle img-responsive" /></span>
+                @endif
+                  @endif
+
+
+
+
           <div class="chat-body clearfix">
             <div class="header">
               <strong class="primary-font">@if(Auth::check())

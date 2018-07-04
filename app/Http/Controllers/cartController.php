@@ -23,6 +23,7 @@ use App\Pharmacist;
 use App\Pharmacistproduct;
 use Cart;
 use Auth;
+use Curl;
 
 
 
@@ -46,15 +47,22 @@ class cartController extends Controller
 
 
     // |---------------------------------- 2) addToCart ----------------------------------|
-    public function addToCart($productId, $productSource)
+    public function addToCart($productSource, $productId, $pharmacistId)
     {
+        // productSource types
+        //      1 -> website storage
+        //      2 -> api storage
+        //      3 -> localhost storage
+        
         if ($productSource == 1) {
             $productDetails = Pharmacistproduct::whereId($productId)->first();
             $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
         }
-
+        
         if ($productSource == 2) {
-            echo 'under development';
+            $pharmacyDetails = Pharmacist::whereId($pharmacistId)->first();
+            $productDetails = Curl::to($pharmacyDetails->dbAPI.$productId)->asJson()->get();;
+            $cart = Cart::add($productDetails[0]->id, $productDetails[0]->name, '1', $productDetails[0]->price, ['pharmacistId' => $pharmacistId, 'pharmacistName' => $productDetails[0]->pharmacistName, 'prescription' => $productDetails[0]->prescription]);
         }
 
         return redirect()->back()->with('message', 'Item added to cart'); // change in future

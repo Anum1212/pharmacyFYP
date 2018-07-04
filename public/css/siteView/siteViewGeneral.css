@@ -23,6 +23,7 @@
 .thumbnail {
     margin-bottom: 55px;
     max-width: 240px;
+    min-height: 500px;
 }
 .thumbnail h3 {
     color: #30A5FF;

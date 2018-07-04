@@ -30,7 +30,7 @@
                         @foreach ($products as $product)
                         <tr>
                             <td data-label="#">{{ (($products->currentPage() - 1 ) * $products->perPage() ) + $loop->iteration }}</td>
-                            <td data-label="Name">{{$product->name}}</td>
+                            <td data-label="Name">{{ $product->name }}</td>
                             <td data-label="Dosage">{{$product->dosage}}</td>
                             @if($product->type=='1')
                             <!-- 1 = Tablet -->
@@ -53,7 +53,11 @@
                             @elseif($product->type=='7')
                             <!-- 7 = Cream -->
                             <td data-label="Type">Cream</td>
-                            @endif @if($product->prescription=='0')
+                            @elseif($product->type=='8')
+                            <!-- 8 = Others -->
+                            <td data-label="Type">Others</td>
+                            @endif
+                             @if($product->prescription=='0')
                             <!-- 0 = Not Required -->
                             <td data-label="prescription">Not Required</td>
                             @elseif($product->prescription=='1')

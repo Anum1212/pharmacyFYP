@@ -19,6 +19,17 @@ class CreatePharmacistproductsTable extends Migration
             $table->string('pharmacistId');
             $table->string('pharmacistName');
             $table->string('name');
+            $table->string('genericName');
+            // possible categories 
+            // 1) Medicine 
+            // 2) Proteins and Suppliments 
+            // 3) Baby and Mom 
+            // 4) Beauty 
+            // 5) HouseHold 
+            // 6) Others
+            $table->integer('category');
+            $table->integer('tablets');
+            $table->string('manufacturer');
             $table->string('dosage');
             // possible types of medicine
             // 1 -> tablet
@@ -28,6 +39,7 @@ class CreatePharmacistproductsTable extends Migration
             // 5 -> drops
             // 6 -> injection
             // 7 -> cream
+            // 8 -> others
             $table->integer('type');
             // possible prescription status
             // 0 -> not required
@@ -38,7 +50,7 @@ class CreatePharmacistproductsTable extends Migration
             // possible status type
             // 0 -> product discontinued
             // 1 -> product offered by pharmacist
-            $table->integer('status')->default('1');            
+            $table->integer('status')->default('1');
             // possible productSource type
             // 1 -> local website Storage
             // 2 -> api

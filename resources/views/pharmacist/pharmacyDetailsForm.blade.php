@@ -36,12 +36,12 @@
               <div class="panel-body col-lg-12 col-md-12 col-sm-12 col-xs-12" id="apiInfo">
                 <ol>
                   <li>Enter your pharamacy API</li>
-                  <li>In the medicine fields enter the name of medicines availbale in your database</li>
+                  <li>In the medicine fields enter the name of a medicine availbale in your database</li>
                   <li>Enter proper name of medicine as saved in your database</li>
-                  <li>the system will use these medicines to veriify if the api is valid</li>
-                  <li>if the system fails to find these medicines you will be given an error notification</li>
+                  <li>the system will use this medicine name to veriify if the api is valid</li>
+                  <li>if the system fails to find the medicines you will be given an error notification</li>
                   <li>Contact Admin in case of problem.
-                    <a class="btn btn-md btn-success" href="/pharmacist/contactUsForm">
+                    <a class="btn btn-md btn-success" href="/contactUsFormGeneral">
                       <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
                   </li>
                 </ol>
@@ -52,36 +52,20 @@
                   {{ csrf_field() }}
                   <fieldset>
 
-                    <!-- Message body -->
+                    <!-- db API -->
                     <div class="form-group">
                       <label class="col-md-1 control-label" for="message">API</label>
                       <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <textarea class="form-control" id="message" name="message" rows="5" required></textarea>
+                        <textarea class="form-control" id="dbAPI" name="dbAPI" rows="5" required></textarea>
                       </div>
                     </div>
 
 
                     <!-- Name input-->
                     <div class="form-group">
-                      <label class="col-md-1 control-label" for="medicine">Medicine 1</label>
+                      <label class="col-md-1 control-label" for="medicine">Medicine</label>
                       <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <input id="medicine" name="medicine[]" type="text" class="form-control" required>
-                      </div>
-                    </div>
-
-                    <!-- Name input-->
-                    <div class="form-group">
-                      <label class="col-md-1 control-label" for="medicine">Medicine 2</label>
-                      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <input id="medicine" name="medicine[]" type="text" class="form-control" required>
-                      </div>
-                    </div>
-
-                    <!-- Name input-->
-                    <div class="form-group">
-                      <label class="col-md-1 control-label" for="medicine">Medicine 3</label>
-                      <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
-                        <input id="medicine" name="medicine[]" type="text" class="form-control" required>
+                        <input id="medicine" name="medicine" type="text" class="form-control" required>
                       </div>
                     </div>
 

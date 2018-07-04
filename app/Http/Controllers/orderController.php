@@ -56,32 +56,36 @@ class orderController extends Controller
 
 
     // |---------------------------------- 2) prescriptionUploadForm ----------------------------------|
-    public function prescriptionUploadForm()
+    public function prescriptionUploadForm(Request $req)
     {
+        $deliveryDate = $req->deliveryDate;
+        // dd($req->deliveryDate);
+
         // possible prescriptionNeeded status (default = 0)
         // 0 -> not required
         // 1 -> required
-        $prescriptionNeeded='0'; //
+        $prescriptionNeeded = '0'; //
 
         foreach (Cart::content() as $item) {
-            if ($item->options->prescription==1) {
+            if ($item->options->prescription == 1) {
                 $prescriptionNeeded = '1';
             }
         }
-        if ($prescriptionNeeded==1) {
-            return view('siteView.prescriptionUpload');
+        if ($prescriptionNeeded == 1) {
+            return view('siteView.prescriptionUpload', compact('deliveryDate'));
         } else {
-            return redirect('/checkOutCart');
+            return $this->checkout($deliveryDate);
+            // return redirect('/checkOutCart/' deliveryDate);
         }
     }
 
 
 
     // |---------------------------------- 3) (checkout with) prescriptionUpload ----------------------------------|
-    public function prescriptionUpload(Request $req)
+    public function prescriptionUpload(Request $req, $deliveryDate)
     {
         $userId = Auth::user()->id;
-        $cost=Cart::total();
+        $cost = Cart::total();
 
         if ($cost > 0) {
             $order = new Order;
@@ -89,6 +93,7 @@ class orderController extends Controller
             $order->userId = $userId;
             $order->cost = $cost;
             $order->status = '0';
+            $order->deliveryDate = $deliveryDate;
             // possible prescription status
             // 0 -> not required
             // 1 -> required
@@ -104,7 +109,7 @@ class orderController extends Controller
                 $orderItem->pharmacistId = $item->options->pharmacistId;
                 $orderItem->quantity = $item->qty;
                 $orderItem->save();
-        }
+            }
 
             if ($req->file('imageFile')) {
                 Storage::put('public/myAssets/prescriptions', $req->imageFile);
@@ -114,10 +119,8 @@ class orderController extends Controller
                 $prescription->save();
             }
 
-            Cart::destroy();
             return $this->generateInvoice($lastInsertId);
-        }
-         else {
+        } else {
             return redirect('/')->with('message', 'Cart Empty');
         }
     }
@@ -125,16 +128,18 @@ class orderController extends Controller
 
 
     // |---------------------------------- 4) checkout ----------------------------------|
-    public function checkout()
+    public function checkout($deliveryDate)
     {
+        // dd('check out function', $deliveryDate);
         $userId = Auth::user()->id;
-        $cost=Cart::total();
+        $cost = Cart::total();
 
         if ($cost > 0) {
             $order = new Order;
 
             $order->userId = $userId;
             $order->cost = $cost;
+            $order->deliveryDate = $deliveryDate;
             $order->status = '0';
             $order->save();
 
@@ -148,8 +153,7 @@ class orderController extends Controller
                 $orderItem->quantity = $item->qty;
                 $orderItem->save();
             }
-            
-            Cart::destroy();
+
             return $this->generateInvoice($lastInsertId);
         } else {
             return redirect('/');
@@ -161,8 +165,8 @@ class orderController extends Controller
     // |---------------------------------- 5) generateInvoice ----------------------------------|
     public function generateInvoice($lastInsertId)
     {
-        $product=[];
-        $allPharmacistId=[];
+        $product = [];
+        $allPharmacistId = [];
         $order = Order::whereId($lastInsertId)->first();
         $customerDetails = User::whereId($order->userId)->first();
 
@@ -173,6 +177,16 @@ class orderController extends Controller
             $product[] = Pharmacistproduct::whereId($productId)->first();
         }
 
+
+        foreach (Cart::content() as $item) {
+            // echo $item->id;
+            $orderItem = Pharmacistproduct::whereId($item->id)->first();
+            $orderItem->quantity = $orderItem->quantity - $item->qty;
+            $orderItem->save();
+        }
+
+
+        
         // to remove duplicates
         $pharmacistId = array_unique($allPharmacistId);
                 // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
@@ -188,7 +202,7 @@ class orderController extends Controller
         // 2     =>   9
         $arrangedPharmacistId = array_values($pharmacistId);
 
-        for ($i=0; $i<count($arrangedPharmacistId); $i++) {
+        for ($i = 0; $i < count($arrangedPharmacistId); $i++) {
             $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
         }
 
@@ -196,24 +210,29 @@ class orderController extends Controller
         Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
 
         // send mail to pharmacist(s)
-        foreach($pharmacistId as $pharmacist){
-        Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
+        foreach ($pharmacistId as $pharmacist) {
+            Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
         }
 
         // send sms to customer
         $username = '923208778084';///Your  Username 
-        $password='3195';///Your SECRET Password 
-        $sender='ABC';///Your Masking 
-        $mobile= $customerDetails->contact; ///add comma to send multiple sms like 92301,92310,92321 
-        $message='Your Order# '.$lastInsertId.' has been received. Your Total Order Cost is Rs ' .$order->cost;///Your Message 
-        $post = "sender=".urlencode($sender)."&mobile=".urlencode($mobile)."&message=".urlencode($message)."&format=json"; 
-        $url = "http://sendpk.com/api/sms.php?username=".$username."&password=". $password.""; 
-        $ch = curl_init(); $timeout = 0; // set to zero for no timeout 
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)'); 
-        curl_setopt($ch, CURLOPT_URL,$url); curl_setopt($ch, CURLOPT_POST, 1); 
-        curl_setopt($ch, CURLOPT_POSTFIELDS,$post);
+        $password = '3195';///Your SECRET Password 
+        $sender = 'ABC';///Your Masking 
+        $mobile = $customerDetails->contact; ///add comma to send multiple sms like 92301,92310,92321 
+        $message = 'Your Order# ' . $lastInsertId . ' has been received. Your Total Order Cost is Rs ' . $order->cost;///Your Message 
+        $post = "sender=" . urlencode($sender) . "&mobile=" . urlencode($mobile) . "&message=" . urlencode($message) . "&format=json";
+        $url = "http://sendpk.com/api/sms.php?username=" . $username . "&password=" . $password . "";
+        $ch = curl_init();
+        $timeout = 0; // set to zero for no timeout 
+        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt ($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        $result = curl_exec($ch);
+
+        Cart::destroy();
 
         // return view
         return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));

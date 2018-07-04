@@ -24,7 +24,7 @@
                         @foreach($orders as $order)
                         <tr>
                             <td data-label="#">{{ (($orders->currentPage() - 1 ) * $orders->perPage() ) + $loop->iteration }}</td>
-                            <td data-label="order date">{{$order->created_at}}</td>
+                            <td data-label="order date">{{$order->created_at->format('d/m/Y')}}</td>
                             <td data-label="price">{{$order->cost}}</td>
                             <td data-label="View">
                                 <a href="viewSpecificOrder/{{$order->id}}">

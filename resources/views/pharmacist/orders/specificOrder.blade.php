@@ -6,8 +6,8 @@
     <div class="panel panel-default">
       <div class="panel-heading">
         Order#{{$order->id}}
-        <small>
-          <b>Date</b> {{$order->created_at}}</small>
+        <span style="font-size: 11px;">
+          {{$order->created_at->format('d/m/Y')}}</span>
         <span class="pull-right clickable panel-toggle panel-button-tab-left">
           <em class="fa fa-toggle-up"></em>
         </span>
@@ -64,12 +64,9 @@
             </tr>
           </thead>
           <tbody>
-            <?php
-    $i=1;
-    ?>
               @foreach($orderDetails as $orderDetail)
               <tr>
-                <td data-label="#">{{$i}}</td>
+                <td data-label="#">{{ $loop->iteration }}</td>
                 @foreach($productDetails as $productDetail) @if($productDetail->id == $orderDetail->productId)
                 <td data-label="item">{{$productDetail->name}}</td>
                 @if($productDetail->type=='1')
@@ -96,9 +93,6 @@
                 @endif @endif @endforeach
                 <td data-label="quantity">{{$orderDetail->quantity}}</td>
               </tr>
-              <?php
-      $i++;
-      ?>
                 @endforeach
                 <tr>
                   <td colspan="2">

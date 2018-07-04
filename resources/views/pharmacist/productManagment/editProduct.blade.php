@@ -14,6 +14,7 @@
         <form class="form-horizontal confirm" action="/pharmacist/editProduct/{{$product->id}}" method="POST">
           {{ csrf_field() }} {{ method_field('PUT') }}
           <fieldset>
+
             <!-- Product Name-->
             <div class="form-group">
               <label class="col-md-3 control-label" for="productName">Product Name</label>
@@ -22,16 +23,24 @@
               </div>
             </div>
 
-            <!-- Product Dosage-->
+            <!-- genericName-->
             <div class="form-group">
-              <label class="col-md-3 control-label" for="dosage">Dosage</label>
+              <label class="col-md-3 control-label" for="genericName">GenericName</label>
               <div class="col-md-9">
-                <input id="dosage" name="dosage" type="number" class="form-control" value="{{$product->dosage}}" required>
+                <input id="genericName" name="genericName" type="text" class="form-control" value="{{$product->genericName}}" required>
               </div>
             </div>
 
-            {{-- possible types of medicine 1) tablet 2) capsule 3) syrup 4) inhaler 5) drops 6) injection 7) cream --}}
-            <!-- Product Dosage-->
+            <!-- manufacturer-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="manufacturer">Manufacturer</label>
+              <div class="col-md-9">
+                <input id="manufacturer" name="manufacturer" type="text" class="form-control" value="{{$product->manufacturer}}" required>
+              </div>
+            </div>
+
+                        {{-- possible types of medicine 1) tablet 2) capsule 3) syrup 4) inhaler 5) drops 6) injection 7) cream --}}
+            <!-- Product Type-->
             <div class="form-group">
               <label class="col-md-3 control-label" for="dosage">Product Type:</label>
               <div class="col-md-9">
@@ -43,7 +52,40 @@
                   <option value="5" <?php if($product->type=="5") echo 'selected="selected"'; ?>>Drops</option>
                   <option value="6" <?php if($product->type=="6") echo 'selected="selected"'; ?>>Injection</option>
                   <option value="7" <?php if($product->type=="7") echo 'selected="selected"'; ?>>Cream</option>
+                  <option value="8" <?php if($product->type=="8") echo 'selected="selected"'; ?>>Others</option>
                 </select>
+              </div>
+            </div>
+
+              {{-- possible category 1) Medicine 2) Supplements 3) Baby and Mom 4) Beauty 5) HouseHold 6) Others --}}
+            <!-- Product Type-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="dosage">Product Category:</label>
+              <div class="col-md-9">
+                <select class="form-control" id="category" name="category" required>
+                  <option value="1" <?php if($product->category=="category1") echo 'selected="selected"'; ?>>Medicine</option>
+                  <option value="2" <?php if($product->category=="category2") echo 'selected="selected"'; ?>>Supplements</option>
+                  <option value="3" <?php if($product->category=="category3") echo 'selected="selected"'; ?>>Baby and Mom</option>
+                  <option value="4" <?php if($product->category=="category4") echo 'selected="selected"'; ?>>Beauty</option>
+                  <option value="5" <?php if($product->category=="category5") echo 'selected="selected"'; ?>>HouseHold</option>
+                  <option value="6" <?php if($product->category=="category6") echo 'selected="selected"'; ?>>Others</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- tablets-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="tablets">Tablets</label>
+              <div class="col-md-9">
+                <input id="tablets" name="tablets" type="number" class="form-control" value="{{$product->tablets}}" placeholder="leave empty if not a tablet">
+              </div>
+            </div>
+
+            <!-- Product Dosage-->
+            <div class="form-group">
+              <label class="col-md-3 control-label" for="dosage">Dosage</label>
+              <div class="col-md-9">
+                <input id="dosage" name="dosage" type="number" class="form-control" value="{{$product->dosage}}" required>
               </div>
             </div>
 

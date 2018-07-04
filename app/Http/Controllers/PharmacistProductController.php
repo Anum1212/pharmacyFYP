@@ -66,8 +66,12 @@ class PharmacistProductController extends Controller
         $newProduct->pharmacistId = Auth::user()->id;
         $newProduct->pharmacistName = Auth::user()->pharmacyName;
         $newProduct->name = $req->productName;
+        $newProduct->genericName = $req->genericName;
+        $newProduct->manufacturer = $req->manufacturer;
+        $newProduct->tablets = $req->tablets;
         $newProduct->dosage = $req->dosage;
         $newProduct->type = $req->drugType;
+        $newProduct->category = 'category'.$req->category;
         $newProduct->prescription = $req->prescription;
         $newProduct->price = $req->price;
         $newProduct->quantity = $req->quantity;
@@ -104,8 +108,12 @@ class PharmacistProductController extends Controller
 
         // store data in the pharmacist's table
         $product->name = $req->productName;
+        $product->genericName = $req->genericName;
+        $product->manufacturer = $req->manufacturer;
+        $product->tablets = $req->tablets;
         $product->dosage = $req->dosage;
         $product->type = $req->drugType;
+        $product->category = $req->category;
         $product->prescription = $req->prescription;
         $product->price = $req->price;
         $product->quantity = $req->quantity;

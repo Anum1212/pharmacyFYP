@@ -11,7 +11,7 @@
     }
 
     #header {
-      background: #30A5FF;
+      background: #D41B29;
       color: white;
     }
 
@@ -20,7 +20,7 @@
     }
 
     #button {
-      background-color: #30A5FF;
+      background-color: #D41B29;
       border-radius: 5%;
       color: white;
     }
@@ -33,7 +33,7 @@
 
 <body style="text-align: center;">
   <div id="emailBody">
-    <div id="header" style="background: #30A5FF;
+    <div id="header" style="background: #D41B29;
       color: white;">
       <h1>Pharmacy</h1>
     </div>
@@ -48,7 +48,7 @@
         <br>
       </p>
     </div>
-    <div id="button" style="background-color: #30A5FF; border-radius: 5%; color: white;">
+    <div id="button" style="background-color: #D41B29; border-radius: 5%; color: white;">
       <h2><a style="color: white;" href="{{route('verifyPharmacistRegistration', [" email " => $pharmacist->email, "verificationToken
         " => $pharmacist->verificationToken])}}">Click Here</a></h2>
     </div>

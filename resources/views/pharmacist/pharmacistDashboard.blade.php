@@ -8,13 +8,7 @@
 @section('body')
 
 <div class="row">
-    {{-- Gap --}}
-  <div class="col-lg-12" style="margin-top:25px">
-  </div>
-  {{-- weather Widget --}}
-<div class="col-lg-12">
-  <iframe src="https://www.meteoblue.com/en/weather/widget/three?geoloc=detect&nocurrent=0&noforecast=0&noforecast=1&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=image"  frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%;height: 170px"></iframe><div></div>
-</div>
+
 {{-- Gap --}}
 <div class="col-lg-12" style="margin-top:25px">
           </div>
@@ -50,6 +44,76 @@
 			</div><!--/.row-->
 				</div>
       </div>
+      
+      {{-- Stock Alert --}}
+      @if(count($stockAlert)>0)
+      <div class="col-lg-12">
+				<div class="panel panel-danger">
+					<div class="panel-heading text-center">
+						<b>Stock Alert</b> 
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
+					<div class="panel-body">
+            <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Dosage</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Prescription</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($stockAlert as $product)
+                        <tr>
+                            <td data-label="#">{{ $loop->iteration }}</td>
+                            <td data-label="Name"> <a href="/medicineDetails/{{ $product->productSource }}/{{ $product->id }}/{{ $product->pharmacistId }}">{{ $product->name }} </a></td>
+                            <td data-label="Dosage">{{$product->dosage}}</td>
+                            @if($product->type=='1')
+                            <!-- 1 = Tablet -->
+                            <td data-label="Type">Tablet</td>
+                            @elseif($product->type=='2')
+                            <!-- 2 = Capsule -->
+                            <td data-label="Type">Capsule</td>
+                            @elseif($product->type=='3')
+                            <!-- 3 = Syrup -->
+                            <td data-label="Type">Syrup</td>
+                            @elseif($product->type=='4')
+                            <!-- 4 = Inhaler -->
+                            <td data-label="Type">Inhaler</td>
+                            @elseif($product->type=='5')
+                            <!-- 5 = Drops -->
+                            <td data-label="Type">Drops</td>
+                            @elseif($product->type=='6')
+                            <!-- 6 = Injection -->
+                            <td data-label="Type">Injection</td>
+                            @elseif($product->type=='7')
+                            <!-- 7 = Cream -->
+                            <td data-label="Type">Cream</td>
+                            @elseif($product->type=='8')
+                            <!-- 8 = Others -->
+                            <td data-label="Type">Others</td>
+                            @endif
+                             @if($product->prescription=='0')
+                            <!-- 0 = Not Required -->
+                            <td data-label="prescription">Not Required</td>
+                            @elseif($product->prescription=='1')
+                            <!-- 1 = Required -->
+                            <td data-label="Type">Required</td>
+                            @endif
+                            <td data-label="Price">{{$product->price}}</td>
+                            <td data-label="Quantity">{{$product->quantity}}</td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            
+					</div>
+				</div>
+      </div>
+      @endif
       
       {{-- Most Searched Medicine --}}
 			<div class="col-lg-12">

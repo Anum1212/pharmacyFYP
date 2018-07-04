@@ -28,7 +28,7 @@
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="/">
-                    <span>Lumino</span>Admin</a>
+                    <span>LifeLine</span> <em class="fa fa-heartbeat" style="color:#fff; font-size: 25px"></em></a>
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="dropdown">
                         <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">

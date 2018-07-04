@@ -36,6 +36,7 @@ use App\Order;
 use App\Orderitem;
 use App\Rating;
 use App\Reminder;
+use Cart;
 
 class HomeController extends Controller
 {
@@ -49,6 +50,12 @@ class HomeController extends Controller
         $this->middleware('auth:web')->except(['viewSpecificOrder', 'resendVerificationEmail']);
         $this->middleware('userTypeAorC')->only(['viewSpecificOrder']);
         $this->middleware('rateOrder');
+        $this->middleware(function ($request, $next) {
+            Cart::instance('shopping');
+            Cart::restore(Auth::id());
+
+            return $next($request);
+        });
     }
 
 
@@ -118,8 +125,7 @@ class HomeController extends Controller
                         $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
                         $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
                     }
-                    // dd($pharmacyDetails);
-                    return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails'));
+                    return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'order'));
                 }
                 // if $orderDetails is empty return with error
                 else {
