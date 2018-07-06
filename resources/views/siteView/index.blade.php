@@ -100,7 +100,7 @@
 						<img src="/themeAssets/images/medicine2.jpg" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/1" method="get">
+							<form action="/searchMedicineByCategory/category1" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
@@ -118,7 +118,7 @@
 						<img src="/themeAssets/images/supplements.jpg" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/2" method="get">
+							<form action="/searchMedicineByCategory/category2" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
@@ -136,7 +136,7 @@
 						<img src="/themeAssets/images/baby.jpg" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/3" method="get">
+							<form action="/searchMedicineByCategory/category3" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
@@ -154,7 +154,7 @@
 						<img src="/themeAssets/images/beauty.jpg" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/4" method="get">
+							<form action="/searchMedicineByCategory/category4" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
@@ -172,7 +172,7 @@
 						<img src="/themeAssets/images/household.jpg" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/5" method="get">
+							<form action="/searchMedicineByCategory/category5" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
@@ -190,7 +190,7 @@
 						<img src="/themeAssets/images/others.png" alt="IMG-BENNER">
 
 						<div class="block1-wrapbtn w-size2">
-							<form action="searchMedicineByCategory/6" method="get">
+							<form action="/searchMedicineByCategory/category6" method="get">
 							<!-- Button -->
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
