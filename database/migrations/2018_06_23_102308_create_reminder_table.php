@@ -16,8 +16,6 @@ class CreateReminderTable extends Migration
         Schema::create('reminders', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->integer('customerId');
-            $table->string('customerName');
             $table->string('customerEmail');
             $table->string('productName');
             $table->float('longitude', 10, 6);

@@ -190,7 +190,10 @@
             $('#ratingModal').modal('show');
         });
     </script>
-    @endif @section('script') @show
+    @endif 
+    
+    
+    @section('script') @show
 
 </body>
 

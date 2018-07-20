@@ -39,7 +39,7 @@
   <div id="emailBody">
     <div id="header" style="background: #D41B29;
       color: white;">
-      <h1>Pharmacy</h1>
+      <h1>LifeLine</h1>
     </div>
     <div id="content">
       <h1 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif">Confirm Your Email</h1>

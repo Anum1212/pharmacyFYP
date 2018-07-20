@@ -230,7 +230,7 @@
 <body>
   <div id="emailBody">
     <div id="header" style="background: #D41B29;color: white;text-align: center;">
-      <h1>Pharmacy</h1>
+      <h1>LifeLine</h1>
     </div>
     <div class="inv-container" style="font-family: 'Lato', sans-serif;margin: 20px auto;max-width: 650px;">
       <div class="inv-note" style="font-weight: 400;font-style: italic;color: #333;line-height: 140%;padding: 0 5px 20px 5px;border-bottom: 1px solid #eee;margin-bottom: 10px;">
@@ -257,38 +257,50 @@
           </tr>
         </thead>
         <tbody>
-          @for($i=0; $i<count($product); $i++) 
-          @if($product[$i]->pharmacistId == $recipientData->id)<tr>
-            <td class="u-left" style="padding: 5px;text-align: left;">{{$product[$i]->name}}</td>
-            @if($product[$i]->type=='1')
+
+
+
+
+
+
+
+
+
+
+
+          @foreach ($products as $product)
+          @if($product->options->pharmacistId == $recipientData->id)
+          <tr>
+            <td class="u-left" style="padding: 5px;text-align: left;">{{ $product->name }}</td>
+            @if($product->options->type=='1')
             <!-- 1 = Tablet -->
             <td class="left" style="padding: 5px;">Tablet</td>
-            @elseif($product[$i]->type=='2')
+            @elseif($product->options->type=='2')
             <!-- 2 = Capsule -->
             <td class="left" style="padding: 5px;">Capsule </td>
-            @elseif($product[$i]->type=='3')
+            @elseif($product->options->type=='3')
             <!-- 3 = Syrup -->
             <td class="left" style="padding: 5px;">Syrup</td>
-            @elseif($product[$i]->type=='4')
+            @elseif($product->options->type=='4')
             <!-- 4 = Inhaler -->
             <td class="left" style="padding: 5px;">Inhaler</td>
-            @elseif($product[$i]->type=='5')
+            @elseif($product->options->type=='5')
             <!-- 5 = Drops -->
             <td class="left" style="padding: 5px;">Drops</td>
-                @elseif($product[$i]->type=='6')
+             @elseif($product->options->type=='6')
               <!-- 6 = Injection -->
-             <td class="left" style="padding: 5px;">Injection</td>
-              @elseif($product[$i]->type=='7')
+              <td class="left" style="padding: 5px;">Injection</td>
+              @elseif($product->options->type=='7')
                 <!-- 7 = Cream -->
-            <td class="left" style="padding: 5px;">Cream</td>
-              @elseif($product[$i]->type=='8')
+                <td class="left" style="padding: 5px;">Cream</td>
+              @elseif($product->options->type=='8')
                 <!-- 7 = Cream -->
-            <td class="left" style="padding: 5px;">Others</td>
+                <td class="left" style="padding: 5px;">Others</td>
                 @endif
-                <td class="u-right" style="padding: 5px;text-align: right;">{{$product[$i]->price}}</td>
-                <td class="u-mid" style="padding: 5px;text-align: center;">{{$orderItems[$i]->quantity}}</td>
-                <td class="u-right" style="padding: 5px;text-align: right;">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
-            </tr>
+                <td class="u-right">{{ $product->price }}</td>
+                <td class="u-mid">{{ $product->qty }}</td>
+                <td class="u-right">{{ $product->price*$product->qty }}</td>
+                </tr>
             @endif
                 @endfor
         </tbody>

@@ -25,7 +25,7 @@
 <body style="text-align: center;">
   <div id="emailBody">
     <div id="header" style="background: #D41B29; color: white;">
-      <h1>Pharmacy</h1>
+      <h1>LifeLine</h1>
     </div>
     <div id="content">
       <h4><b>Hi There!

@@ -11,6 +11,9 @@
 @endsection
 @section('body')
 
+{{-- including medicine notify modal --}}
+@include('includes.notifyModal');
+
 	<!-- Slider -->
 	<section class="slide1" style="margin-top: -100px">
 		<div class="wrap-slick1">

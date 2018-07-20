@@ -10,13 +10,14 @@
 // 2) resendVerificationEmail
 // 3) Index
 // 4) storeProductsInTable
-// 5) savePharmacyApi (arham)??
-// 6) viewAllOrders
-// 7) viewSpecificOrder
+// 5) localhost
+// 6) savePharmacyApi
+// 7) viewAllOrders
 // 8) changeOrderStatus
-// 9) editAccountDetailsForm
-// 10) editAccountDetails
-// 11) contactUsForm
+// 9) changeOrderStatus
+// 10) editAccountDetailsForm
+// 11) editAccountDetails
+// 12) contactUsForm
 
 
 
@@ -28,6 +29,8 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Storage;
+use App\File;
 use Carbon\carbon;
 use Auth;
 use Curl;
@@ -40,6 +43,7 @@ use App\Pharmacistproduct;
 use App\Order;
 use App\Orderitem;
 use App\Prescription;
+use App\Mail\localhostPharmacy;
 
 class PharmacistController extends Controller
 {
@@ -111,11 +115,9 @@ class PharmacistController extends Controller
                 $stockAlert = collect($stockAlert);
             }
 
-            // if data source is website
+            // if data source is localhost
             if ($pharmacyDetails->dataSource == '3') {
-                dd("arham write your code here pharmacistController index method");
-                // $stockAlert = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['quantity', '<', '25']])->get();
-                // $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['status', 1]])->count();
+                dd("arham write your code here pharmacistController index method stockAlert and totalProducts are needed for main dahboard page");
             }
 
             $orderItems = Orderitem::where('pharmacistId', $pharmacyDetails->id)->orderBy('id', 'desc')->get();
@@ -163,12 +165,34 @@ class PharmacistController extends Controller
         $saveRecord = Pharmacist::find(Auth::user()->id);
         $saveRecord->dataSource = '1';
         $saveRecord->save();
-        return redirect()->action('PharmacistController@index')->with('message', 'You can now add products to our databse');
+        return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
     }
 
 
 
-    // |---------------------------------- 5) savePharmacyApi ----------------------------------|
+    //  |---------------------------------- 5) localhost ----------------------------------|
+
+    // create table if user chose manual data entry i.e did not provide any api
+    public function localhost()
+    {
+        $pharmacistId = Auth::user()->id;
+        $pharmacistDetails = Pharmacist::find(Auth::user()->id);
+        Storage::put('public/myAssets/emailAttatchments/'.$pharmacistDetails->id.'.txt', $pharmacistDetails->id);
+        // if file created
+        if(Storage::exists('public/myAssets/emailAttatchments/'.$pharmacistDetails->id.'.txt')) {
+            // send email
+            Mail::send(new localhostPharmacy($pharmacistDetails));
+            // delete the created file
+            Storage::delete('public/myAssets/emailAttatchments/'.$pharmacistId.'.txt');
+        }
+        $pharmacistDetails->dataSource = '3';
+        $pharmacistDetails->save();
+        return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
+    }
+
+
+
+    // |---------------------------------- 6) savePharmacyApi ----------------------------------|
     public function savePharmacyApi(Request $req)
     {
         $this->validate($req, [
@@ -191,13 +215,13 @@ class PharmacistController extends Controller
             $saveRecord->dataSource = '2';
             $saveRecord->dbAPI = $dbApi;
             $saveRecord->save();
-            return redirect()->action('PharmacistController@index')->with('message', 'Record Saved');
+            return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
         }
     }
 
 
 
-    //  |---------------------------------- 6) viewAllOrders ----------------------------------|
+    //  |---------------------------------- 7) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
         $allOrderId = [];
@@ -257,7 +281,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 7) changeOrderStatus ----------------------------------|
+    //  |---------------------------------- 8) changeOrderStatus ----------------------------------|
     public function changeOrderStatus($orderId, $status)
     {
         // possible status types
@@ -277,7 +301,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 8) changeOrderStatus ----------------------------------|
+    //  |---------------------------------- 9) changeOrderStatus ----------------------------------|
     public function viewSpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails = [];
@@ -309,7 +333,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 9) editAccountDetailsForm ----------------------------------|
+    //  |---------------------------------- 10) editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
         $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
@@ -318,7 +342,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 10) editAccountDetails ----------------------------------|
+    //  |---------------------------------- 11) editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
         $pharmacyDetails = Pharmacist::find(Auth::user()->id);
@@ -374,7 +398,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 11) contactUsForm ----------------------------------|
+    //  |---------------------------------- 12) contactUsForm ----------------------------------|
     public function contactUsForm()
     {
         return view('pharmacist.messageToAdminForm');

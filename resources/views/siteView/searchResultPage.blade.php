@@ -1,5 +1,9 @@
 @extends('layouts.siteLayout') @section('tabTitle', 'Search Result') @section('head') @endsection @section('style') @endsection
 @section('body')
+
+{{-- including medicine notify modal --}}
+@include('includes.notifyModal');
+
 <!-- Content page -->
 <section class="bgwhite p-t-55 p-b-65">
         <div class="container">

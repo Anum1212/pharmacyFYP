@@ -23,6 +23,19 @@ class rateOrder
      */
     public function handle($request, Closure $next)
     {
+        if(Auth::guard('web')->check()){
+            // get all orders where time since order is more than 12 hours
+            $ratingStatus = Order::where([
+                ['ratingStatus', '0'],
+                ['userId', Auth::user()->id],
+                ['created_at', '<', Carbon::now()->subHours(12)->toDateTimeString()]
+            ])->get();
+
+            foreach ($ratingStatus as $changeRatingStatus) {
+                $changeRatingStatus->ratingStatus = '1';
+                $changeRatingStatus->update();
+            }
+
         $allPharmacistIds = [];
         $pharmacyRatings = [];
         $order = Order::where([['userId', Auth::user()->id], ['ratingStatus', '1']])->first();
@@ -58,6 +71,7 @@ class rateOrder
             return $next($request);
             // return response()->view('ratingsPage', compact('pharmacyRatings'));
         }
+    }
         return $next($request);
 }
 }

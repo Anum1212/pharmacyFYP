@@ -101,7 +101,7 @@ Route::get('/viewSpecificOrder/{orderId}', 'HomeController@viewSpecificOrder');
 // verifyCustomerRegistration --> verify Customer Registration
 Route::get('verifyCustomerRegistration/{email}/{verificationToken}', 'Auth\RegisterController@verifyCustomerRegistration')->name('verifyCustomerRegistration');
 // verifyCustomerRegistration --> verify Customer Registration
-Route::get('setAvailabilityNotification/{medicineName}/{latitude}/{longitude}', 'HomeController@setAvailabilityNotification');
+Route::get('setAvailabilityNotification', 'HomeController@setAvailabilityNotification');
 
 
 
@@ -210,9 +210,11 @@ Route::prefix('pharmacist')->group(function () {
         //editAccountDetails --> save pharmacist edit form changes
     Route::post('/editAccountDetails', 'PharmacistController@editAccountDetails');
         //savePharmacyApi(trash arham will make new one)
-        Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
+    Route::post('/savePharmacyApi', 'PharmacistController@savePharmacyApi');
         //storeProductsInTable --> pharamacist decides to use website database to store products
     Route::get('/storeProductsInTable', 'PharmacistController@storeProductsInTable');
+        //localhost --> pharamacist decides to use their own system storage
+    Route::get('/localhost', 'PharmacistController@localhost');
         //contactUsForm --> goto contact admin form
     Route::get('/contactUsForm', 'PharmacistController@contactUsForm');
         //viewProducts --> view products the pharamacist has uploaded to website

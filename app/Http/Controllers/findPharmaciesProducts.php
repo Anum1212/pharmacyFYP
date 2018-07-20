@@ -6,11 +6,12 @@
 // ------------------
 // Methods Present
 // ------------------
-// 1) medicineDetails
-// 2) searchMedicine
-// 3) searchMedicineByCategory
-// 4) multiRequest
-// 5) pharmacyDetails
+// 1)__construct
+// 2) medicineDetails
+// 3) searchMedicine
+// 4) searchMedicineByCategory
+// 5) multiRequest
+// 6) pharmacyDetails
 
 
 
@@ -51,7 +52,7 @@ class findPharmaciesProducts extends Controller
 
 
 
-//  |---------------------------------- 1) medicineDetails ----------------------------------|
+//  |---------------------------------- 2) medicineDetails ----------------------------------|
 
 function medicineDetails(Request $request, $productSource, $medicineId, $pharmacyId)
 {
@@ -111,7 +112,7 @@ else
 
 
 
-//  |---------------------------------- 2) searchMedicine ----------------------------------|
+//  |---------------------------------- 3) searchMedicine ----------------------------------|
     public function searchMedicine(Request $req)
     {
         if (!Cache::has('key')) {
@@ -234,7 +235,7 @@ else
 
             // if product not found return with error
                 if ($productsCollection->isEmpty()) {
-                    return redirect()->back()->with('error', "Oops product not found in the defined radius.<ul style='list-style:none'><li>Try to increase the radius</li><li>or <a href='setAvailabilityNotification/$medicineSearched/$latitude/$longitude'><b>Click here</b></a> to get notified when product is available near you</li></ul>");
+                    return redirect()->back()->with('error', "Oops product not found in the defined radius.<ul style='list-style:none'><li>Try to increase the radius</li><li>or <a href='' id = 'showNotifyModal' data-toggle= 'modal' data-target='#notifyModal'><b>Click here</b></a> to get notified when product is available near you</li></ul>");
                 }
 
             return view('siteView.searchResultPage', compact('productsCollection', 'nearByPharmacies'));
@@ -243,7 +244,7 @@ else
 
 
 
-//  |---------------------------------- 3) searchMedicineByCategory ----------------------------------|
+//  |---------------------------------- 4) searchMedicineByCategory ----------------------------------|
     // find pharmacies within the specified distance
     public function searchMedicineByCategory(Request $req, $categoryId)
     {
@@ -382,7 +383,7 @@ else
 
 
 
-//  |---------------------------------- 4) multiRequest ----------------------------------|
+//  |---------------------------------- 5) multiRequest ----------------------------------|
     public function multiRequest($data, $options = array())
     {
         // array of curl handles
@@ -438,7 +439,7 @@ else
 
 
 
-    //  |---------------------------------- 5) pharmacyDetails ----------------------------------|
+    //  |---------------------------------- 6) pharmacyDetails ----------------------------------|
     public function pharmacyDetails($pharmacyId, $productId = null) //$productId for displaying the product that the user selected for viewing medicine details
     {
         $pharmacyRating = Rating::where('pharmacyId', $pharmacyId)->first();

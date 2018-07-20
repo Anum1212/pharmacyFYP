@@ -1,8 +1,4 @@
-@extends('layouts.authCustomer')
-
-@section('tabTitle', 'Register')
-
-@section('body')
+@extends('layouts.auth') @section('tabTitle', 'Register') @section('body')
 <div class="row">
   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     <div class="fullPage panel panel-default">
@@ -14,11 +10,10 @@
             <label for="name" class="col-md-4 control-label">Name</label>
 
             <div class="col-md-5">
-              <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus>
-              @if ($errors->has('name'))
+              <input id="name" type="text" class="form-control" name="name" value="{{ old('name') }}" required autofocus> @if ($errors->has('name'))
               <span class="help-block">
-                                <strong>{{ $errors->first('name') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('name') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -28,11 +23,10 @@
             <label for="email" class="col-md-4 control-label">E-Mail Address</label>
 
             <div class="col-md-5">
-              <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required>
-              @if ($errors->has('email'))
+              <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" required> @if ($errors->has('email'))
               <span class="help-block">
-                                <strong>{{ $errors->first('email') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('email') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -44,12 +38,13 @@
             <div class="col-md-5">
               <div class="input-group">
                 <span class="input-group-addon">+92</span>
-                <input id="contact" type="text" class="form-control" name="contact" minlength="10" maxlength="11" value="{{ old('contact') }}" required autofocus>
+                <input id="contact" type="text" class="form-control" name="contact" minlength="10" maxlength="11" value="{{ old('contact') }}"
+                  required autofocus>
               </div>
               @if ($errors->has('contact'))
               <span class="help-block">
-                                <strong>{{ $errors->first('contact') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('contact') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -59,11 +54,10 @@
             <label for="address" class="col-md-4 control-label">Address</label>
 
             <div class="col-md-5">
-              <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}" required autofocus>
-              @if ($errors->has('address'))
+              <input id="address" type="text" class="form-control" name="address" value="{{ old('address') }}" required autofocus> @if ($errors->has('address'))
               <span class="help-block">
-                                <strong>{{ $errors->first('address') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('address') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -73,11 +67,10 @@
             <label for="society" class="col-md-4 control-label">Society</label>
 
             <div class="col-md-5">
-              <input id="society" type="text" class="form-control" name="society" value="{{ old('society') }}" required autofocus>
-              @if ($errors->has('society'))
+              <input id="society" type="text" class="form-control" name="society" value="{{ old('society') }}" required autofocus> @if ($errors->has('society'))
               <span class="help-block">
-                                <strong>{{ $errors->first('society') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('society') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -87,11 +80,10 @@
             <label for="city" class="col-md-4 control-label">City</label>
 
             <div class="col-md-5">
-              <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}" required autofocus>
-              @if ($errors->has('city'))
+              <input id="city" type="text" class="form-control" name="city" value="{{ old('city') }}" required autofocus> @if ($errors->has('city'))
               <span class="help-block">
-                                <strong>{{ $errors->first('city') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('city') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -101,11 +93,10 @@
             <label for="password" class="col-md-4 control-label">Password</label>
 
             <div class="col-md-5">
-              <input id="password" type="password" class="form-control" name="password" required>
-              @if ($errors->has('password'))
+              <input id="password" type="password" class="form-control" name="password" required> @if ($errors->has('password'))
               <span class="help-block">
-                                <strong>{{ $errors->first('password') }}</strong>
-                            </span>
+                <strong>{{ $errors->first('password') }}</strong>
+              </span>
               @endif
             </div>
           </div>
@@ -123,8 +114,13 @@
           <div class="form-group">
             <div class="col-md-5 col-md-offset-4">
               <button type="submit" class="btn btn-primary">
-                                Register
-                            </button>
+                Register
+              </button>
+              <br>
+              <br>
+              <p>Already have account ?
+                <a href="{{ route('login') }}" id="signIn"> Sign In Here</a>
+              </p>
             </div>
           </div>
         </form>

@@ -59,7 +59,6 @@ class orderController extends Controller
     public function prescriptionUploadForm(Request $req)
     {
         $deliveryDate = $req->deliveryDate;
-        // dd($req->deliveryDate);
 
         // possible prescriptionNeeded status (default = 0)
         // 0 -> not required
@@ -130,7 +129,6 @@ class orderController extends Controller
     // |---------------------------------- 4) checkout ----------------------------------|
     public function checkout($deliveryDate)
     {
-        // dd('check out function', $deliveryDate);
         $userId = Auth::user()->id;
         $cost = Cart::total();
 
@@ -169,27 +167,14 @@ class orderController extends Controller
         $allPharmacistId = [];
         $order = Order::whereId($lastInsertId)->first();
         $customerDetails = User::whereId($order->userId)->first();
-
-        $orderItems = Orderitem::where('orderId', $lastInsertId)->get();
-        foreach ($orderItems as $orderItem) {
-            $productId = $orderItem->productId;
-            $allPharmacistId[] = $orderItem->pharmacistId;
-            $product[] = Pharmacistproduct::whereId($productId)->first();
-        }
-
-
-        foreach (Cart::content() as $item) {
-            // echo $item->id;
-            $orderItem = Pharmacistproduct::whereId($item->id)->first();
-            $orderItem->quantity = $orderItem->quantity - $item->qty;
-            $orderItem->save();
-        }
+        
+        $products = Cart::content();
 
 
         
         // to remove duplicates
         $pharmacistId = array_unique($allPharmacistId);
-                // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
+        // to renumber the array index after using array_unique() i.e after using array_unique() the array may look like
         // index => value
         // 0     =>   1
         // 2     =>   3
@@ -207,34 +192,34 @@ class orderController extends Controller
         }
 
         // send mail to customer
-        Mail::send(new invoice($customerDetails, $product, $order, $orderItems));
+            // Mail::send(new invoice($customerDetails, $products, $order));
 
-        // send mail to pharmacist(s)
-        foreach ($pharmacistId as $pharmacist) {
-            Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
-        }
+        // // send mail to pharmacist(s)
+        // foreach ($pharmacistId as $pharmacist) {
+        //     Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
+        // }
 
         // send sms to customer
-        $username = '923208778084';///Your  Username 
-        $password = '3195';///Your SECRET Password 
-        $sender = 'ABC';///Your Masking 
-        $mobile = $customerDetails->contact; ///add comma to send multiple sms like 92301,92310,92321 
-        $message = 'Your Order# ' . $lastInsertId . ' has been received. Your Total Order Cost is Rs ' . $order->cost;///Your Message 
-        $post = "sender=" . urlencode($sender) . "&mobile=" . urlencode($mobile) . "&message=" . urlencode($message) . "&format=json";
-        $url = "http://sendpk.com/api/sms.php?username=" . $username . "&password=" . $password . "";
-        $ch = curl_init();
-        $timeout = 0; // set to zero for no timeout 
-        curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-        $result = curl_exec($ch);
+        // $username = '923208778084';///Your  Username 
+        // $password = '3195';///Your SECRET Password 
+        // $sender = 'ABC';///Your Masking 
+        // $mobile = $customerDetails->contact; ///add comma to send multiple sms like 92301,92310,92321 
+        // $message = 'Your Order# ' . $lastInsertId . ' has been received. Your Total Order Cost is Rs ' . $order->cost;///Your Message 
+        // $post = "sender=" . urlencode($sender) . "&mobile=" . urlencode($mobile) . "&message=" . urlencode($message) . "&format=json";
+        // $url = "http://sendpk.com/api/sms.php?username=" . $username . "&password=" . $password . "";
+        // $ch = curl_init();
+        // $timeout = 0; // set to zero for no timeout 
+        // curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1)');
+        // curl_setopt($ch, CURLOPT_URL, $url);
+        // curl_setopt($ch, CURLOPT_POST, 1);
+        // curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        // curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+        // $result = curl_exec($ch);
 
         Cart::destroy();
 
         // return view
-        return view('siteView.invoice', compact('product', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
+        return view('siteView.invoice', compact('products', 'order', 'orderItems', 'customerDetails', 'lastInsertId'));
     }
 }

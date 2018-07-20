@@ -25,6 +25,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Carbon\carbon;
+use Curl;
 use Auth;
 use Geocode;
 use Mail;
@@ -47,7 +48,7 @@ class HomeController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->middleware('auth:web')->except(['viewSpecificOrder', 'resendVerificationEmail']);
+        $this->middleware('auth:web')->except(['viewSpecificOrder', 'resendVerificationEmail', 'setAvailabilityNotification']);
         $this->middleware('userTypeAorC')->only(['viewSpecificOrder']);
         $this->middleware('rateOrder');
         $this->middleware(function ($request, $next) {
@@ -107,8 +108,8 @@ class HomeController extends Controller
     //  |---------------------------------- 5) viewSpecificOrder ----------------------------------|
     public function viewSpecificOrder($orderId)
     {
-        $productDetails =[];
-        $pharmacyDetails =[];
+        $productDetails = [];
+        $pharmacyDetails = [];
         // find the order
         $order = Order::whereId($orderId)->first();
         // check if $order is empty
@@ -119,27 +120,27 @@ class HomeController extends Controller
                 // if everything is satisfied fetch order details
                 $orderDetails = Orderitem::where('orderId', $orderId)->get();
                 // check if $orderDetails is empty
-                if (count($orderDetails)>0) {
+                if (count($orderDetails) > 0) {
                     // if $orderDetails is not empty fetch remaining details n return view
                     foreach ($orderDetails as $orderDetail) {
                         $pharmacyDetails[] = Pharmacist::whereId($orderDetail->pharmacistId)->first();
-                        $productDetails[]  = Pharmacistproduct::whereId($orderDetail->productId)->first();
+                        $productDetails[] = Pharmacistproduct::whereId($orderDetail->productId)->first();
                     }
                     return view('customer.orders.specificOrder', compact('pharmacyDetails', 'productDetails', 'orderDetails', 'order'));
                 }
                 // if $orderDetails is empty return with error
                 else {
-                    return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+                    return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# ' . $orderId . ' not found');
                 }
             }
             // if $orderId does not belong to logged in user return with error
             else {
-                return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+                return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# ' . $orderId . ' not found');
             }
         }
         // if $orderId not found return with error
         else {
-            return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# '.$orderId.' not found');
+            return redirect()->action('HomeController@viewAllOrders')->with('error', 'Order# ' . $orderId . ' not found');
         }
     }
 
@@ -173,16 +174,16 @@ class HomeController extends Controller
     {
         $customerDetails = User::find(Auth::user()->id);
 
-        $address = $req->address.' '.$req->society.' '.$req->city;
+        $address = $req->address . ' ' . $req->society . ' ' . $req->city;
         $addressToLatLng = Geocode::make()->address($address);
-        if($addressToLatLng){
-        $latitude = $addressToLatLng->latitude();
-        $longitude = $addressToLatLng->longitude();
-        $customerDetails->address = $req->address;
-        $customerDetails->society = $req->society;
-        $customerDetails->city = $req->city;
-        $customerDetails->longitude = $longitude;
-        $customerDetails->latitude = $latitude;
+        if ($addressToLatLng) {
+            $latitude = $addressToLatLng->latitude();
+            $longitude = $addressToLatLng->longitude();
+            $customerDetails->address = $req->address;
+            $customerDetails->society = $req->society;
+            $customerDetails->city = $req->city;
+            $customerDetails->longitude = $longitude;
+            $customerDetails->latitude = $latitude;
         }
 
         $customerDetails->name = $req->name;
@@ -202,7 +203,7 @@ class HomeController extends Controller
         $newCustomerRatings = [];
         $loopRange = count($req->pharmacyId);
 
-        for ($i=0; $i<$loopRange; $i++) {
+        for ($i = 0; $i < $loopRange; $i++) {
             $currentRatings[] = Rating::where('pharmacyId', $req->pharmacyId[$i])->first();
             $newCustomerRatings[] = $req->rating[$i];
         }
@@ -210,11 +211,11 @@ class HomeController extends Controller
         $i = 0;
         foreach ($currentRatings as $currentRating) {
             // to convert the average back to total points
-            $totalRating = $currentRating->rating*$currentRating->noOfUserThatRated;
+            $totalRating = $currentRating->rating * $currentRating->noOfUserThatRated;
             //adding 1 to old noOfUserThatRated to get new noOfUserThatRated
-            $currentRating->noOfUserThatRated = $currentRating->noOfUserThatRated+1;
+            $currentRating->noOfUserThatRated = $currentRating->noOfUserThatRated + 1;
             // average formula (old total points + new user points)/ total number of people that rated
-            $currentRating->rating = ($totalRating+$newCustomerRatings[$i])/$currentRating->noOfUserThatRated;
+            $currentRating->rating = ($totalRating + $newCustomerRatings[$i]) / $currentRating->noOfUserThatRated;
             // update rating
             $currentRating->update();
             $i++;
@@ -239,16 +240,27 @@ class HomeController extends Controller
 
 
     // |---------------------------------- 11) setAvailabilityNotification ----------------------------------|
-    public function setAvailabilityNotification($medicineName, $latitude, $longitude)
+    public function setAvailabilityNotification(Request $req)
     {
-        $reminder = new Reminder;
-        $reminder->customerId = Auth::user()->id;
-        $reminder->customerName = Auth::user()->name;
-        $reminder->customerEmail = Auth::user()->email;
-        $reminder->productName = $medicineName;
-        $reminder->longitude = $latitude;
-        $reminder->latitude = $longitude;
-        $reminder->save();
-        return redirect()->back()->with('message', 'An email will be sent to you when your product is available');
+        // call api and get strength and forms
+            $strengthAndFroms = Curl::to('https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search')
+            ->withData(array('terms' => $req->medicineName, 'ef' => 'STRENGTHS_AND_FORMS'))
+            ->get();
+        // json decode the response
+            $jsonDecodeResponse = json_decode($strengthAndFroms);
+        // if no medicine strengths found then it means this medicine doesn't exist. 
+        // so redirect back with appropriate message
+            if ($jsonDecodeResponse[0] == 0) {
+                return redirect('/')->with('error', 'It seems like no such medicine exists. Contact Admin for further action.');
+            }
+            else{
+            $reminder = new Reminder;
+            $reminder->customerEmail = $req->email;
+            $reminder->productName = $req->medicineName;
+            $reminder->latitude = $req->session()->get('latitude');
+            $reminder->longitude = $req->session()->get('longitude');
+            $reminder->save();
+            return redirect('/')->with('message', 'An email will be sent to you when your product is available.');
+    }
     }
 }

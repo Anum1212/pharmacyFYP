@@ -9,15 +9,22 @@
         <span class="pull-right clickable panel-toggle panel-button-tab-left">
           <em class="fa fa-toggle-up"></em>
         </span>
+              <span class="pull-right">
+              <a class="btn btn-md btn-success" href="/contactUsFormGeneral">
+                            <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
+                          </span>
       </div>
       <div class="panel-body">
-        <div class="buttons container col-lg-9 col-lg-offset-2 col-md-9 col-md-offset-2 col-sm-9 col-sm-offset-3 col-xs-12">
-          <div class="row">
-            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <a href="/pharmacist/storeProductsInTable" class="btn btn-md btn-default">Store Data on website Storage</a>
+        <div class="buttons">
+          <div class="row text-center">
+            <div class="form-group">
+              <a href="/pharmacist/storeProductsInTable" class="btn btn-default">Store Data on website Storage</a>
             </div>
-            <div class="form-group col-lg-6 col-md-6 col-sm-12 col-xs-12">
-              <button class="btn btn-md btn-default" id="showApiForm">Give access to your DataBase</button>
+            <div class="form-group">
+              <a href="/pharmacist/localhost" class="btn btn-default">Use your own local database</a>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-default" id="showApiForm">Give access to your DataBase</button>
             </div>
           </div>
         </div>

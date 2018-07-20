@@ -30,7 +30,7 @@ class replyToMessages extends Mailable
      */
     public function build(Request $req)
     {
-        return $this->from('anamamer0@gmail.com', 'Laravel Pharmacy Project')
+        return $this->from('anamamer0@gmail.com', 'LifeLine')
       ->to($this->recipientData->senderEmail)
       ->subject('Reply from Pharmacy for : ' . $this->recipientData->name)
       ->view('email.replyToMessage',['reply'=>$req->messageReply]);

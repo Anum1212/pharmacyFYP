@@ -11,19 +11,18 @@ class customerOrder extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $recipientData, $customerDetails, $product, $order, $orderItems;
+    public $recipientData, $customerDetails, $products, $order;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($recipientData, $customerDetails, $product, $order, $orderItems)
+    public function __construct($recipientData, $customerDetails, $products, $order)
     {
     $this->recipientData = $recipientData;
     $this->customerDetails = $customerDetails;
-    $this->product = $product;
+    $this->products = $products;
     $this->order = $order;
-    $this->orderItems = $orderItems;
     }
 
     /**
@@ -33,9 +32,9 @@ class customerOrder extends Mailable
      */
     public function build()
     {
-        return $this->from('anamamer0@gmail.com', 'Laravel Pharmacy Project')
+        return $this->from('anamamer0@gmail.com', 'LifeLine')
       ->to($this->recipientData->email)
       ->subject('Order Invoice')
-      ->view('email.customerOrder',['product'=>$this->product, 'customerDetails'=>$this->customerDetails]);
+      ->view('email.customerOrder',['products'=>$this->products, 'customerDetails'=>$this->customerDetails]);
     }
 }

@@ -97,37 +97,37 @@
 												</tr>
 											</thead>
 											<tbody>
-												@for($i=0; $i
-												<count($product); $i++) <tr>
-													<td>{{$product[$i]->name}}</td>
-													@if($product[$i]->type=='1')
+												@foreach ($products as $product)
+												 <tr>
+													<td>{{$product->name}}</td>
+													@if($product->options->type=='1')
 													<!-- 1 = Tablet -->
 													<td class="title">Tablet</td>
-													@elseif($product[$i]->type=='2')
+													@elseif($product->options->type=='2')
 													<!-- 2 = Capsule -->
 													<td class="title">Capsule </td>
-													@elseif($product[$i]->type=='3')
+													@elseif($product->options->type=='3')
 													<!-- 3 = Syrup -->
 													<td class="title">Syrup</td>
-													@elseif($product[$i]->type=='4')
+													@elseif($product->options->type=='4')
 													<!-- 4 = Inhaler -->
 													<td class="title">Inhaler</td>
-													@elseif($product[$i]->type=='5')
+													@elseif($product->options->type=='5')
 													<!-- 5 = Drops -->
 													<td class="title">Drops
-														</> @elseif($product[$i]->type=='6')
+														</> @elseif($product->options->type=='6')
 														<!-- 6 = Injection -->
 														<td class="title">Injection
-															</> @elseif($product[$i]->type=='7')
+															</> @elseif($product->options->type=='7')
 															<!-- 7 = Cream -->
 															<td class="title">Cream</td>
 															@endif
-															<td class="text-center">{{$product[$i]->price}}</td>
-															<td class="text-center">{{$orderItems[$i]->quantity}}</td>
-															<td class="text-right">{{$product[$i]->price*$orderItems[$i]->quantity}}</td>
+															<td class="text-center">{{$product->price}}</td>
+															<td class="text-center">{{$product->qty}}</td>
+															<td class="text-right">{{$product->price*$product->qty}}</td>
 															</tr>
 
-															@endfor
+															@endforeach
 
 
 															<tr>
@@ -157,6 +157,8 @@
 					</div>
 	</div>
 </section>
-@endsection @section('script')
+@endsection 
+
+@section('script')
 
 @endsection
