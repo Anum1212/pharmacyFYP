@@ -58,6 +58,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'userTypeAorP' => \App\Http\Middleware\userTypeAorP::class,
         'userTypeAorC' => \App\Http\Middleware\userTypeAorC::class,
+        'userTypeCorP' => \App\Http\Middleware\userTypeCorP::class,
         'rateOrder' => \App\Http\Middleware\rateOrder::class,
     ];
 }

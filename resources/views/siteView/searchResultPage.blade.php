@@ -15,13 +15,6 @@
                                                         <input id="medicineSearched" class="s-text7 size6 p-l-23 p-r-50" type="text" name="medicineSearched" placeholder="Search Products..."
                                                                 @if(session()->has('medicineSearched')) value="{{ session('medicineSearched') }}"
                                                         @endif required>
-
-                                                        <input id="distance" name="distance" type="number" class="form-control" placeholder="Search Radius" @if(session()->has('distance')) value="{{ session('distance') }}" @else value="10"
-                                                        @endif style="display:none" required>
-                                                        <input type="text" name="formatedAddress" id="formatedAddress" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}"
-                                                        @endif style="display:none">
-                                                        <input type="text" name="latitude" id="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
-                                                        <input type="text" name="longitude" id="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
                                                         <button type="submit" class="flex-c-m size5 ab-r-m color2 color0-hov trans-0-4">
                                                                 <i class="fs-12 fa fa-search" aria-hidden="true"></i>
                                                         </button>
@@ -145,7 +138,7 @@
                                                                                 <button class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4" disabled>Out of stock</button>
                                                                                 @else
                                                                                 <!-- Button add to cart-->
-                                                                                <a href="/addToCart/{{ $product->productSource }}/{{ $product->id }}/{{ $product->pharmacistId }}" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to cart</a>
+                                                                                <a href="/addToCart/{{ $product->id }}/{{ $product->pharmacistId }}" class="flex-c-m size1 bg4 bo-rad-23 hov1 s-text1 trans-0-4">Add to cart</a>
                                                                                 @endif
                                                                         </div>
                                                                 </div>
@@ -158,7 +151,7 @@
                                                                 </span>
                                                                 @endif
                                                                 <br>
-                                                                <a href="/medicineDetails/{{ $product->productSource }}/{{ $product->id }}/{{ $product->pharmacistId }}" class="block2-name dis-block s-text3 p-b-5">
+                                                                <a href="/medicineDetails/{{ $product->id }}/{{ $product->pharmacistId }}" class="block2-name dis-block s-text3 p-b-5">
                                                                         <b>{{ $product->name }}
                                                                                 <br> {{ $product->genericName }}
                                                                         </b>

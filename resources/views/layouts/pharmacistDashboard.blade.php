@@ -11,7 +11,9 @@
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    @section('head') @show @section('style') @show
+    
+@section('head') @show 
+@section('style') @show
 
 
     <!--Custom Font-->
@@ -23,7 +25,8 @@
 </head>
 
 <body>
-    @include('includes.error') @include('includes.message')
+    @include('includes.error')
+    @include('includes.message')
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -52,7 +55,8 @@
         </div>
         <div class="divider"></div>
 
-        @section('searchBar') @show
+        
+@section('searchBar') @show
 
         <ul class="nav menu">
             <li class="{{{ (Request::is('pharmacist/dashboard') ? 'active' : '') }}}">
@@ -93,10 +97,6 @@
                 <a href="/downloads">
                     <em class="fa fa-file">&nbsp;</em> Downloads</a>
             </li>
-            <li class="{{{ (Request::is('/chatView') ? 'active' : '') }}}">
-                <a href="/chatView">
-                    <em class="fa fa-comments">&nbsp;</em> Chat</a>
-            </li>
             <li class="{{{ (Request::is('pharmacist/contactUsForm') ? 'active' : '') }}}">
                 <a href="/pharmacist/contactUsForm">
                     <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
@@ -113,7 +113,8 @@
     <!--/.sidebar-->
 
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-        @section('body') @show
+        
+@section('body') @show
     </div>
     <!--/.row-->
 
@@ -127,7 +128,8 @@
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/custom.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/confirmDelete.js') }}"></script>
 
-    @section('script') @show
+    
+@section('script') @show
 
 </body>
 

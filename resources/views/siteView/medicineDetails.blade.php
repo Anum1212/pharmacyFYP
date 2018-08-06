@@ -1,10 +1,14 @@
 @extends('layouts.siteLayout') 
-
-@section('tabTitle', $product[0]->name .' Details')
-
+@section('tabTitle', $product->name .' Details') 
 @section('head')
 <link href="{{ asset('css/siteView/rated.css') }}" rel="stylesheet">
-<link rel="stylesheet" href="{{asset('css/table.css')}}"> @endsection @section('style') @endsection @section('body')
+<link rel="stylesheet" href="{{asset('css/table.css')}}">
+@endsection
+ 
+@section('style')
+@endsection
+ 
+@section('body')
 
 <!-- Product Detail -->
 <div class="container bgwhite p-t-35 p-b-80">
@@ -17,23 +21,23 @@
                                 <div class="slick3">
                                         <div class="item-slick3">
                                                 <div class="wrap-pic-w">
-                                                        @if($product[0]->type=='1')
+                                                        @if($product->type=='1')
                                                         <!-- 1 = Tablet -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/tablet.png') }}> @elseif($product[0]->type=='2')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/tablet.png') }}>                                                        @elseif($product->type=='2')
                                                         <!-- 2 = Capsule -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/capsule.png') }}> @elseif($product[0]->type=='3')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/capsule.png') }}>                                                        @elseif($product->type=='3')
                                                         <!-- 3 = Syrup -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/syrup.png') }}> @elseif($product[0]->type=='4')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/syrup.png') }}>                                                        @elseif($product->type=='4')
                                                         <!-- 4 = Inhaler -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/inhaler.png') }}> @elseif($product[0]->type=='5')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/inhaler.png') }}>                                                        @elseif($product->type=='5')
                                                         <!-- 5 = Drops -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/drops.png') }}> @elseif($product[0]->type=='6')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/drops.png') }}>                                                        @elseif($product->type=='6')
                                                         <!-- 6 = Injection -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/injection.png') }}> @elseif($product[0]->type=='7')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/injection.png') }}>                                                        @elseif($product->type=='7')
                                                         <!-- 7 = Cream -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/cream.png') }}> @elseif($product[0]->type=='8')
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/cream.png') }}>                                                        @elseif($product->type=='8')
                                                         <!-- 7 = Cream -->
-                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/others.png') }}> @endif
+                                                        <img class="img-responsive" style="height:200px; width:200px" src={{ asset( 'storage/myAssets/others.png') }}>                                                        @endif
 
                                                 </div>
                                         </div>
@@ -43,100 +47,100 @@
 
                 <div class="w-size14 p-t-30 respon5">
                         <h4 class="product-detail-name m-text16 p-b-13">
-                                {{ $product[0]->name }}
-                                <br> {{ $product[0]->genericName }}
+                                {{ $product->name }}
+                                <br> {{ $product->genericName }}
                         </h4>
 
                         <span class="m-text17">
-                                Rs {{ $product[0]->price }}
+                                Rs {{ $product->price }}
                         </span>
 
                         <p class="s-text8 p-t-10">
-                                @if($product[0]->type=='1')
+                                @if($product->type=='1')
                                 <!-- 1 = Tablet -->
-                                Type: Tablet {{$product[0]->tablets}} tbs @elseif($product[0]->type=='2')
+                                Type: Tablet {{ $product->tablets }} tbs @elseif($product->type=='2')
                                 <!-- 2 = Capsule -->
-                                Type: Capsule {{$product[0]->tablets}} tbs @elseif($product[0]->type=='3')
+                                Type: Capsule {{ $product->tablets }} tbs @elseif($product->type=='3')
                                 <!-- 3 = Syrup -->
-                                Type: Syrup @elseif($product[0]->type=='4')
+                                Type: Syrup @elseif($product->type=='4')
                                 <!-- 4 = Inhaler -->
-                                Type: Inhaler @elseif($product[0]->type=='5')
+                                Type: Inhaler @elseif($product->type=='5')
                                 <!-- 5 = Drops -->
-                                Type: Drops @elseif($product[0]->type=='6')
+                                Type: Drops @elseif($product->type=='6')
                                 <!-- 6 = Injection -->
-                                Type: Injection @elseif($product[0]->type=='7')
+                                Type: Injection @elseif($product->type=='7')
                                 <!-- 7 = Cream -->
-                                Type: Cream 
-                                @elseif($product[0]->type=='8')
+                                Type: Cream @elseif($product->type=='8')
                                 <!-- 7 = Cream -->
-                                Type: Others 
-                                @endif
-                                <br> 
-                                @if($product[0]->type=='1' || $product[0]->type=='2' || $product[0]->type=='7')
+                                Type: Others @endif
+                                <br> @if($product->type=='1' || $product->type=='2' || $product->type=='7')
                                 <!-- 1 = Tablet -->
-                                Dosage: {{$product[0]->dosage}} mg 
-                                @elseif($product[0]->type=='8') 
-                                Dosage/Weight:
-                                @else Dosage: {{ $product[0]->dosage }} ml @endif
-                                <br> 
-                                @if($product[0]->prescription=='1')
-                                <span style="color:red"> Prescription Required </span>
-                                @endif
+                                Dosage: {{ $product->dosage }} mg @elseif($product->type=='8') Dosage/Weight: @else Dosage: {{ $product->dosage }}
+                                ml @endif
+                                <br> @if($product->prescription=='1')
+                                <span style="color:red"> Prescription Required </span> @endif
                                 <br> Manufacturer:
-                                <span style="color:brown; font-weight:bold">{{ $product[0]->manufacturer }}</span>
+                                <span style="color:brown; font-weight:bold">{{ $product->manufacturer }}</span>
                                 <br> Sold By:
-                                <a href="/pharmacyDetails/{{ $pharmacyDetails->id }}/{{ $product[0]->id }}">
+                                <a href="/pharmacyDetails/{{ $pharmacyDetails->id }}/{{ $product->id }}">
                                         <span style="color:brown; font-weight:bold">{{$pharmacyDetails->pharmacyName}} </span>
                                 </a>
                                 <fieldset class="rating">
-                                        <input disabled <?php if($pharmacyRating->rating=="5") echo 'checked="checked"'; ?> type="radio" id="star5" name="rating" value="5"
-                                        />
+                                        <input disabled <?php if($pharmacyRating->rating=="5") echo 'checked="checked"';
+                                        ?> type="radio" id="star5" name="rating" value="5" />
                                         <label class="full" for="star5" title="Awesome - 5 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="4.5") echo 'checked="checked"'; ?> type="radio" id="star4half" name="rating"
-                                        value="4.5" />
+                                        <input disabled <?php if($pharmacyRating->rating=="4.5") echo 'checked="checked"';
+                                        ?> type="radio" id="star4half" name="rating" value="4.5" />
                                         <label class="half" for="star4half" title="Pretty good - 4.5 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="4") echo 'checked="checked"'; ?> type="radio" id="star4" name="rating" value="4"
-                                        />
+                                        <input disabled <?php if($pharmacyRating->rating=="4") echo 'checked="checked"';
+                                        ?> type="radio" id="star4" name="rating" value="4" />
                                         <label class="full" for="star4" title="Pretty good - 4 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="3.5") echo 'checked="checked"'; ?> type="radio" id="star3half" name="rating"
-                                        value="3.5" />
+                                        <input disabled <?php if($pharmacyRating->rating=="3.5") echo 'checked="checked"';
+                                        ?> type="radio" id="star3half" name="rating" value="3.5" />
                                         <label class="half" for="star3half" title="Meh - 3.5 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="3") echo 'checked="checked"'; ?> type="radio" id="star3" name="rating" value="3"
-                                        />
+                                        <input disabled <?php if($pharmacyRating->rating=="3") echo 'checked="checked"';
+                                        ?> type="radio" id="star3" name="rating" value="3" />
                                         <label class="full" for="star3" title="Meh - 3 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="2.5") echo 'checked="checked"'; ?> type="radio" id="star2half" name="rating"
-                                        value="2.5" />
+                                        <input disabled <?php if($pharmacyRating->rating=="2.5") echo 'checked="checked"';
+                                        ?> type="radio" id="star2half" name="rating" value="2.5" />
                                         <label class="half" for="star2half" title="Kinda bad - 2.5 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="2") echo 'checked="checked"'; ?> type="radio" id="star2" name="rating" value="2"
-                                        />
+                                        <input disabled <?php if($pharmacyRating->rating=="2") echo 'checked="checked"';
+                                        ?> type="radio" id="star2" name="rating" value="2" />
                                         <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="1.5") echo 'checked="checked"'; ?> type="radio" id="star1half" name="rating"
-                                        value="1.5" />
+                                        <input disabled <?php if($pharmacyRating->rating=="1.5") echo 'checked="checked"';
+                                        ?> type="radio" id="star1half" name="rating" value="1.5" />
                                         <label class="half" for="star1half" title="Meh - 1.5 stars"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="1") echo 'checked="checked"'; ?> type="radio" id="star1" name="rating" value="1"
-                                        />
+                                        <input disabled <?php if($pharmacyRating->rating=="1") echo 'checked="checked"';
+                                        ?> type="radio" id="star1" name="rating" value="1" />
                                         <label class="full" for="star1" title="Sucks big time - 1 star"></label>
-                                        <input disabled <?php if($pharmacyRating->rating=="0.5") echo 'checked="checked"'; ?> type="radio" id="starhalf" name="rating"
-                                        value="0.5" />
+                                        <input disabled <?php if($pharmacyRating->rating=="0.5") echo 'checked="checked"';
+                                        ?> type="radio" id="starhalf" name="rating" value="0.5" />
                                         <label class="half" for="starhalf" title="Sucks big time - 0.5 stars"></label>
                                 </fieldset>
                                 <br>
                         </p>
 
                         <div class="p-b-45">
-                                <span class="s-text8">Category: @if($product[0]->category=='1')
+                                <span class="s-text8">Category: 
+                                        @if($product->category=='category1')
                                         <!-- 1 = Medicine -->
-                                        Medicine @elseif($product[0]->category=='2')
+                                        Medicine 
+                                        @elseif($product->category=='category2')
                                         <!-- 2 = Proteins and Suppliments -->
-                                        Proteins and Suppliments {{$product[0]->tablets}} tbs @elseif($product[0]->category=='3')
+                                        Proteins and Suppliments 
+                                        @elseif($product->category=='category3')
                                         <!-- 3 = Baby and Mom  -->
-                                        Baby and Mom @elseif($product[0]->category=='4')
+                                        Baby and Mom 
+                                        @elseif($product->category=='category4')
                                         <!-- 4 = Beauty  -->
-                                        Beauty @elseif($product[0]->category=='5')
+                                        Beauty 
+                                        @elseif($product->category=='category5')
                                         <!-- 5 = HouseHold -->
-                                        HouseHold @elseif($product[0]->category=='6')
+                                        HouseHold 
+                                        @elseif($product->category=='category6')
                                         <!-- 6 = Others -->
-                                        Others @endif </span>
+                                        Others 
+                                        @endif </span>
                         </div>
 
                         <!-- Add to cart button  -->
@@ -146,13 +150,12 @@
                                         <div class="w-size16 flex-m flex-w">
 
                                                 <div class="btn-addcart-product-detail size9 trans-0-4 m-t-10 m-b-10">
-                                                        @if($product[0]->quantity == 0)
+                                                        @if($product->quantity == 0)
                                                         <button class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4" disabled>Out of stock</button>
                                                         <!-- Button out of stock -->
                                                         @else
                                                         <!-- Button add to cart-->
-                                                        <a href="/addToCart/{{ $product[0]->productSource }}/{{ $product[0]->id }}/{{ $product[0]->pharmacistId }}" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">Add to cart</a>
-                                                        @endif
+                                                        <a href="/addToCart/{{ $product->id }}/{{ $product->pharmacistId }}" class="flex-c-m sizefull bg1 bo-rad-23 hov1 s-text1 trans-0-4">Add to cart</a>                                                        @endif
                                                 </div>
                                         </div>
                                 </div>
@@ -356,4 +359,7 @@
         @endif
 
 </div>
-@endsection @section('script') @endsection
+@endsection
+ 
+@section('script')
+@endsection

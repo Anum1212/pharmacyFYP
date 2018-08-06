@@ -11,7 +11,9 @@
     <link href="{{ asset('css/dashboard/styles.css') }}" rel="stylesheet">
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    @section('head') @show @section('style') @show
+    
+@section('head') @show 
+@section('style') @show
 
 
     <!--Custom Font-->
@@ -23,8 +25,8 @@
 </head>
 
 <body>
-
-    @include('includes.error') @include('includes.message')
+    @include('includes.error')
+    @include('includes.message')
     <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -53,7 +55,8 @@
         </div>
         <div class="divider"></div>
 
-        @section('searchBar') @show
+        
+@section('searchBar') @show
 
         <ul class="nav menu">
             <li class="{{{ (Request::is('dashboard') ? 'active' : '') }}}">
@@ -76,10 +79,6 @@
                 <a href="/downloads">
                     <em class="fa fa-file">&nbsp;</em> Downloads</a>
             </li>
-            <li class="{{{ (Request::is('chatView') ? 'active' : '') }}}">
-                <a href="/chatView">
-                    <em class="fa fa-comments">&nbsp;</em> Chat</a>
-            </li>
             <li class="{{{ (Request::is('contactUsForm') ? 'active' : '') }}}">
                 <a href="contactUsForm">
                     <em class="fa fa-comment">&nbsp;</em> Contact Admin</a>
@@ -95,7 +94,8 @@
     </div>
     <!--/.sidebar-->
     <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-        @section('body') @show
+        
+@section('body') @show
     </div>
     <!--/.row-->
 
@@ -112,12 +112,7 @@
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/bootstrap-datepicker.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/custom.js') }}"></script>
     <script type="text/javascript" src="{{ URL::asset('js/dashboard/confirmDelete.js') }}"></script>
-    @yield('script') 
-    
-    
-    {{-- trigger rating modal if customer rating is needed --}} 
-    
-    @if(!empty($pharmacyRatings))
+    @yield('script') {{-- trigger rating modal if customer rating is needed --}} @if(!empty($pharmacyRatings))
     <link href="{{ asset('css/table.css') }}" rel="stylesheet">
     <link href="{{ asset('css/siteView/rating.css') }}" rel="stylesheet"> {{-- rating modal --}}
     <div id="ratingModal" class="modal fade" role="dialog">
@@ -191,9 +186,7 @@
         });
     </script>
     @endif 
-    
-    
-    @section('script') @show
+@section('script') @show
 
 </body>
 

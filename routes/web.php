@@ -46,14 +46,8 @@ Route::post('/ratePharmacy', 'HomeController@ratePharmacy');
 Route::post('/ratePharmacyLater', 'HomeController@ratePharmacyLater');
     //update Pharmacy Rating
 Route::get('/downloads', 'siteViewController@downloads');
-    // chatView --> go to chat page
-Route::get('/chatView', 'chatController@chat');
-    // getMessages --> get chat message
-Route::get('getMessages', 'chatController@getMessages');
-    // storeChatData --> Store Chat Data
-Route::get('storeChatData', 'chatController@storeChatData');
     // Show Medicine Details
-Route::get('medicineDetails/{productSource}/{medicineId}/{pharmacyId}', 'findPharmaciesProducts@medicineDetails');
+Route::get('medicineDetails/{medicineId}/{pharmacyId}', 'findPharmaciesProducts@medicineDetails');
     //contactUsFormGeneral --> goto to contact us form page
 Route::get('/contactUsFormGeneral', 'siteViewController@contactUsFormGeneral');
     //aboutUs --> goto to contact us form page
@@ -63,7 +57,7 @@ Route::get('/aboutUs', 'siteViewController@aboutUs');
 
     // |---------------------------------- Cart Managment Routes ----------------------------------|
     // addToCart --> add item to cart
-Route::get('/addToCart/{productSource}/{productId}/{pharmacistId}', 'cartController@addToCart');
+Route::get('/addToCart/{productId}/{pharmacistId}', 'cartController@addToCart');
     // removeFromCart --> remove item from cart
 Route::get('/removeFromCart/{product}', 'cartController@remove');
     // viewCart --> view items present in the cart

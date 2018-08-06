@@ -21,11 +21,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Session;
-use Bodunde\ GoogleGeocoder\ Geocoder;
 use Curl;
 use DB;
 use Auth;
-use Geocode;
 use App\User;
 use App\Pharmacist;
 use App\Pharmacistproduct;
@@ -54,7 +52,7 @@ class findPharmaciesProducts extends Controller
 
 //  |---------------------------------- 2) medicineDetails ----------------------------------|
 
-function medicineDetails(Request $request, $productSource, $medicineId, $pharmacyId)
+function medicineDetails(Request $request, $medicineId, $pharmacyId)
 {
     // get pharmacy details
     $pharmacyDetails = Pharmacist::whereId($pharmacyId)->first();
@@ -62,48 +60,36 @@ function medicineDetails(Request $request, $productSource, $medicineId, $pharmac
     // get pharmacy rating
     $pharmacyRating = Rating::where('pharmacyId', $pharmacyId)->first();
     
-    // if product is from web storage
-    if($productSource=='1'){
-        // using product as array to match result with api product response
-        $product = [];
         // get product details
-        $product[] = Pharmacistproduct::whereId($medicineId)->first();
-    }
+        $product = Pharmacistproduct::whereId($medicineId)->first();
 
-    // if product is from api
-    if($productSource=='2'){
-        $pharmacyApi = $pharmacyDetails->dbAPI.$medicineId;
-        // get product details
-        $product = Curl::to($pharmacyApi)->asJson()->get();
-    }
-
-    if($product[0]->type != '8' || $product[0]->category != 'category6'){
-    $medicineName= $product[0]->name;
+    if($product->type != '8' || $product->category != 'category6'){
+    $medicineName= $product->name;
     
     // call api and get strength and forms
-    $strengthAndFroms = Curl::to('https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search')->withData(array( 'terms' => $medicineName,'ef' => 'STRENGTHS_AND_FORMS' ))->get();
+    $strengthAndForms = Curl::to('https://clin-table-search.lhc.nlm.nih.gov/api/rxterms/v3/search')->withData(array( 'terms' => $medicineName,'ef' => 'STRENGTHS_AND_FORMS' ))->get();
     
     // json decode the response
-    $jsonDecodeResponse = json_decode($strengthAndFroms);
+    $jsonDecodeResponse = json_decode($strengthAndForms);
     
     // call api and get sideEffects
-    $sideEffects = Curl::to('https://api.fda.gov/drug/label.json')->withData(array('search' => /*$medicineName[0]->genericName*/ $medicineName))->get();
+    $sideEffects = Curl::to('https://api.fda.gov/drug/label.json')->withData(array('search' => $medicineName))->get();
     
     // json decode the response
     $sideEffects = json_decode($sideEffects);
             
     // if no medicine strengths found
     if($jsonDecodeResponse[0]==0){
-            return view('siteView.medicineDetails', compact('sideEffects', 'product', 'pharmacyDetails', 'pharmacyRating'))->with('mediName', $strengthAndFroms);
+            return view('siteView.medicineDetails', compact('sideEffects', 'product', 'pharmacyDetails', 'pharmacyRating'))->with('medicineName', $strengthAndForms);
     }
 
     // if medicine strengths found
     else{
-    $strengthAndFroms = array(
+    $strengthAndForms = array(
         'name' => $jsonDecodeResponse[1],
         'detail' => $jsonDecodeResponse[2]->STRENGTHS_AND_FORMS
     );
-    return view('siteView.medicineDetails', compact('sideEffects', 'strengthAndFroms', 'product', 'pharmacyDetails', 'pharmacyRating'))->with('size', sizeof($strengthAndFroms['name']))->with('mediName', $strengthAndFroms);
+    return view('siteView.medicineDetails', compact('sideEffects', 'strengthAndForms', 'product', 'pharmacyDetails', 'pharmacyRating'))->with('size', sizeof($strengthAndForms['name']))->with('medicineName', $strengthAndForms);
 }
 }
 else
@@ -115,43 +101,28 @@ else
 //  |---------------------------------- 3) searchMedicine ----------------------------------|
     public function searchMedicine(Request $req)
     {
-        if (!Cache::has('key')) {
-            Cache::forever('key', 0);
-        } else {
-            $count = Cache::get('key');
-            $count = ++$count;
-            Cache::forever('key', $count);
-        }
-        if (Cache::get('key') > 0) {
-  //user is reloading from same browser
-            Cache::forget('key');
-         // return redirect()->back()->withError('kindly search medicine again');
-        }
-
-        /*$reloadTime=$_COOKIE[$cookie_name];*/
-
-        $starttime = microtime(true);
-   //setting time limit infinite for unlimited execution of the code
-        set_time_limit(0);
-        if (!isset($request->trim)) {
-            $trim = 0;
-        } else {
-            $trim = (int)$request->trim;
-          /* dd(gettype($trim));*/
-        }
-
-
         // setting Variables
-        $latitude = $req->latitude;
+
+        if ($req->latitude != ""){
+        $latitude =$req->latitude;
         $longitude = $req->longitude;
         $formatedAddress = $req->formatedAddress;
         $medicineSearched = $req->medicineSearched;
-        // if session already has value use it
-        if (Session::has('distance'))
-        $distance = session('distance');
-        // else get value from form and convert to kilometer
+        }
+
+        else{
+            $latitude = session('latitude');
+            $longitude = session('longitude');
+            $formatedAddress = session('formatedAddress');
+            $medicineSearched = session('medicineSearched');
+        }
+
+        // if form has value get value from form and convert to kilometer
+        if ($req->distance != "")
+            $distance = $req->distance;
+        // else use session value 
         else
-        $distance = $req->distance;
+            $distance = session('distance');
 
         // setting session values
         session(['latitude' => $latitude, 'longitude'=> $longitude, 'medicineSearched'=>$medicineSearched, 'formatedAddress'=>$formatedAddress, 'distance'=> $distance]);
@@ -170,7 +141,7 @@ else
         if (!empty($nearByPharmacies)) {
             
             
-// ----------------------- get products from local website storage -----------------------            
+// ----------------------- get products -----------------------            
             foreach ($nearByPharmacies as $nearByPharmacy) {
                 $websiteProducts[] = Pharmacistproduct::where([
                     ['pharmacistId', '=', $nearByPharmacy->id],
@@ -182,62 +153,15 @@ else
                 // ********** critical step **********
                 // $websiteProducts is an array of collections
                 // in the code below we combine the collections into 1 collection
-                $websiteProductsCollection = new Collection();
+                $productsCollection = new Collection();
                 foreach ($websiteProducts as $collection) {
                     foreach ($collection as $item) {
-                        $websiteProductsCollection->push($item);
+                        $productsCollection->push($item);
                     }
                 }
-                
-
-// ----------------------- get products from api -----------------------
-                $apiProducts = [];
-                foreach ($nearByPharmacies as $nearByPharmacy) {
-                    if ($nearByPharmacy->dataSource == '2') {
-                        $apiProducts[] = $nearByPharmacy->dbAPI. $medicineSearched;
-                    }
-                }
-                sleep(0);
-                
-                //function to call multiple api
-                $multiRequestResponse = $this->multiRequest($apiProducts);
-                //dd($medicineRecordFromApi);
-                //local medicine array
-                $trim = $trim + 4;
-                
-                // get size of $response
-                $multiRequestResponseSize = sizeof($multiRequestResponse);
-                // loop for json decoding
-                for ($i = 0; $i < $multiRequestResponseSize; $i++) {
-                    $responseFromApi[] = json_decode($multiRequestResponse[$i]);
-                }
-
-                // responseFromApi is an array of collections of collection
-                // the code below converts it into collection of collcections
-                $apiProductsIntialCollection = new Collection();
-                foreach ($responseFromApi as $collection) {
-                    foreach ($collection as $item) {
-                        $apiProductsIntialCollection->push($item);
-                    }
-                }
-                
-                // apiProductsIntialCollection is an array of collections
-                // the code below converts it into 1 collection
-            $apiProductsCollection = new Collection();
-            foreach ($apiProductsIntialCollection as $collection) {
-                foreach ($collection as $item) {
-                    $apiProductsCollection->push($item);
-                }
-            }
-
-            // the code below merges websiteProductsCollection & apiProductsCollection into one collection
-            $productsCollection = $websiteProductsCollection->merge($apiProductsCollection);
-
-            // if product not found return with error
-                if ($productsCollection->isEmpty()) {
-                    return redirect()->back()->with('error', "Oops product not found in the defined radius.<ul style='list-style:none'><li>Try to increase the radius</li><li>or <a href='' id = 'showNotifyModal' data-toggle= 'modal' data-target='#notifyModal'><b>Click here</b></a> to get notified when product is available near you</li></ul>");
-                }
-
+                if ($productsCollection->isEmpty()) 
+return redirect()->back()->with('error', "Oops product not found in the defined radius. Try to increase the radius");
+else
             return view('siteView.searchResultPage', compact('productsCollection', 'nearByPharmacies'));
         } // end of if(!empty($nearByPharmacies)) condition
     }
@@ -248,34 +172,10 @@ else
     // find pharmacies within the specified distance
     public function searchMedicineByCategory(Request $req, $categoryId)
     {
-        if (!Cache::has('key')) {
-            Cache::forever('key', 0);
-        } else {
-            $count = Cache::get('key');
-            $count = ++$count;
-            Cache::forever('key', $count);
-        }
-        if (Cache::get('key') > 0) {
-  //user is reloading from same browser
-            Cache::forget('key');
-         // return redirect()->back()->withError('kindly search medicine again');
-        }
-
-        /*$reloadTime=$_COOKIE[$cookie_name];*/
-
-        $starttime = microtime(true);
-   //setting time limit infinite for unlimited execution of the code
-        set_time_limit(0);
-        if (!isset($request->trim)) {
-            $trim = 0;
-        } else {
-            $trim = (int)$request->trim;
-          /* dd(gettype($trim));*/
-        }
-
+        
         // setting variables
         // checking if customer used the find medicine form first 
-        // if yes then we will the distance and geoloacation from that form
+        // if yes then we will the distance and geolocation from that form
         // if session already has latitude use it
         if (Session::has('latitude')){
         $latitude = session('latitude');
@@ -321,57 +221,13 @@ else
                 // ********** critical step **********
                 // $websiteProducts is an array of collections
                 // in the code below we combine the collections into 1 collection
-            $websiteProductsCollection = new Collection();
+            $productsCollection = new Collection();
             foreach ($websiteProducts as $collection) {
                 foreach ($collection as $item) {
-                    $websiteProductsCollection->push($item);
+                    $productsCollection->push($item);
                 }
             }
                 
-
-// ----------------------- get products from api -----------------------
-            $apiProducts = [];
-            foreach ($nearByPharmacies as $nearByPharmacy) {
-                if ($nearByPharmacy->dataSource == '2') {
-                    $apiProducts[] = $nearByPharmacy->dbAPI . $categoryId;
-                }
-            }
-            sleep(0);
-                
-                //function to call multiple api
-            $multiRequestResponse = $this->multiRequest($apiProducts);
-                //dd($medicineRecordFromApi);
-                //local medicine array
-            $trim = $trim + 4;
-                
-                // get size of $response
-            $multiRequestResponseSize = sizeof($multiRequestResponse);
-                // loop for json decoding
-            for ($i = 0; $i < $multiRequestResponseSize; $i++) {
-                $responseFromApi[] = json_decode($multiRequestResponse[$i]);
-            }
-
-                // responseFromApi is an array of collections of collection
-                // the code below converts it into collection of collcections
-            $apiProductsIntialCollection = new Collection();
-            foreach ($responseFromApi as $collection) {
-                foreach ($collection as $item) {
-                    $apiProductsIntialCollection->push($item);
-                }
-            }
-                
-                // apiProductsIntialCollection is an array of collections
-                // the code below converts it into 1 collection
-            $apiProductsCollection = new Collection();
-            foreach ($apiProductsIntialCollection as $collection) {
-                foreach ($collection as $item) {
-                    $apiProductsCollection->push($item);
-                }
-            }
-
-            // the code below merges websiteProductsCollection & apiProductsCollection into one collection
-            $productsCollection = $websiteProductsCollection->merge($apiProductsCollection);
-
                 // if product not found return with error
             if ($productsCollection->isEmpty()) {
                 return redirect('/')->with('error', "Oops no products found in this category.");
@@ -383,88 +239,15 @@ else
 
 
 
-//  |---------------------------------- 5) multiRequest ----------------------------------|
-    public function multiRequest($data, $options = array())
-    {
-        // array of curl handles
-        $curly = array();
-        // data to be returned
-        $result = array();
-        // multi handle
-        $mh = curl_multi_init();
-        // loop through $data and create curl handles
-        // then add them to the multi-handle
-        foreach ($data as $id => $d) {
-            $curly[$id] = curl_init();
-
-            $url = (is_array($d) && !empty($d['url'])) ? $d['url'] : $d;
-            curl_setopt($curly[$id], CURLOPT_URL, $url);
-            curl_setopt($curly[$id], CURLOPT_HEADER, 0);
-            curl_setopt($curly[$id], CURLOPT_RETURNTRANSFER, 1);
-
-            // post?
-            if (is_array($d)) {
-                if (!empty($d['post'])) {
-                    curl_setopt($curly[$id], CURLOPT_POST, 1);
-                    curl_setopt($curly[$id], CURLOPT_POSTFIELDS, $d['post']);
-                }
-            }
-
-            // extra options?
-            if (!empty($options)) {
-                curl_setopt_array($curly[$id], $options);
-            }
-
-            curl_multi_add_handle($mh, $curly[$id]);
-        }
-
-        // execute the handles
-        $running = null;
-        do {
-            curl_multi_exec($mh, $running);
-        } while ($running > 0);
-
-
-        // get content and remove handles
-        foreach ($curly as $id => $c) {
-            $result[$id] = curl_multi_getcontent($c);
-            curl_multi_remove_handle($mh, $c);
-        }
-
-        // all done
-        curl_multi_close($mh);
-
-        return $result;
-    }
-
-
-
     //  |---------------------------------- 6) pharmacyDetails ----------------------------------|
     public function pharmacyDetails($pharmacyId, $productId = null) //$productId for displaying the product that the user selected for viewing medicine details
     {
         $pharmacyRating = Rating::where('pharmacyId', $pharmacyId)->first();
         $pharmacy = Pharmacist::whereId($pharmacyId)->first();
 
-        if($pharmacy->dataSource == '1'){
-            $selectedProduct = [];
-            $selectedProduct[] = Pharmacistproduct::whereId($productId)->first();
+            $selectedProduct = Pharmacistproduct::whereId($productId)->first();
             $pharmacyProducts = Pharmacistproduct::where('pharmacistId', $pharmacyId)->get();
-        }
 
-        if($pharmacy->dataSource == '2'){
-            $pharmacyApi = rtrim($pharmacy->dbAPI, '/');
-        // get product details
-            $responseFromApi = Curl::to($pharmacyApi)->asJson()->get();
-            $selectedProduct = Curl::to($pharmacyApi.'/'.$productId)->asJson()->get();
-        // responseFromApi is an array of collections of collection
-        // the code below converts it into collection of collcections
-            $pharmacyProducts = new Collection();
-            foreach ($responseFromApi as $collection) {
-                foreach ($collection as $item) {
-                    $pharmacyProducts->push($item);
-                }
-            }
-        }
         return view('siteView.pharmacyDetails', compact('pharmacy', 'pharmacyProducts', 'selectedProduct', 'pharmacyRating'));
     }
 }

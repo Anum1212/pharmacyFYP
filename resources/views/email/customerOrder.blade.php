@@ -235,15 +235,15 @@
     <div class="inv-container" style="font-family: 'Lato', sans-serif;margin: 20px auto;max-width: 650px;">
       <div class="inv-note" style="font-weight: 400;font-style: italic;color: #333;line-height: 140%;padding: 0 5px 20px 5px;border-bottom: 1px solid #eee;margin-bottom: 10px;">
         Hi
-        <b>{{$recipientData->name}}</b>, the following is an invoice for
-        <b>Order# {{$order->id}}</b>. Here are the customer details.
+        <b>{{ $pharmacist->name }}</b>, the following is an invoice for
+        <b>Order# {{ $order->id }}</b> which is to be delivered on {{ $order->deliverydate }}. Here are the customer details.
       </div>
       
       <div class="inv-header" style="margin: 30px 5px;vertical-align: top;">
         <div class="inv-date" style="margin-right: 5%;display: inline-block;width: 45%;">
-        <b>Name </b> {{$customerDetails->name}}<br>
-      <b>Contact </b> {{$customerDetails->contact}}<br>
-      <b>Delivery Address </b> {{$customerDetails->address}}, {{$customerDetails->society}}, {{$customerDetails->city}},<br>
+        <b>Name </b> {{ $customerDetails->name }}<br>
+      <b>Contact </b> {{ $customerDetails->contact }}<br>
+      <b>Delivery Address </b> {{ $customerDetails->address }}, {{ $customerDetails->society }}, {{ $customerDetails->city }},<br>
         </div>
       </div>
       <table class="inv-table" style="width: 100%;border-spacing: 0;border-collapse: collapse;">
@@ -258,18 +258,8 @@
         </thead>
         <tbody>
 
-
-
-
-
-
-
-
-
-
-
           @foreach ($products as $product)
-          @if($product->options->pharmacistId == $recipientData->id)
+          @if($product->options->pharmacistId == $pharmacist->id)
           <tr>
             <td class="u-left" style="padding: 5px;text-align: left;">{{ $product->name }}</td>
             @if($product->options->type=='1')
@@ -302,7 +292,7 @@
                 <td class="u-right">{{ $product->price*$product->qty }}</td>
                 </tr>
             @endif
-                @endfor
+                @endforeach
         </tbody>
  
 

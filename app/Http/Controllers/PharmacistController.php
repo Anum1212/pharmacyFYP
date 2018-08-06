@@ -9,15 +9,12 @@
 // 1) __construct
 // 2) resendVerificationEmail
 // 3) Index
-// 4) storeProductsInTable
-// 5) localhost
-// 6) savePharmacyApi
-// 7) viewAllOrders
-// 8) changeOrderStatus
-// 9) changeOrderStatus
-// 10) editAccountDetailsForm
-// 11) editAccountDetails
-// 12) contactUsForm
+// 4) viewAllOrders
+// 5) changeOrderStatus
+// 6) changeOrderStatus
+// 7) editAccountDetailsForm
+// 8) editAccountDetails
+// 9) contactUsForm
 
 
 
@@ -75,50 +72,12 @@ class PharmacistController extends Controller
         // get logged in pharamcist details
         $pharmacyDetails = Auth::user()->whereId(Auth::user()->id)->first();
 
-        // if dataSource is 0 it means pharamcist hasnt provided an api or choose manual data entry
-        // hence take pharamcist to page where they either enter api or decide to enter data manually
-        if ($pharmacyDetails->dataSource == '0') {
-            return view('pharmacist.pharmacyDetailsForm');
-
-        // if dataSource is NOT 0 it means user has provided an api or chose manual data entry
-          // hence take pharamcist to dashboard
-        } else {
-
             $allOrderId = [];
             $newOrders = [];
             $orders = [];
             
-            // if data source is website
-            if ($pharmacyDetails->dataSource == '1') {
                 $stockAlert = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['quantity', '<', '25']])->get();
                 $totalProducts = Pharmacistproduct::where([['pharmacistId', $pharmacyDetails->id], ['status', 1]])->count();
-            }
-
-            // if data source is api
-            if ($pharmacyDetails->dataSource == '2') {
-                $stockAlert = [];
-                $pharmacyApi = rtrim($pharmacyDetails->dbAPI, '/');
-                $responseFromApi = Curl::to($pharmacyApi)->asJson()->get();
-                    // responseFromApi is an array of collections of collection
-                    // the code below converts it into collection of collcections
-                $pharmacyProducts = new Collection();
-                foreach ($responseFromApi as $collection) {
-                    foreach ($collection as $item) {
-                        $pharmacyProducts->push($item);
-                    }
-                }
-                $totalProducts = count($pharmacyProducts);
-                foreach ($pharmacyProducts as $pharmacyProduct)
-                    if ($pharmacyProduct->quantity < '25')
-                    $stockAlert[] = $pharmacyProduct;
-
-                $stockAlert = collect($stockAlert);
-            }
-
-            // if data source is localhost
-            if ($pharmacyDetails->dataSource == '3') {
-                dd("arham write your code here pharmacistController index method stockAlert and totalProducts are needed for main dahboard page");
-            }
 
             $orderItems = Orderitem::where('pharmacistId', $pharmacyDetails->id)->orderBy('id', 'desc')->get();
             foreach ($orderItems as $orderItem) {
@@ -150,78 +109,12 @@ class PharmacistController extends Controller
             ])->first();
 
             $newOrders = count($newOrders);
-            $medicines = DB::table('mostsearch')->select('name', DB::raw('count(name) as total'))->whereMonth('created_at', '=', date('m'))->groupBy('name')->orderBy('total', 'DESC')->take(10)->get();
-            return view('pharmacist.pharmacistDashboard', compact('pharmacyDetails', 'medicines', 'newOrders', 'totalOrders', 'totalProducts', 'stockAlert'));
+            return view('pharmacist.pharmacistDashboard', compact('pharmacyDetails', 'newOrders', 'totalOrders', 'totalProducts', 'stockAlert'));
         }
-    }
 
 
 
-    //  |---------------------------------- 4) storeProductsInTable ----------------------------------|
-
-    // create table if user chose manual data entry i.e did not provide any api
-    public function storeProductsInTable()
-    {
-        $saveRecord = Pharmacist::find(Auth::user()->id);
-        $saveRecord->dataSource = '1';
-        $saveRecord->save();
-        return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
-    }
-
-
-
-    //  |---------------------------------- 5) localhost ----------------------------------|
-
-    // create table if user chose manual data entry i.e did not provide any api
-    public function localhost()
-    {
-        $pharmacistId = Auth::user()->id;
-        $pharmacistDetails = Pharmacist::find(Auth::user()->id);
-        Storage::put('public/myAssets/emailAttatchments/'.$pharmacistDetails->id.'.txt', $pharmacistDetails->id);
-        // if file created
-        if(Storage::exists('public/myAssets/emailAttatchments/'.$pharmacistDetails->id.'.txt')) {
-            // send email
-            Mail::send(new localhostPharmacy($pharmacistDetails));
-            // delete the created file
-            Storage::delete('public/myAssets/emailAttatchments/'.$pharmacistId.'.txt');
-        }
-        $pharmacistDetails->dataSource = '3';
-        $pharmacistDetails->save();
-        return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
-    }
-
-
-
-    // |---------------------------------- 6) savePharmacyApi ----------------------------------|
-    public function savePharmacyApi(Request $req)
-    {
-        $this->validate($req, [
-            'dbAPI' => 'required|',
-            'medicine' => 'required|',
-        ]);
-
-
-        $dbApi = $req->dbAPI;
-        $dbApi = rtrim($dbApi, '/') . '/';
-        $medicine = $req->medicine;
-        $testApi = $dbApi . $medicine;
-        $medNotFound = '0';
-        $testApiResponse = Curl::to($testApi)->asJson()->get();
-
-        if ($testApiResponse == '0' || $testApiResponse == null) {
-            return redirect::back()->with('error', 'Api verifivcation failed');
-        } else {
-            $saveRecord = Pharmacist::find(Auth::user()->id);
-            $saveRecord->dataSource = '2';
-            $saveRecord->dbAPI = $dbApi;
-            $saveRecord->save();
-            return redirect()->action('PharmacistController@index')->with('message', 'Welcome to LifeLine');
-        }
-    }
-
-
-
-    //  |---------------------------------- 7) viewAllOrders ----------------------------------|
+    //  |---------------------------------- 4) viewAllOrders ----------------------------------|
     public function viewAllOrders()
     {
         $allOrderId = [];
@@ -281,7 +174,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 8) changeOrderStatus ----------------------------------|
+    //  |---------------------------------- 5) changeOrderStatus ----------------------------------|
     public function changeOrderStatus($orderId, $status)
     {
         // possible status types
@@ -301,7 +194,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 9) changeOrderStatus ----------------------------------|
+    //  |---------------------------------- 6) changeOrderStatus ----------------------------------|
     public function viewSpecificOrder($orderId, $customerId, $pharmacyId)
     {
         $productDetails = [];
@@ -333,7 +226,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 10) editAccountDetailsForm ----------------------------------|
+    //  |---------------------------------- 7) editAccountDetailsForm ----------------------------------|
     public function editAccountDetailsForm()
     {
         $pharmacyDetails = Pharmacist::whereId(Auth::user()->id)->first();
@@ -342,7 +235,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 11) editAccountDetails ----------------------------------|
+    //  |---------------------------------- 8) editAccountDetails ----------------------------------|
     public function editAccountDetails(Request $req)
     {
         $pharmacyDetails = Pharmacist::find(Auth::user()->id);
@@ -398,7 +291,7 @@ class PharmacistController extends Controller
 
 
 
-    //  |---------------------------------- 12) contactUsForm ----------------------------------|
+    //  |---------------------------------- 9) contactUsForm ----------------------------------|
     public function contactUsForm()
     {
         return view('pharmacist.messageToAdminForm');

@@ -31,7 +31,7 @@ class siteViewController extends Controller
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->middleware('auth:web')->only(['downloads']);
+        $this->middleware('userTypeCorP')->only(['downloads']);
         $this->middleware(function ($request, $next) {
             Cart::instance('shopping');
             Cart::restore(Auth::id());

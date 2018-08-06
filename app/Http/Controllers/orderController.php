@@ -169,8 +169,11 @@ class orderController extends Controller
         $customerDetails = User::whereId($order->userId)->first();
         
         $products = Cart::content();
-
-
+        
+        foreach($products as $product)
+        {
+            $allPharmacistId[] = $product->options->pharmacistId;
+        }
         
         // to remove duplicates
         $pharmacistId = array_unique($allPharmacistId);
@@ -188,16 +191,16 @@ class orderController extends Controller
         $arrangedPharmacistId = array_values($pharmacistId);
 
         for ($i = 0; $i < count($arrangedPharmacistId); $i++) {
-            $pharmacistId[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
+            $pharmacistIdCollection[$i] = Pharmacist::whereId($arrangedPharmacistId[$i])->first();
         }
 
         // send mail to customer
-            // Mail::send(new invoice($customerDetails, $products, $order));
+            Mail::send(new invoice($customerDetails, $products, $order));
 
         // // send mail to pharmacist(s)
-        // foreach ($pharmacistId as $pharmacist) {
-        //     Mail::send(new customerOrder($pharmacist, $customerDetails, $product, $order, $orderItems));
-        // }
+        foreach ($pharmacistIdCollection as $pharmacist) {
+            Mail::send(new customerOrder($pharmacist, $customerDetails, $products, $order));
+        }
 
         // send sms to customer
         // $username = '923208778084';///Your  Username 

@@ -47,25 +47,13 @@ class cartController extends Controller
 
 
     // |---------------------------------- 2) addToCart ----------------------------------|
-    public function addToCart($productSource, $productId, $pharmacistId)
+    public function addToCart($productId, $pharmacistId)
     {
-        // productSource types
-        //      1 -> website storage
-        //      2 -> api storage
-        //      3 -> localhost storage
         
-        if ($productSource == 1) {
             $productDetails = Pharmacistproduct::whereId($productId)->first();
             $cart = Cart::add($productDetails->id, $productDetails->name, '1', $productDetails->price, ['type' => $productDetails->type, 'pharmacistId' => $productDetails->pharmacistId, 'pharmacistName' => $productDetails->pharmacistName, 'prescription' => $productDetails->prescription]);
-        }
-        
-        if ($productSource == 2) {
-            $pharmacyDetails = Pharmacist::whereId($pharmacistId)->first();
-            $productDetails = Curl::to($pharmacyDetails->dbAPI.$productId)->asJson()->get();;
-            $cart = Cart::add($productDetails[0]->id, $productDetails[0]->name, '1', $productDetails[0]->price, ['type' => $productDetails[0]->type, 'pharmacistId' => $pharmacistId, 'pharmacistName' => $productDetails[0]->pharmacistName, 'prescription' => $productDetails[0]->prescription]);
-        }
 
-        return redirect()->back()->with('message', 'Item added to cart'); // change in future
+        return redirect()->back()->with('message', 'Item added to cart');
     }
 
 
