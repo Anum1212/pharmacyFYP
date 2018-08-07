@@ -41,12 +41,15 @@
 	<link rel="stylesheet" type="text/css" href="/themeAssets/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/themeAssets/css/main.css">
 	<!--===============================================================================================-->
+	<script type="text/javascript" src="{{ URL::asset('js/dashboard/jquery.js') }}"></script>
+	<script type="text/javascript" src="{{ URL::asset('js/dashboard/bootstrap.min.js') }}"></script>
+	<!--===============================================================================================-->
 @section('head')
-    
+
 @show
 
 @section('style')
-    
+
 @show
 </head>
 
@@ -308,7 +311,7 @@
 
 
     @section('body')
-        
+
     @show
 
 
@@ -417,7 +420,7 @@
 	</script>
 	<!--===============================================================================================-->
 	<script src="/themeAssets/js/main.js"></script>
-	
+
 	<script>
 		function submitCategoryForm(event, formId){
                 event.preventDefault();
@@ -425,8 +428,8 @@
                 $('#'+categoryForm).submit();
         }
 		</script>
-		
-    @section('script')    
+
+    @section('script')
     @show
 </body>
 

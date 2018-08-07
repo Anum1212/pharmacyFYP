@@ -3,11 +3,11 @@
 @section('tabTitle', 'Home')
 
 @section('head')
-    
+
 @endsection
 
 @section('style')
-    
+
 @endsection
 @section('body')
 
@@ -86,7 +86,7 @@
 		<br>
 
 @include('includes.searchBar')
-</div> {{-- searchBarWrapper --}} 
+</div> {{-- searchBarWrapper --}}
 
 <hr>
 	<!-- Banner -->
@@ -108,7 +108,7 @@
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
 							<button type="submit" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-								Medicine 
+								Medicine
 							</button>
 						</form>
 						</div>
@@ -126,7 +126,7 @@
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
 							<button type="submit" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-							Suppliments 
+							Suppliments
 							</button>
 						</form>
 						</div>
@@ -144,7 +144,7 @@
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
 							<button type="submit" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-								Baby and Mom 
+								Baby and Mom
 							</button>
 						</form>
 						</div>
@@ -162,7 +162,7 @@
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
 							<button type="submit" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-								Beauty 
+								Beauty
 							</button>
 						</form>
 						</div>
@@ -180,7 +180,7 @@
 							<input type="text" name="latitude" class="lat" @if(session()->has('latitude')) value="{{ session('latitude') }}" @endif style="display:none">
                         <input type="text" name="longitude" class="lng" @if(session()->has('longitude')) value="{{ session('longitude') }}" @endif style="display:none">
 							<button type="submit" class="flex-c-m size2 m-text2 bg3 hov1 trans-0-4">
-								HouseHold 
+								HouseHold
 							</button>
 						</form>
 						</div>
@@ -216,11 +216,11 @@
 
 <script>
     $(document).ready(function () {
-		if($('#address').val().length == 0)
+		if($('.address').val().length == 0)
 		$('.medicineForm').hide();
 
 		// get Location on window load
-		getLocation();
+		// getLocation();
 
 		// Add smooth scrolling to all links
   $(".scrollToDiv").on('click', function(event) {
@@ -238,7 +238,7 @@
       $('html, body').animate({
         scrollTop: $(hash).offset().top
       }, 800, function(){
-   
+
         // Add hash (#) to URL when done scrolling (default click behavior)
         window.location.hash = hash;
       });

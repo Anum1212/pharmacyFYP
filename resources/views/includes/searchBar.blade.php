@@ -3,14 +3,14 @@
             <div class="col-12 col-md-7 align-self-center">
                     <div id="imaginary_container">
                         <div class="input-group stylish-input-group">
-                            <input type="text" class="form-control" id="address" placeholder="Enter Location" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
-                            <span class="detectLocationAddon input-group-addon">
+                            <input type="text" class="form-control address" id="address2" placeholder="Enter Location" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
+                            {{-- <span class="detectLocationAddon input-group-addon">
                                 <button type="button" onclick="getLocation()" class="detectLocation">
                                     <span class="fa fa-bullseye" style="color: red;"></span>
                                 </button>
-                            </span>
+                            </span> --}}
                             <span class="input-group-addon">
-                                <button type="botton" onclick="addressToCoOrdinates()">
+                                <button type="botton" onclick="addressToCoOrdinates(2)">
                                     <span class="fa fa-search"></span>
                                 </button>
                             </span>
@@ -35,3 +35,42 @@
             </div> {{-- medicineForm --}}
         </div> {{-- row --}}
     </div> {{-- Container --}}
+
+
+    @if(!session()->has('latitude'))
+    <div id="addressBarModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter your Location</h4>
+                </div>
+                <div class="modal-body">
+                  <div class="align-self-center">
+                          <div id="imaginary_container">
+                              <div class="input-group stylish-input-group">
+                                  <input type="text" class="form-control address" id="address1" placeholder="Enter Location" @if(session()->has('formatedAddress')) value="{{ session('formatedAddress') }}" @endif>
+                                  <span class="input-group-addon">
+                                      <button type="botton" onclick="addressToCoOrdinates(1)">
+                                          <span class="fa fa-search"></span>
+                                      </button>
+                                  </span>
+                              </div>
+                          </div>
+                  </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    {{-- A script to show rating Modal if user rating is needed see rateOrder Middleware for more details --}}
+    <script>
+        $(function () {
+            $('#addressBarModal').modal({
+    backdrop: 'static',
+    keyboard: false
+},'show');
+        });
+    </script>
+    @endif

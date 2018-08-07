@@ -4,7 +4,3 @@
 		{{session()->get('message')}}
 	</div>
 @endif
-
-<script>
-	$('div.alert').delay(5000).slideUp(300);
-</script>
