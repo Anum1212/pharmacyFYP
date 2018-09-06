@@ -213,12 +213,5 @@
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAb86GIW2pKc-uVB8LdJrP_YKsYj7LedUo">
 </script>
 
-<script>
-        $(document).ready(function () {
-        // get Location on window load
-		getLocation();
-        });
-
-</script>
 <script type="text/javascript" src="{{ URL::asset('js/searchBar.js') }}"></script>
 @endsection

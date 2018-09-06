@@ -1,14 +1,14 @@
-@extends('layouts.siteLayout') 
-@section('tabTitle', $pharmacy->pharmacyName .' Details') 
+@extends('layouts.siteLayout')
+@section('tabTitle', $pharmacy->pharmacyName .' Details')
 @section('head')
 <link href="{{ asset('css/map.css') }}" rel="stylesheet">
 <link href="{{ asset('css/siteView/rated.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 @endsection
- 
+
 @section('style')
 @endsection
- 
+
 @section('body')
 <!-- Pharmacy Details -->
 <div class="container bgwhite p-t-35 p-b-80">
@@ -136,7 +136,7 @@
                                                 @if($selectedProduct->quantity == 0)
                                                 <span style="color:#F15540"><b>Out of stock</b></span> @endif
                                                 <br>
-                                                <a href="/medicineDetails/{{ $selectedProduct->id }}" class="block2-name dis-block s-text3 p-b-5">
+                                                <a href="/medicineDetails/{{ $selectedProduct->id }}/{{ $pharmacy->id }}" class="block2-name dis-block s-text3 p-b-5">
                                                         <b>{{ $selectedProduct->name }}
                                                                 <br> {{ $selectedProduct->genericName }}
                                                         </b>
@@ -213,7 +213,7 @@
                                                 @if($product->quantity == 0)
                                                 <span style="color:#F15540"><b>Out of stock</b></span> @endif
                                                 <br>
-                                                <a href="/medicineDetails/{{ $product->id }}" class="block2-name dis-block s-text3 p-b-5">
+                                                <a href="/medicineDetails/{{ $product->id }}/{{ $pharmacy->id }}" class="block2-name dis-block s-text3 p-b-5">
                                                         <b>{{ $product->name }}
                                                                 <br> {{ $product->genericName }}
                                                         </b>
@@ -255,7 +255,7 @@
         </div>
 </section>
 @endsection
- 
+
 @section('script')
 <script type="text/javascript">
         var map;

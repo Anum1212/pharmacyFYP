@@ -21,7 +21,7 @@
 				<div class="item-slick1 item1-slick1" style="background-image: url(/themeAssets/images/sliderImage01.jpg); background-position:left 0px top -90px;">
 					<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
 						<span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="fadeInDown" style="color:black">
-							{{-- Women Collection 2018 --}}
+							{{-- Slide --}}
 						</span>
 
 						<h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="fadeInUp" style="color:#5A5A5B">
@@ -40,7 +40,7 @@
 				<div class="item-slick1 item2-slick1" style="background-image: url(/themeAssets/images/sliderImage02.jpg);">
 					<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
 						<span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="rollIn">
-							{{-- Women Collection 2018 --}}
+							{{-- Slide --}}
 						</span>
 
 						<h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="lightSpeedIn" style="color:#5A5A5B">
@@ -59,7 +59,7 @@
 				<div class="item-slick1 item3-slick1" style="background-image: url(/themeAssets/images/sliderImage03.jpg);">
 					<div class="wrap-content-slide1 sizefull flex-col-c-m p-l-15 p-r-15 p-t-150 p-b-170">
 						<span class="caption1-slide1 m-text1 t-center animated visible-false m-b-15" data-appear="rotateInDownLeft">
-							{{-- Women Collection 2018 --}}
+							{{-- Slide --}}
 						</span>
 
 						<h2 class="caption2-slide1 xl-text1 t-center animated visible-false m-b-37" data-appear="rotateInUpRight" style="color:#fff">
