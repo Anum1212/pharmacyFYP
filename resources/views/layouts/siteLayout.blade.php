@@ -77,7 +77,7 @@
 		<div class="wrap_header">
 			<!-- Logo -->
 			<a href="/" class="logo">
-				<img src="/themeAssets/images/icons/lifeLine2.png" alt="IMG-LOGO"> <i class="fa fa-heartbeat" style="font-size: 40px; color:#E65641"></i>
+				<img src="/themeAssets/images/icons/lifeLine.png" alt="IMG-LOGO"> <i class="fa fa-heartbeat" style="font-size: 40px; color:#E65641"></i>
 			</a>
 
 			<!-- Menu -->
